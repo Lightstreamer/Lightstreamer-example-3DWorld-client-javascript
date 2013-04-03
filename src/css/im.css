@@ -1,0 +1,86 @@
+/*
+ * LIGHTSTREAMER - www.lightstreamer.com
+ * Basic Instant Messenger Demo
+ */
+.demoTitle {
+  font-family: Verdana, Arial, Helvetica, Sans-serif;
+  font-size: 9pt;
+  color: #000000;
+  font-weight: bold;
+  text-align: right;
+}
+.messagePanel {
+  overflow: auto;
+  border-style: solid;
+  border-color: #b0b0b0;
+  border-width: 0px;
+  background-color: #ffffff;
+}
+.messageContainer {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #0055aa;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5x;
+  padding-bottom: 3px;
+}
+.messagePart1 {
+  font-family: Sans-serif;
+  font-size: 8pt;
+  font-weight: bold;
+}
+.messagePart2 {
+  font-family: Sans-serif;
+  font-size: 9pt;
+  text-align: center;
+}
+.sendTitle {
+  font-family: Sans-serif;
+  font-size: 9pt;
+  color: #000000;
+}
+.buddiesTitle {
+  height: 15px;
+  font-family: Sans-serif;
+  font-size: 9pt;
+  background-color: #b0b0b0;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+}
+.tableTitle {
+  font-family: Sans-serif;
+  font-size: 7pt;
+  color: #ffffff;
+  background-color: #336600;
+  font-weight: bold;
+  text-align: center;
+}
+.cursor {
+	position:absolute;
+	top:-5px;
+	left:0;
+	width:11px;
+	height:21px;
+	background:transparent url(../images/handle.png);
+	overflow: visible;
+}
+.slideLine {
+	width:200px;
+	background-color:#bdbdbd;
+	height:10px;
+	position:relative;
+}
+.note { 
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size: 7pt;
+	color: #000000; 
+	background: #ffffff;
+	font-weight: normal; 
+	text-align: left; 
+}
+#wrap {
+  width: 1250px;
+  margin: 0 auto;
+}

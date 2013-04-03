@@ -1,0 +1,994 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd"> 
+
+<!--
+  LIGHTSTREAMER - www.lightstreamer.com
+  3D World Demo
+  
+  Copyright 2013 Weswit s.r.l.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<html>
+
+<head>
+  <meta http-equiv="Content-Language" content="en">
+  
+  <title>Lightstreamer :: 3D World Demo</title>
+  <link rel="stylesheet" type="text/css" href="css/im.css" />
+  
+  <!-- JQuery stuff  -->
+  <!-- <link type="text/css" href="css/jquery-ui-1.8.18.custom.css" rel="Stylesheet" /> -->
+  <link type="text/css" href="css/jquery-ui-1.9.2.custom.css" rel="Stylesheet" />
+
+  <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+  <script type="text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script> 
+  <script type="text/javascript" src="js/jquery.qtip-1.0.0-rc3.min.js"></script>
+  <style type="text/css">
+    #bwslider { margin: 10px; }
+    #freqslider{ margin: 10px; }
+    #feedslider{ margin: 10px; }
+    #zoomslider{ margin: 10px; }
+    #fovslider{ margin: 10px; }
+    #decslider{ margin: 10px; }
+    #format { margin-top: 2em; }
+  </style>
+  
+  <style>
+    .qtip-content {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      line-height: 14px;
+    }
+  </style>
+  
+  <!-- load Script.aculo.us libraries (used for implementing the sliders) 
+  <script src="scriptaculous/prototype.js" type="text/javascript"></script>
+  <script src="scriptaculous/scriptaculous.js?load=slider" type="text/javascript"></script> -->
+  
+  <script src="js/require.js"></script>
+  <!-- <script src="js/misc.js"></script>  -->
+  <script src="js/lightstreamer.js"></script>
+</head>
+
+<body leftmargin="3" topmargin="0" marginwidth="3" marginheight="5" >
+
+  <a href="https://github.com/Weswit/dojo-lightstreamer-stocklist"><img style="position: absolute; top: 0; right: 0; border: 0; z-index:1" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+  <div id="wrop">
+ 
+            <script>
+                // accordion
+                  $(function() {
+                    $("#accordion").accordion({ active: false });
+                  });
+                  
+                // "notaccordion" type used for keeping multiple panels open at the same time
+                  $(function() {
+                  $("#notaccordion").addClass("ui-accordion ui-accordion-icons ui-widget ui-helper-reset")
+                  .find("h3")
+                    .addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom")
+                    .hover(function() { $(this).toggleClass("ui-state-hover"); })
+                    .prepend('<span class="ui-icon ui-icon-triangle-1-e"></span>')
+                    .click(function() {
+                      $(this)
+                        .toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")
+                        .find("> .ui-icon").toggleClass("ui-icon-triangle-1-e ui-icon-triangle-1-s").end()
+                        .next().toggleClass("ui-accordion-content-active").slideToggle();
+                        checkTable(this);
+                      return false;
+                    })
+                    .next().hide()
+                      .addClass("ui-accordion-content  ui-helper-reset ui-widget-content ui-corner-bottom");
+                  });
+                  
+                // button
+                  $(function() {
+                    $( "a", ".button" ).button();
+                    //$( "a", ".button" ).click(function() { return false; });
+                  });
+                  
+                  $(function() {
+                    $( "#checkExtra" ).button()
+                    .click(function( event ) {
+                      extraInfoOnOff();
+                    });;
+                    $( "#format" ).buttonset();
+                  });
+                  
+                  $(function() {
+                    $( "#checkRot" ).button()
+                    .click(function( event ) {
+                      switchShift();
+                    });;
+                    $( "#format" ).buttonset();
+                  });
+                  
+                // slider
+                  $(document).ready(function() {
+                    $("#bwslider").slider({
+                      animate: true,
+                      min: 0.5,
+                      max: 100.5,
+                      step: 1, 
+                      values: [ 100.5 ],
+                      slide: function( event, ui ) {
+                        updateBWInd(ui.value);
+                      },
+                      change: function(event, ui) { 
+                        var v = ui.value;
+                        updateBWInd(v);
+                        if (client) {
+                          if (ui.value == maxBandVal) {
+                            v = "unlimited";
+                          }  
+                        client.connectionOptions.setMaxBandwidth(v);
+                        }
+                      }
+                    });
+                  });
+                  
+                  $(document).ready(function() {
+                    $("#freqslider").slider({
+                      animate: true,
+                      min: 0.05,
+                      max: 1.0,
+                      step: 0.05, 
+                      values: [ 0.5 ],
+                      slide: function( event, ui ) {
+                        updateFreqInd(ui.value);
+                      },
+                      change: function(event, ui) { 
+                        var rv = updateFreqInd(ui.value);
+                        if ( subsPlayers ) {
+                          subsPlayers.setRequestedMaxFrequency(rv);
+                        }
+                      }
+                    });
+                  });
+                  
+                  $(document).ready(function() {
+                    $("#feedslider").slider({
+                      animate: true,
+                      min: 2,
+                      max: 100,
+                      step: 2, 
+                      values: [ 10 ],
+                      slide: function( event, ui ) {
+                        updateBandFreqInd(ui.value);
+                      },
+                      change: function(event, ui) { 
+                        var rv = updateBandFreqInd(ui.value);
+                        if ( gBandSubs ) {
+                          gBandSubs.setRequestedMaxFrequency(1/rv);
+                        }
+                      }
+                    });
+                  });
+                    
+                  $(document).ready(function() {
+                    $("#zoomslider").slider({
+                      animate: true,
+                      min: 10,
+                      max: 500,
+                      step: 10, 
+                      values: [ 110 ],
+                      slide: function( event, ui ) {
+                        zoomCamera(Number(ui.value));
+                      },
+                      change: function(event, ui) { 
+                        zoomCamera(Number(ui.value));
+                      }
+                    });
+                  });
+                  
+                  $(document).ready(function() {
+                    $("#fovslider").slider({
+                      animate: true,
+                      min: 5,
+                      max: 170,
+                      step: 5, 
+                      values: [ 45 ],
+                      slide: function( event, ui ) {
+                        fovCamera(Number(ui.value));
+                      },
+                      change: function(event, ui) { 
+                        fovCamera(Number(ui.value));
+                      }
+                    });
+                  });
+                  
+                  $(document).ready(function() {
+                    $("#decslider").slider({
+                      animate: true,
+                      min: 1,
+                      max: 19,
+                      step: 1, 
+                      values: [ 8 ],
+                      slide: function( event, ui ) {
+                        updateDecimals(ui.value);
+                      },
+                      change: function(event, ui) { 
+                        var rv = updateDecimals(ui.value);
+           
+                        changePrecision();
+                      }
+                    });
+                  });
+                  
+                  $(document).ready(function() {
+                    var availableTags = [
+                      "Luke Skywalker",
+                      "Paperiono",
+                      "Topolino",
+                      "Peter Parker",
+                      "Bruce Wayne",
+                      "Galileo Galilei",
+                      "Alessandro Volta",
+                      "Guglielmo Marconi",
+                      "Stefnao Meucci",
+                      "Enrico Fermi",
+                      ""
+                    ];
+                    $( "#user_nick" ).autocomplete({
+                      source: availableTags,
+                      response: function( event, ui ) {
+                        console.log("Ciao.");
+                      },
+                      change: function (event, ui)  {
+                        submitNick();
+                      }
+                    });
+                  });
+                  
+                  $(document).ready(function() {
+                    var availableTags = [
+                      ""
+                    ];
+                    $( "#user_msg" ).autocomplete({
+                      source: availableTags,
+                      change: function (event, ui)  {
+                        submitMsg();
+                      }
+                    });
+                  });
+                  
+                  $(document).ready(function() {
+                    var availableTags = [
+                      "Default",
+                      "TerraDue",
+                      "WeswitExperimentals"
+                    ];
+                    $( "#user_world" ).autocomplete({
+                      autoFocus: true,
+                      delay: 0,
+                      source: availableTags,
+                      focus: function( event, ui ) {
+                        enableButton();
+                        $( "#world_button" ).button( "option", "disabled", false );
+                      }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "input[type=submit]" )
+                      .button()
+                      .click(function( event ) {
+
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#s_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKeySmall(83);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#c_s_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(83);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#a_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKeySmall(65);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#c_a_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(65);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#w_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKeySmall(87);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#c_w_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(87);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#d_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKeySmall(68);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#c_d_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(68);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#1_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKeySmall(49);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#c_1_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(49);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#2_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKeySmall(50);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#c_2_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(50);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#ss_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(1083);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#sa_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(1065);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#sw_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(1087);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#sd_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(1068);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#s1_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(1049);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#s2_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitKey(1050);
+                        return false;
+                      });
+                  });
+                  
+                  $(function() {
+                    $( "#world_button" )
+                      .button()
+                      .click(function( event ) {
+                        submitWorld(); 
+                        $( "#world_button" ).button( "option", "disabled", true );
+                        
+                        return false;
+                      });
+                  });
+                  /*
+                  $(function() {
+                    $( "#Nickname" ).tooltip({ content: "Choose your nickname so as to be recognizable in the world." });
+                  });*/
+                  
+                  $.fn.qtip.styles.helpstyle = {
+                    background: '#FFFFFF',
+                    color: '#446976',
+                    textAlign: 'left',
+                    padding: 5,
+                    width: 320,
+                    border: {
+                      width: 3,
+                      radius: 5,
+                      color: '#dec972'
+                    },
+                    tip: 'bottomLeft'
+                  }
+                  
+                  $(function() {
+                    $( "#Nickname" ).qtip({
+                      content: "Choose your nickname so as to be recognizable in the world.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#MyMsg" ).qtip({
+                      content: "Your message for other players in this world ... ",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#Teleport" ).qtip({
+                      content: "Choose a world to be teleported to. You can either enter an existing world (agree with your friends on a name) or create a new one.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#Physics" ).qtip({
+                      content: "Choose if the translation and rotation calculations will be performed on the client side or on the server side.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#Encoding" ).qtip({
+                      content: "In case of physics calculated server side you can choose the precision and the format of the incoming data from the server.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#hExtra" ).qtip({
+                      content: "Hide / Show the nickname and messages of the players.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#cZoom" ).qtip({
+                      content: "Configure the distance of the camera from the center of the scene on Z axis. Minimum distance is fixed to 10 maximum to 500.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#cField" ).qtip({
+                      content: "Configure the camera frustum vertical field of view, from bottom to top of view, in degree.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#maxBand" ).qtip({
+                      content: "The maximum allocated bandwidth for the whole real-time data downstream.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#maxFreq" ).qtip({
+                      content: "Interval between full resynchronizations sent by the server.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#maxFreqS" ).qtip({
+                      content: "The maximum number of updates per second sent by the server for each object in the world.",
+                      position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
+                    });
+                  });
+                  
+                  $(function() {
+                    $( "#dialog" ).dialog({
+                      autoOpen: false,
+                      modal: true});
+                  });
+            </script>
+  
+    <table style="margin: 25px;" width="90%" border="0">  
+      <tr>
+        <td><a href="http://www.lightstreamer.com" target="_blank">
+          <img src="images/logo.png" alt="LIGHTSTREAMER" hspace="0" border="0" /></a></td>
+        <td class="demoTitle" style="align: right" >3D World Demo</td>
+      </tr>
+    </table>
+    
+    <table style="margin: 15px auto;" width="69%">
+      <tr>
+        <td class="note" style="align: center" >
+          This demo shows how well the real-time positions of objects in a multiplayer 3D world can be delivered over WebSockets or HTTP via Lightstreamer Server. 
+          Consider that the demo physics engine can run completely on the server side and the positional and rotational data for all the players in the game are transmitted to all the clients. 
+          In other words, the clients are "pure renderers". Otherwise the physics engine can run both on the client side and server side and the rendering is based on client side physics calculations and periodically synchronized with the server data.  <a href="http://www.lightstreamer.com/">Read the full explanation and instructions...</a>
+        </td>
+      </tr>
+    </table>
+    
+    <table style="margin: 0 auto;" border="0" cellpadding="0" cellspacing="0" width="98%">
+      <tbody>
+      <tr>
+        <td colspan="2" >
+          <!-- <div style="width: 1370px;"> -->
+            <div id="notaccordion" width="100%">
+            
+              <h3 id="identity" style="margin-top: 1px;"><a href="#">Identity</a></h3>
+              <div>
+                <div class="note" style="text-align: left">
+                  <form onSubmit="return false;" class="note" style="font-weight: bold; margin: 0px">
+                    <table>
+                    <td width="225px">
+                      <span>My nickname:</span>
+                      <input id="user_nick" value="" />
+                      <!-- <span id="Nickname"><img class="ui-icon ui-icon-info"></span> src="images/help.png"  -->
+                      <span><img id="Nickname" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
+                    </td>
+                    <td width="305px">
+                      <span>What I think:</span>
+                      <input id="user_msg" value="" />
+                      <span><img id="MyMsg" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
+                      <!-- <input id="nick_button" type="submit" disabled value="Change" class="note"/> -->
+                    </td>
+                    <td>
+                      <span>World:</span>
+                      <input id="user_world" value="Default" />
+                      <input id="world_button" type="submit" disabled value="Teleport" />
+                      <span><img id="Teleport" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
+                      <span id="subscriptionError" style="color: #ff0000;"> </span>
+                      <br>
+                    </td>
+                    </table>
+                  </form>
+                  <form onSubmit="submitWorld(); return false;" class="note" style="font-weight: bold; margin: 0px">
+
+                  </form>
+                  
+                </div>
+              </div>
+              
+              <h3 id="tuning" style="margin-top: 7px;"><a href="#">Tuning</a></h3>
+              <div>
+                <div class="note" style="text-align: left">
+                  <table border="0">  
+                    <tr>
+                      <td class="note" style="font-weight: bold; text-align: left">Current downstream bandwidth of this client: </td>
+                      <td><div data-source="lightstreamer" data-grid="band" data-item=1 data-field="currentBandwidth" class="note" style="text-align: left">--</div></td>
+                      <!--
+                      <td>
+                        <td width="200px">
+                          <div id="feedslider"></div>
+                        </td>
+                        <td width="200px">
+                          <div class="note" style="text-align: left">update every <span id="nowBandFrequency">10</span> seconds</div>
+                        </td>
+                      </td>
+                      -->
+                    </tr>
+                  </table>
+                  <table>
+                    <tr>
+                      <td width="575px">
+                        <form class="note" style="margin: 0px">
+                          <br>
+                          <span style="font-weight: bold; margin: 0px; vertical-align: top;">Physics engine:</span>
+                          <span><img id="Physics" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
+                          <br>
+                          <input type="radio" id="radio_cliSide" name="btnPhysicsSide" value="Client side" checked class="note" /><span id="chkCside"> Client side (with periodic resyncronization) </span>
+                          <br>
+                          <input type="radio" id="radio_serSide" name="btnPhysicsSide" value="Server side" class="note" /><span id="chkSside"> Server side (uses a lot of bandwidth!)</span>
+                          <span id="serSideError" style="color: #ff0000;"> </span>
+                        </form> 
+                      </td>
+                    </tr>
+                  </table>
+                  <br>
+                  <table id="precisionTable">
+                    <tr>
+                      <td width="200px">
+                        <form class="note" style="margin: 0px">
+                          <span style="font-weight: bold; margin: 0px; vertical-align: top;">Data encoding:</span>
+                          <span><img id="Encoding" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
+                          <br>
+                          <input type="radio" id="radio_binary" name="btnPrecision" value="binary" disabled checked class="note" /><span id="chkBin"> Binary </span>
+                          <br>
+                          <input type="radio" id="radio_string" name="btnPrecision" value="string" disabled class="note" /><span id="chkStr"> String</span>
+                        </form> 
+                      </td>
+                      <td width="200px">
+                        <form onSubmit="changePrecision(); return false;" class="note" style="margin: 0px" >
+                          <br>
+                          <input type="radio" id="radio_d" name="btnPrecision" disabled value="double" /><text id="binary_dDesc" style="vertical-align:text-top;" > Double precision </text> 
+                          <br>
+                          <input type="radio" id="radio_s" name="btnPrecision" value="single" disabled checked /><span id="binary_sDesc"> Single precision </span>
+                          <input type="radio" id="radio_f" name="btnPrecision" style="display: none;" disabled value="fixed" /><span id="stringDesc" style="display: none;"> fixed decimals number </span>
+                        </form>
+                      </td>
+                      <td>
+                        <table id="decimalInput" style="visibility:hidden;" >
+                          <tr>
+                            <td class="note" style="text-align: left;">Number of decimals: </td>
+                            <td width="200px">
+                              <div id="decslider"></div>
+                            </td>
+                            <td width="150px">
+                              <div class="note" style="text-align: left"><span id="nowDecimals">8</span> </div>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                  <br>
+                  <table>
+                    <tr>
+                      <td>
+                        <td width="170" class="note" style="text-align: left;">Max bandwidth (for full page) 
+                          <span><img id="maxBand" src="images/help.png" border="0" height="14" width="14" vspace="0" style=""></span>
+                        </td>
+                        <td width="170">
+                          <div id="bwslider"></div>
+                        </td>
+                        <td width="120px">
+                          <div class="note" style="text-align: left"><span id="nowBandwidth">unlimited</span> kbps</div>
+                        </td>
+                      </td>
+                      <td>
+                        <td width="185" class="note" style="text-align:left;"><span id="FreqName">Resynchronization every </span>
+                          <span><img id="maxFreq" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
+                          <span><img id="maxFreqS" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom; display: none;" ></span>
+                        </td>
+                        <td>
+                          <td width="170">
+                            <div id="freqslider"></div>
+                          </td>
+                          <td >
+                            <div class="note" style="text-align: left"><span id="nowFrequency">2</span><span id="um" > seconds</span></div>
+                          </td>
+                        </td>
+                      </td>
+                    </tr>
+                  </table>
+                  <!--
+                  <table>
+                    <tr>
+                      <td colspan="2" class="note" style="text-align: left; color: #000022">
+                        <br />
+                        Use the sliders to change max bandwidth and item update frequency<br />
+                        <br />
+                      </td>
+                    </tr>
+                  </table>
+                  -->
+                </div>
+              </div>
+              
+              <h3 id="matrix" style="margin-top: 7px;"><a href="#">Matrix</a></h3>
+              <div>
+                <!-- message container; the scrollbar will be handled by Lightstreamer -->
+                <div id="message_scroll" class="messagePanel">
+                  <!-- portfolio table; see Lightstreamer-related code in portfolio.js -->
+                  <table cellspacing="1" width="1250 !important" cellpadding="2" border="0">
+                    <tr>
+                      <td colspan="1" nowrap id="col_position" class="tableTitle" style="background-color: #ffffff;" ></td>
+                      
+                      <td colspan="3" nowrap id="col_position" class="tableTitle">Position</td>
+
+                      <td colspan="4" nowrap id="col_rotation" class="tableTitle">Rotation</td>
+                    </tr>
+                    <tr>
+                      <td width="150 !important" nowrap id="col_pos_X" class="tableTitle">Player</td>
+                      <td width="140 !important" nowrap id="col_pos_X" class="tableTitle">X</td>
+                      <td width="140 !important" nowrap id="col_pos_Y" class="tableTitle">Y</td>
+                      <td width="140 !important" nowrap id="col_pos_Z" class="tableTitle">Z</td>
+                      <td width="160 !important" nowrap id="col_rot_X" class="tableTitle">Quaternion X</td>
+                      <td width="160 !important" nowrap id="col_rot_Y" class="tableTitle">Quaternion Y</td>
+                      <td width="160 !important" nowrap id="col_rot_Z" class="tableTitle">Quaternion Z</td>
+                      <td width="160 !important" nowrap id="col_rot_W" class="tableTitle">Quaternion W</td>
+                    </tr>
+                    <!-- row template; will be cloned for each received "ADD" command -->
+                    <tr id="players" data-source="lightstreamer" >
+                      <td><div data-source="lightstreamer" data-field="nick" class="messagePart1"></div></td>
+                      <td><div data-source="lightstreamer" data-field="posX" class="messagePart2"></div></td>
+                      <td><div data-source="lightstreamer" data-field="posY" class="messagePart2"></div></td>
+                      <td><div data-source="lightstreamer" data-field="posZ" class="messagePart2"></div></td>
+                      <td><div data-source="lightstreamer" data-field="rotX" class="messagePart2"></div></td>
+                      <td><div data-source="lightstreamer" data-field="rotY" class="messagePart2"></div></td>
+                      <td><div data-source="lightstreamer" data-field="rotZ" class="messagePart2"></div></td>
+                      <td><div data-source="lightstreamer" data-field="rotW" class="messagePart2"></div></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              
+              <h3 id="commands" style="margin-top: 7px;"><a href="#">Commands</a></h3>
+              <div>
+                <div class="note" style="text-align: left">
+                  <table>
+                    <tr>
+                      <td width="350" class="note" style="text-align:left;font-weight:bold;">
+                        <form class="note" style="margin: 0px">
+                          <input id="c_d_button" type="submit" value="d" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add +1 force impulse on axis X</span>
+                          <br>
+                        </form>
+                        <form class="note" style="margin: 0px">
+                          <input id="c_a_button" type="submit" value="a" style="font-family: Courier New; font-size: 10pt;" />
+                          <span> add -1 force impulse on axis X</span>
+                          <br>
+                        </form>
+                        <form class="note" style="margin: 0px">
+                          <input id="c_w_button" type="submit" value="w" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add +1 force impulse on axis Y</span>
+                          <br>
+                        </form>
+                        <form class="note" style="margin: 0px">
+                          <input id="c_s_button" type="submit" value="s" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add -1 force impulse on axis Y</span>
+                          <br>
+                        </form>
+                        <form class="note" style="margin: 0px">
+                          <input id="c_1_button" type="submit" value="1" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add +1 force impulse on axis Z</span>
+                          <br>
+                        </form>
+                        <form class="note" style="margin: 0px">
+                          <input id="c_2_button" type="submit" value="2" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add -1 force impulse on axis Z</span>
+                          <br>
+                        </form>
+                      </td>
+                      <td>
+                        <br>
+                        <form onSubmit="submitKey(1068); return false;" class="note" style="margin: 0px">
+                          <input id="sd_button" type="submit" value="shift+d" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add +1 torque impulse on axis X</span>
+                          <br>
+                        </form>
+                        <form onSubmit="submitKey(1065); return false;" class="note" style="margin: 0px">
+                          <input id="sa_button" type="submit" value="shift+a" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add -1 torque impulse on axis X</span>
+                          <br>
+                        </form>
+                        <form onSubmit="submitKey(1087); return false;" class="note" style="margin: 0px">
+                          <input id="sw_button" type="submit" value="shift+w" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add +1 torque impulse on axis Y</span>
+                          <br>
+                        </form>
+                        <form onSubmit="submitKey(1083); return false;" class="note" style="margin: 0px">
+                          <input id="ss_button" type="submit" value="shift+s" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add -1 torque impulse on axis Y</span>
+                          <br>
+                        </form>
+                        <form onSubmit="submitKey(1049); return false;" class="note" style="margin: 0px">
+                          <input id="s1_button" type="submit" value="shift+1" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add +1 torque impulse on axis Z</span>
+                          <br>
+                        </form>
+                        <form onSubmit="submitKey(1050); return false;" class="note" style="margin: 0px">
+                          <input id="s2_button" type="submit" value="shift+2" style="font-family: Courier New; font-size: 10pt;"/>
+                          <span> add -1 torque impulse on axis Z</span>
+                          <br>
+                        </form>
+                      </td>
+                    </tr>      
+                  </table>
+                </div>
+              </div>
+              
+              <h3 id="rendering" style="margin-top: 7px;"><a href="#">Rendering</a></h3>
+              <div>
+                <div class="note" style="text-align: left">
+                  <table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td>
+                        <td colspan="2" class="note" style="text-align:left;font-weight:bold;">Camera zoom: </td>
+                        
+                        <td align="center" width="40px" >
+                          <span><img id="cZoom" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
+                        </td>
+                        <td width="40px">
+                          <div class="note" style="font-weight: bold; text-align: right"><span id="idzm"> +</span> </div>
+                        </td>
+                        <td width="200px">
+                          <div id="zoomslider"></div>
+                        </td>
+                        <td width="80px">
+                          <div class="note" style="font-weight: bold; text-align: left"><span id="idzoom">- </span> </div>
+                        </td>
+                      </td>
+                      <td>
+                        <td colspan="2" class="note" style="text-align:left;font-weight:bold;">Camera field of view: </td>
+                        <td align="center" width="40px" >
+                          <span><img id="cField" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
+                        </td>
+                        <td width="40px">
+                          <div class="note" style="font-weight: bold; text-align: right"><span id="idf"> +</span> </div>
+                        </td>
+                        <td width="200px">
+                          <div id="fovslider"></div>
+                        </td>
+                        <td width="80px">
+                          <div class="note" style="font-weight: bold; text-align: left"><span id="idfov">- </span> </div>
+                        </td>
+                      </td>
+                      <td width="200px" >
+                        <input type="checkbox" id="checkExtra" checked /><label for="checkExtra">Hide Extra Info</label>
+                        <span><img id="hExtra" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
+                      </td>
+                      <td>
+                      <table>
+                        <tr>
+                          <td colspan="3" width="80px" align="center">
+                            <input id="w_button" type="submit" value="w" />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input id="a_button" type="submit" value="a" />
+                          </td>
+                          <td>
+                            <input id="s_button" type="submit" value="s" />
+                          </td>
+                          <td>
+                            <input id="d_button" type="submit" value="d" />
+                          </td>
+                        </tr>
+                      </table>
+                      </td>
+                      <td>
+                      <table>
+                        <tr>
+                          <td colspan="1" width="80px" align="center">
+                            <input id="1_button" type="submit" value="1" style="font-family: Courier New; font-size: 7pt;" />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="1" width="80px" align="center">
+                            <input id="2_button" type="submit" value="2" style="font-family: Courier New; font-size: 7pt;" />
+                          </td>
+                        </tr>
+                      </table>
+                      </td>
+                      <td width="200px" >
+                        <input type="checkbox" id="checkRot" checked /><label id="lblcheckRot" for="checkRot">Position</label>
+                      </td>
+                    </tr>
+                  </table>  
+                  <div id="theWorld" style="background-color: #0d0d0d;" border="0"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  
+  </div>
+  
+  
+  
+      <script src="js/three.min.js"></script>
+      <script src="js/helvetiker_regular.typeface.js"></script>
+      <script src="js/droid_serif_bold.typeface.js"></script>
+      <script src="js/droid_serif_regular.typeface.js"></script>
+      
+<script type="text/javascript">
+
+  /////////////// Initializations
+  
+  document.getElementById("user_nick").disabled = false;   
+  document.getElementById("user_world").disabled = false;   
+  
+  document.getElementById("binary_dDesc").style.verticalAlign="bottom";
+  document.getElementById("binary_sDesc").style.verticalAlign="bottom";
+  document.getElementById("chkBin").style.verticalAlign="bottom";
+  document.getElementById("chkStr").style.verticalAlign="bottom";
+  document.getElementById("chkCside").style.verticalAlign="bottom";
+  document.getElementById("chkSside").style.verticalAlign="bottom";
+  
+  document.getElementById("user_msg").innerHTML = "";
+  
+  // open an accordion soon after page load
+  setTimeout(function(){ $("#identity").toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")
+    .find("> .ui-icon").toggleClass("ui-icon-triangle-1-e ui-icon-triangle-1-s").end()
+    .next().toggleClass("ui-accordion-content-active").slideToggle(); }, 750);
+  
+  setTimeout(function(){ 
+    $("#rendering").toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")
+      .find("> .ui-icon").toggleClass("ui-icon-triangle-1-e ui-icon-triangle-1-s").end()
+      .next().toggleClass("ui-accordion-content-active").slideToggle();
+    checkTable({id: "rendering"});
+    }, 900);
+  
+</script>
+
+<script src="js/render.js"></script>
+<script src="js/main.js"></script>
+<script src="js/floatencoding_b64.js"></script>
+
+<div id="dialog" title="Game Over" class="note">
+  <p>Game over for inactivity. Please refresh the page to resume.</p>
+</div>
+
+</body>
+
+</html>
+
