@@ -46,7 +46,7 @@ Before you can run the demo some dependencies need to be solved:
 
 You can deploy this Demo in order to use the Lightstreamer server as Web server or in any external Web Server you are running. 
 If you choose the former case please create a "3DWorldDemo" folder in the <LS_HOME>\pages\demos folder and copy here all the files and subfolders from the src directory of this project. The client demo configuration assume that Lightstreamer Server, Lightstreamer 3D World Adapter and this client are launched on the same machine. 
-Anyway the 3DWorldDemo Adapter have to be deployed in your local Lightstreamer server instance. Please check out the project and follow the installation instructions provided with it.
+Anyway the [3DWorldDemo Adapter Set](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) have to be deployed in your local Lightstreamer server instance. Please check out the project and follow the installation instructions provided with it.
 The demo is now ready to be launched. [Here](http://www.lightstreamer.com/demo/3DWorldDemo/) a demostration hosted in our servers.
 
 Lightstreamer Compatibility Notes
