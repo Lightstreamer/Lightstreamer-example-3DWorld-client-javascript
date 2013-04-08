@@ -47,18 +47,13 @@ var myLastWorlds = "";
 var logonName = null;
 var myWorld = "Utente";
 
-//document.getElementById("chkTable").onclick=checkTable(this);
 
 function checkCanvas(checkBtn) {
   if ( rndrListener != null ) {
     if (checkBtn.checked == true ) {
-      // subsPlayers.removeListener(rndrListener);
-      //  document.getElementById("theWorld").hidden = "hidden";
       stopRender();
       document.getElementById("theWorld").style.display = "none";
     } else {
-      // subsPlayers.addListener(rndrListener);
-      //  document.getElementById("theWorld").hidden = "";
       startRender();
       document.getElementById("theWorld").style.display = "";
     }
@@ -138,14 +133,12 @@ function startGrid() {
           var tmp = new Subscription("MERGE",key,["dVx", "dVy", "dVz", "dRx", "dRy", "dRz"]);
           
           tmp.setRequestedSnapshot("yes");
-          //tmp.setRequestedMaxFrequency("unfiltered");
           tmp.setRequestedMaxFrequency("unlimited");
           tmp.addListener({
             onItemUpdate: function(updInfo) {
               
               if ( updInfo.isValueChanged("dVx") ) {
                 updateDinamics2(updInfo.getItemName(), "dVx", updInfo.getValue("dVx"));
-                // console.error("Inner2 - addDeltaSub: " + updInfo.getItemName() + "," + updInfo.getValue("dVx"));
               }
               if ( updInfo.isValueChanged("dVy") ) {
                 updateDinamics2(updInfo.getItemName(), "dVy", updInfo.getValue("dVy"));
@@ -239,15 +232,12 @@ function checkTable(obj) {
       if (matrix) {
         stopGrid();
         matrix = false;
-        //document.getElementById("message_scroll").style.display="none";
       } else {
         startGrid();
         matrix = true;
-        //document.getElementById("message_scroll").style.display="";
       }
     }
   } else if (obj.id == "rendering" ) {
-    //rendering = (window.getComputedStyle(document.getElementById("rendering"),null).getPropertyValue("color") == "rgb(255, 255, 255)");
     if ( rendering  == true ) {
       stopRender();
       rendering = false;
@@ -282,7 +272,7 @@ function changePrecision() {
   //  define("lsClient",["LightstreamerClient","StatusWidget"],function(LightstreamerClient,StatusWidget) {
   define("lsClient",["LightstreamerClient","StatusWidget"],function(LightstreamerClient,StatusWidget) {
     var protocolToUse = document.location.protocol != "file:" ? document.location.protocol : "http:";
-    var lsClient = new LightstreamerClient("http://localhost:8080","DEMOMOVE3D");
+    var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");
     lsClient.connectionSharing.enableSharing("Move3dDemo", "ATTACH", "CREATE");
     //lsClient.connectionOptions.setForcedTransport("WS-POLLING");
     lsClient.connectionOptions.setXDomainStreamingEnabled(false);
@@ -316,10 +306,8 @@ function changePrecision() {
     
     if ( chkSwitchShift == true ) {
       chkSwitchShift = false;
-      // document.getElementById("lblcheckRot").innerHTML = "Position";
       $( "#checkRot" ).button( "option", "label", "Position" );
     } else {
-      // document.getElementById("lblcheckRot").innerHTML = "Rotation";
       $( "#checkRot" ).button( "option", "label", "Rotation" );
       chkSwitchShift = true;
     }
@@ -332,9 +320,6 @@ function changePrecision() {
   addEvent("resize", onWindowResize, true);
   addEvent("hashchange", get_hash, true);
   
-  //window.attachEvent("onkeyup", KeyCheck);
-  //document.addEventListener(document.onkeyup, KeyCheck, false);
-
   function addEvent(evnt, handler, noDoc){ 
     if (typeof window.addEventListener != "undefined") {
       window.addEventListener(evnt, handler, false);
@@ -356,23 +341,6 @@ function changePrecision() {
   function KeyCheck(e) {
     var keyId = (window.event) ? event.keyCode : e.keyCode;
     var shift = (window.event) ? event.shiftKey : e.shiftKey;
-    
-    /*console.log("Key ID:" + keyId);
-    
-    if ( (keyId == 38) || (keyId == 40) || (keyId == 37) || (keyId == 39) || (keyId == 96) || (keyId == 97) || (keyId == 35) || (keyId == 45) ) {
-      if ( client != null ) {
-        if ( shift ) {
-           msg = "10" + keyId;
-        } else {
-          if ( keyId == 35 ) {
-            msg = "1096";
-          } else if ( keyId == 45 ) {
-            msg = "1097";
-          } else {
-            msg = keyId;
-          }
-        }
-    */
     
     if (keyId == 13) {
       // Return
@@ -411,8 +379,6 @@ function changePrecision() {
             // OK.
           }
         });
-        
-      //  updateDinamics(logonName+"_bs", msg);
       } 
     }
   }
@@ -472,8 +438,7 @@ function changePrecision() {
     
     if ( (physicsMod == 0) &&  document.getElementById("radio_serSide").checked ) {
       // Passare in modalità server side physics calculation.
-      console.log("Start Server physics calculation.");
-      // backUpDeltasKeys();
+      //console.log("Start Server physics calculation.");
       subServerSide();
       unsubDeltas();
       stopPhysics();
@@ -499,13 +464,13 @@ function changePrecision() {
     } 
     if ( (physicsMod == 1) &&  document.getElementById("radio_cliSide").checked ) {
       // Passare in modalità client side physics calculation.
-      console.log("Start Client physics calculation.");
+      //console.log("Start Client physics calculation.");
       unsubServerSide();
       resubDeltas();
       startPhysics();
       physicsMod = 0;
       
-      // Fisso Binary Single precision.
+      // Fix Binary Single precision.
       document.getElementById("radio_string").checked = false;
       document.getElementById("radio_binary").checked = true;
       document.getElementById("radio_f").checked = false;
@@ -540,9 +505,6 @@ function changePrecision() {
       document.getElementById("radio_s").style.display = "none";
       document.getElementById("binary_sDesc").style.display = "none";
       document.getElementById("binary_dDesc").style.display = "none";
-      
-      // document.getElementById("stringDesc").style.display = "";
-      // document.getElementById("radio_f").style.display = "";
       
       if (physicsMod != 0 ) {
         document.getElementById("radio_f").disabled = false;
@@ -615,7 +577,6 @@ function changePrecision() {
       },
       onProcessed: function(originalMex) {
         // OK.
-        //updateNick(logonName+"_"+precision, nick);
       }
     });
   }
@@ -639,7 +600,6 @@ function changePrecision() {
       },
       onProcessed: function(originalMex) {
         // OK.
-        // updateLastMsg(logonName+"_"+precision, txt);
       }
     });
   }
@@ -657,11 +617,6 @@ function changePrecision() {
           client.unsubscribe(subsLogon);
           
           subsPlayers.setItems(["Custom_list_"+myWorld+"_"+precision]);
-          //subsPlayers.addListener({onSubscription: function(){
-          //    subsLogon.setItemGroup("c_logon_"+myWorld+"_"+logonName);
-          //    client.subscribe(subsLogon);
-          //  }
-          //});
           client.subscribe(subsPlayers);
           
           clearScene();
@@ -690,8 +645,10 @@ function changePrecision() {
   }
 
   function submitMsg() {
+    var text = null;
+    
     if (document.getElementById("user_msg")) {
-      var text = new String(document.getElementById("user_msg").value, "UTF_8");
+      text = new String(document.getElementById("user_msg").value, "UTF_8");
       
       text = text.replace(/à/g, "a");
       text = text.replace(/è/g, "e");
@@ -699,15 +656,18 @@ function changePrecision() {
       text = text.replace(/ì/g, "i");
       text = text.replace(/ò/g, "o");
       text = text.replace(/ù/g, "u");
-      
-      if (!text) {
-        alert("Please type a message.");
-      } else if (text.indexOf(".") == 0) {
-        alert(". as first character not valid!");
-      } else {
-        sendMyMsg(text);
-        myLastWorlds = text;
-      }
+    } else {
+      text = " ";
+    }
+    
+    /*if (!text && (myLastWorlds == "")) {
+      alert("Please type a message.");
+    } else*/
+    if (text.indexOf(".") == 0) {
+      alert(". as first character not valid!");
+    } else {
+      sendMyMsg(text);
+      myLastWorlds = text;
     }
   } 
   
@@ -775,10 +735,8 @@ function changePrecision() {
     info.setCellValue(field, d);
   }
     
-  // will create a Subscription+DynaGrid when the nickname is available
   function createMessageGrid() {
-  
-    //require(["lsClient","DynaGrid","StaticGrid","Subscription"],function(lsClient,DynaGrid,StaticGrid,Subscription) {  
+   
     require(["lsClient","DynaGrid","StaticGrid","Subscription"],function(lsClient,DynaGrid,StaticGrid,Subscription) {  
       client = lsClient;
       
@@ -787,19 +745,16 @@ function changePrecision() {
       imGrid.setAutoScroll("ELEMENT", "message_scroll"); // automatic scrolling for new messages
       imGrid.setAutoCleanBehavior(false, false);
       imGrid.addListener({
-        // background colors to associate to identities
         colors: ["#FFFFE0","#FFEBCD","#F0F8FF","#CCFFCC","#FFF5EE","#E0FFFF","#F0FFF0","#F0E68C","#87CEEB","#E6E6FA","#FFB6C1","#F5FFFA","#FFFAFA","#F5F5DC","#F8F8FF","#FFE4E1","#D8BFD8","#FFF0F5","#EEE8AA"],
         next: 0,
         associated: {},
       
         // set visual effects on received messages
         onVisualUpdate: function(key,info,domNode) {
-          //console.log("START --------------------------->");
         
           if (info == null) {
             return;
           }
-          //var precision = info.getCellValue("precision");
           if ( info.getCellValue("nick").indexOf(".") == 0) {
             info.setCellValue("nick", info.getCellValue("nick").substring(1));
           } else if ( precision == "bd" ) {
@@ -827,17 +782,7 @@ function changePrecision() {
             });
           
           } else {
-          
-            /*
-            info.forEachChangedField(function(fieldName,newValue) {
-              if (newValue != null) {
-                if ( fieldName != "nick" ) {
-                  var f = newValue * 1.0;
-                  info.setCellValue(fieldName, f);
-                }
-              }
-            });
-            */
+            // Skip.
           }
           
           if (info.getChangedFieldValue("nick") != null ) {
@@ -846,35 +791,20 @@ function changePrecision() {
               domNode.style.color = "#FF0000";
               domNode.style.backgroundColor = "#E5E5E5";
             } else if ( !info.getCellValue("nick").indexOf("Ghost") == 0) { 
-              // domNode.style.backgroundColor = "#00FFFF";
               domNode.style.backgroundColor = "#E5E5E5";
               domNode.style.color = "#0F87FF";
             } else {
-              // domNode.style.backgroundColor = "#E5E5E5";
               domNode.style.backgroundColor = "#E5E5E5";
               domNode.style.color = "#000000";
             }
           }
-          
-          /*
-          var narr = key.split(" ");
-          if ( key.indexOf(logonName) == -1 ) {
-            updateScene(narr[1], info.getCellValue("posX"), info.getCellValue("posY"), info.getCellValue("posZ"), info.getCellValue("rotX"), info.getCellValue("rotY"), info.getCellValue("rotZ"), info.getCellValue("rotW"), false);
-          } else {
-            updateScene(narr[1], info.getCellValue("posX"), info.getCellValue("posY"), info.getCellValue("posZ"), info.getCellValue("rotX"), info.getCellValue("rotY"), info.getCellValue("rotZ"), info.getCellValue("rotW"), true);
-          }*/
-          //console.log("STOP ---------------------------<");
         }
       });
       
       subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key"]);
       subsPlayers.setRequestedSnapshot("yes");
-      // subsPlayers.setCommandSecondLevelFields(["nick", "msg", "lifeSpan","posY", "posZ", "rotX", "rotY", "rotZ", "rotW", "posX", "dVx", "dVy", "dVz", "dRx", "dRy", "dRz"]);
       subsPlayers.setCommandSecondLevelFields(["nick", "msg", "lifeSpan","posY", "posZ", "rotX", "rotY", "rotZ", "rotW", "posX"]);
-      //subsPlayers.setRequestedMaxFrequency("unlimited");
-      //subsPlayers.setRequestedMaxFrequency(33.0);
       subsPlayers.setRequestedMaxFrequency(0.5);
-      //subsPlayers.addListener(imGrid);
       rndrListener = {
         onItemUpdate: function(updateInfo){
           var posX = null;
@@ -885,8 +815,6 @@ function changePrecision() {
           var rotZ = null;
           var rotW = null;
           var r, d;
-          
-          //console.log("START ------>");
           
           if ( precision == "bd" ) {
             
@@ -1003,7 +931,6 @@ function changePrecision() {
             removeFromScene(updateInfo.getValue("key"));
             removeDeltaSub(updateInfo.getValue("key"));
           } else {  
-            //if ( updateInfo.getValue("key").indexOf(logonName) == -1 ) {
             if ( updateInfo.isValueChanged("nick") ) {
               if ( (updateInfo.getValue("nick") == myNick) || (updateInfo.getValue("nick") == (precision+logonName)) || (updateInfo.getValue("nick") == (logonName)) ) {
                 iam = true;
@@ -1018,10 +945,6 @@ function changePrecision() {
               }
             }
             
-            //if ( updateInfo.getValue("command") == "ADD" ) {
-            //  addDeltaSub(updateInfo.getValue("key"));
-            //}
-            
             if ( updateInfo.isValueChanged("nick") ) {
               if ( updateInfo.getValue("nick") != null) {
                 updateNick(updateInfo.getValue("key"), updateInfo.getValue("nick"), iam);
@@ -1031,22 +954,11 @@ function changePrecision() {
             if ( updateInfo.isValueChanged("msg") ) {
               if ( updateInfo.getValue("msg") != null ) {
                 updateLastMsg(updateInfo.getValue("key"), updateInfo.getValue("msg"));
+              } else if ( updateInfo.getValue("msg") == "" ) {
+                updateLastMsg(updateInfo.getValue("key"), "");
               }
             }
-            
-              /*
-            if ( updateInfo.getValue("command") == "ADD" ) {
-              console.log("posX: " + posX + ", nick: " + updateInfo.getValue("nick"));
-              if (( posX != 0 ) && ( posX != null ) && (updateInfo.getValue("nick") != null) ) {
-              
-              }
-            }*/ 
           }
-          
-          /*
-          if (!updateInfo.getValue("key").startsWith("Ghost")) {
-            console.log("Player : " + updateInfo.getValue("key") + " -> " + updateInfo.getValue("lifeSpan"));
-          }*/
         },
         onUnsubscription: function() {
           clearScene();
@@ -1064,7 +976,6 @@ function changePrecision() {
       
       
       subsLogon = new Subscription("DISTINCT", "c_logon_"+myWorld+"_"+logonName+"_"+physicsMod, ["Test"]);
-      //subsLogon = new Subscription("DISTINCT", "logon_"+logonName, ["Test"]);
       subsLogon.addListener({onSubscription: function(){
           if (myNick != logonName) {
             sendNickMsg(myNick)
@@ -1076,7 +987,6 @@ function changePrecision() {
           document.getElementById("subscriptionError").innerHTML = msg;
         }
       });
-      // lsClient.subscribe(subsLogon);
       
       var bandGrid = new StaticGrid("band",true);
       bandGrid.addListener({onVisualUpdate: function(key,info,dom) {
@@ -1097,9 +1007,6 @@ function changePrecision() {
     }); 
  }
 
-//////////////// Buddy Table Management
-
-  // will create a Subscription+DynaGrid after the login
   function createBuddyTable() {
 
    }

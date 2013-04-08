@@ -35,14 +35,7 @@ var MAX_SIZE_Z = 60;
 var scene = new THREE.Scene(); 
 
 // Camera definition
-//var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000); 
 var camera = null; 
-// var camera = new THREE.OrthographicCamera( WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 1, 1000 );
-// var camera = new THREE.OrthographicCamera( -100, 100, -100, 100, 1, 1000 );
-
-// Rendering definition
-//var renderer = new THREE.CanvasRenderer();
-//var renderer = new THREE.WebGLRenderer(); 
 
 var webGLinUse = true;
 var extraInfo = true;
@@ -53,7 +46,6 @@ var goRender = true;
 var goPhysics = true;
 
 var materialMe = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
-//var materialOther = new THREE.MeshLambertMaterial( { color: 0x00ffff } );
 var materialOther = new THREE.MeshLambertMaterial( { color: 0x0f87ff } );
 var materialGhost = new THREE.MeshLambertMaterial( { color: 0xdddddd } );
 var materialSphere = new THREE.MeshLambertMaterial( { color: 0xffc32b } );
@@ -77,10 +69,6 @@ try {
   var lightF = new THREE.DirectionalLight( 0xffffff, 2 );
   lightF.position.set( 160, 90, 120 );
   scene.add( lightF );
-  
-  //var lightR = new THREE.DirectionalLight( 0x000000, 3 );
-  //lightF.position.set( -160, -90, -120 );
-  //scene.add( lightR );
   
   var light = new THREE.PointLight( 0xffffff, 2 ); 
   light.position.set( -160, -90, -120 );
@@ -210,9 +198,6 @@ var textaX = new THREE.TextGeometry( "x", {
           });
 textaX.computeBoundingBox();
 var aX = new THREE.Mesh(textaX, materialAxisLabel);
-//aX.position.x = -75;
-//aX.position.y = -44;
-//aX.position.z = -55;
 aX.position.x = -21;
 aX.position.y = -45;
 aX.position.z = -50;
@@ -266,8 +251,6 @@ aZ.quaternion.w = 0.7071067811;
 group.add( aZ );
 
 scene.add( group );
-// camera.position.x = 200;
-// camera.position.y = 112;
 camera.position.z = 140;
 camera.lookAt( sphere.position );
 
@@ -279,13 +262,11 @@ function physicsCalculator() {
   for (var i = 0; i < cube.length; i++) {
     var tmp = 0.0;
   
-    // console.log("X: " + cube[i].position.x);
     tmp = cube[i].position.x + (dinamics[i].V.x * 0.002);
     cube[i].position.x = tmp;
     texts[i].position.x = (tmp+2);
     msgs[i].position.x = tmp;
       
-    // console.log("X: " + cube[i].position.x + ", DeltaX: " + (dinamics[i].V.x * 0.002));
     if ( cube[i].position.x >= MAX_SIZE_X ) {
       cube[i].position.x = (MAX_SIZE_X * -1);
     } else {
@@ -324,12 +305,6 @@ function physicsCalculator() {
     qz.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), (dinamics[i].R.z*0.02) );
     cube[i].quaternion.multiply( qz );
     cube[i].quaternion.normalize();
-      
-      /*cube[i].rotation.x += (dinamics[i].R.x*0.01);
-      cube[i].rotation.y += (dinamics[i].R.y*0.01);
-      cube[i].rotation.z += (dinamics[i].R.z*0.01);*/
-      
-      //console.log("Nuovo X:" + cube[i].position.x + ", vx: " + dinamics[i].V.x);
     }
 }
 
@@ -389,13 +364,25 @@ function updateLastMsg(plyr, msg) {
   }
   
   if ( indx > -1 && !( plyr.indexOf("Ghost") == 0) ) {
-    var text3d = new THREE.TextGeometry( msg, {
+    var text3d = null;
+    if ( (msg != null) && (msg != "") ) {
+      text3d = new THREE.TextGeometry( msg, {
             size: 1.2,
             height: 0,
             curveSegments: 0,
 
-          font: "droid serif"
+            font: "droid serif"
           });
+    } else {
+      text3d = new THREE.TextGeometry( ".", {
+              size: 0,
+              height: 0,
+              curveSegments: 0,
+
+              font: "droid serif",
+            });
+    }          
+          
     text3d.computeBoundingBox();
     
     if ( extraInfo ) {
@@ -563,14 +550,12 @@ function clearScene() {
     nicks.pop();
     dinamics.pop();
     tmpNicks = texts.pop();
-    // scene.remove(tmpBox);
     group.remove(tmpBox);
     group.remove(tmpNicks);
     
     tmpBox = msgs.pop();
     group.remove(tmpBox);
   }
-  //scene.remove( group );
   
   render();
 }
@@ -581,7 +566,6 @@ function removeFromScene(plyr) {
     return ;
   }
   
-  //scene.remove(cube[indx]);
   group.remove(cube[indx]);
   group.remove(texts[indx]);
   group.remove(msgs[indx]);
