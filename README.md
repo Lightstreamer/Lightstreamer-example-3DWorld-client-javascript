@@ -47,7 +47,7 @@ Before you can run the demo some dependencies need to be solved:
 
 You can deploy this Demo in order to use the Lightstreamer server as Web server or in any external Web Server you are running. 
 If you choose the former case please create a "3DWorldDemo" folder in the <LS_HOME>/pages/demos folder and copy here all the files and subfolders from the src directory of this project. The client demo configuration assume that Lightstreamer Server, Lightstreamer 3D World Adapter and this client are launched on the same machine.
-If you need to targetting a different Lightstreamer server search this line in main.js:
+If you need to targeting a different Lightstreamer server please search this line in main.js:
 ```js
 var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");
 ```
