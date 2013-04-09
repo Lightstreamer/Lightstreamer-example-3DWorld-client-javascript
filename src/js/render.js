@@ -28,6 +28,10 @@ var msgs = new Array();
 var dinamics = new Array();
 var sceneReady = false;
 
+var FRAME_RATE = 30;
+var BASE_RATE = 10;
+var rateFactor = 0;
+
 var MAX_SIZE_X = 85;
 var MAX_SIZE_Y = 45;
 var MAX_SIZE_Z = 60;
@@ -256,38 +260,57 @@ camera.lookAt( sphere.position );
 
 function physicsCalculator() {
   if (goPhysics) {
-    setTimeout(physicsCalculator, 10);
+    setTimeout(physicsCalculator, FRAME_RATE);
   }
   
   for (var i = 0; i < cube.length; i++) {
     var tmp = 0.0;
   
-    tmp = cube[i].position.x + (dinamics[i].V.x * 0.002);
+    tmp = cube[i].position.x + (dinamics[i].V.x * 0.002 * rateFactor);
     cube[i].position.x = tmp;
     texts[i].position.x = (tmp+2);
     msgs[i].position.x = tmp;
-      
     if ( cube[i].position.x >= MAX_SIZE_X ) {
       cube[i].position.x = (MAX_SIZE_X * -1);
+      texts[i].position.x = ((MAX_SIZE_X * -1) + 2);
+      msgs[i].position.x = (MAX_SIZE_X * -1);
     } else {
       if ( cube[i].position.x <= (MAX_SIZE_X * -1) ) {
-        cube[i].position.x = MAX_SIZE_X ;
+        cube[i].position.x = MAX_SIZE_X;
+        texts[i].position.x = (MAX_SIZE_X + 2);
+        msgs[i].position.x = MAX_SIZE_X;
       }
     }
-    cube[i].position.y += (dinamics[i].V.y * 0.002);
+    
+    tmp = cube[i].position.y + (dinamics[i].V.y * 0.002 * rateFactor);
+    cube[i].position.y = tmp;
+    texts[i].position.y = (tmp + 1);
+    msgs[i].position.y = (tmp - 1);
     if ( cube[i].position.y >= MAX_SIZE_Y ) {
       cube[i].position.y = (MAX_SIZE_Y * -1);
+      texts[i].position.y = ((MAX_SIZE_Y * -1) + 1);
+      msgs[i].position.y = ((MAX_SIZE_Y * -1) - 1);
     } else {
       if ( cube[i].position.y <= (MAX_SIZE_Y * -1) ) {
-        cube[i].position.y = MAX_SIZE_Y ;
+        cube[i].position.y = MAX_SIZE_Y;
+        texts[i].position.y = (MAX_SIZE_Y + 1);
+        msgs[i].position.y = MAX_SIZE_Y - 1;
       }
     }
-    cube[i].position.z += (dinamics[i].V.z * 0.002);
+    
+    tmp = cube[i].position.z + (dinamics[i].V.z * 0.002 * rateFactor);
+    cube[i].position.z = tmp;
+    texts[i].position.z = (tmp + 2);
+    msgs[i].position.z = (tmp + 2);
     if ( cube[i].position.z >= MAX_SIZE_Z ) {
       cube[i].position.z = (MAX_SIZE_Z * -1);
+      texts[i].position.z = ((MAX_SIZE_Z * -1) + 2);
+      msgs[i].position.z = (MAX_SIZE_Z * -1) + 2;
     } else {
       if ( cube[i].position.z <= (MAX_SIZE_Z * -1) ) {
         cube[i].position.z = MAX_SIZE_Z ;
+        texts[i].position.z = ((MAX_SIZE_Z) + 2);
+        msgs[i].position.z = (MAX_SIZE_Z) + 2;
       }
     }
       
@@ -661,5 +684,6 @@ function extraInfoOnOff() {
 }
 
 sceneReady = true;
+rateFactor = (FRAME_RATE/BASE_RATE);
 physicsCalculator();
 render(); 

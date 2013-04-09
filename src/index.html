@@ -265,6 +265,7 @@
                     $( "#user_world" ).autocomplete({
                       autoFocus: true,
                       delay: 0,
+                      minLength: 0,
                       source: availableTags,
                       focus: function( event, ui ) {
                         enableButton();
@@ -601,7 +602,7 @@
                     </td>
                     <td>
                       <span>World:</span>
-                      <input id="user_world" value="Default" />
+                      <input id="user_world" value="Default" onfocus="enableButton();"/>
                       <input id="world_button" type="submit" disabled value="Teleport" />
                       <span><img id="Teleport" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
                       <span id="subscriptionError" style="color: #ff0000;"> </span>
@@ -643,7 +644,7 @@
                           <span style="font-weight: bold; margin: 0px; vertical-align: top;">Physics engine:</span>
                           <span><img id="Physics" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
                           <br>
-                          <input type="radio" id="radio_cliSide" name="btnPhysicsSide" value="Client side" checked class="note" /><span id="chkCside"> Client side (with periodic resyncronization) </span>
+                          <input type="radio" id="radio_cliSide" name="btnPhysicsSide" value="Client side" checked class="note" /><span id="chkCside"> Client side (with periodic resynchronization) </span>
                           <br>
                           <input type="radio" id="radio_serSide" name="btnPhysicsSide" value="Server side" class="note" /><span id="chkSside"> Server side (uses a lot of bandwidth!)</span>
                           <span id="serSideError" style="color: #ff0000;"> </span>
@@ -718,17 +719,6 @@
                       </td>
                     </tr>
                   </table>
-                  <!--
-                  <table>
-                    <tr>
-                      <td colspan="2" class="note" style="text-align: left; color: #000022">
-                        <br />
-                        Use the sliders to change max bandwidth and item update frequency<br />
-                        <br />
-                      </td>
-                    </tr>
-                  </table>
-                  -->
                 </div>
               </div>
               
@@ -736,7 +726,13 @@
               <div>
                 <!-- message container; the scrollbar will be handled by Lightstreamer -->
                 <div id="message_scroll" class="messagePanel">
-                  <!-- portfolio table; see Lightstreamer-related code in portfolio.js -->
+                  <table>
+                    <tr>
+                      <td class="note" style="align: center" >
+                        This table shows the positions and rotations received from the server. If in the Tuning section you select the Client-side physics engine, only the periodic world synchronization will be delivered by the server.
+                      </td>
+                    </tr>
+                  </table>
                   <table cellspacing="1" width="1250 !important" cellpadding="2" border="0">
                     <tr>
                       <td colspan="1" nowrap id="col_position" class="tableTitle" style="background-color: #ffffff;" ></td>
@@ -934,11 +930,8 @@
     </tbody>
   </table>
 
-  
   </div>
-  
-  
-  
+
       <script src="js/three.min.js"></script>
       <script src="js/helvetiker_regular.typeface.js"></script>
       <script src="js/droid_serif_bold.typeface.js"></script>
@@ -950,6 +943,7 @@
   
   document.getElementById("user_nick").disabled = false;   
   document.getElementById("user_world").disabled = false;   
+  document.getElementById("world_button").disabled = true;   
   
   document.getElementById("binary_dDesc").style.verticalAlign="bottom";
   document.getElementById("binary_sDesc").style.verticalAlign="bottom";
@@ -959,6 +953,24 @@
   document.getElementById("chkSside").style.verticalAlign="bottom";
   
   document.getElementById("user_msg").innerHTML = "";
+
+  document.getElementById("radio_cliSide").checked = true;
+  
+  setTimeout(function(){ 
+      try {
+        document.getElementById("radio_binary").checked = true;
+        document.getElementById("radio_string").disabled = true;
+        document.getElementById("radio_binary").disabled = true;
+        
+        document.getElementById("radio_d").disabled = true;
+        document.getElementById("radio_s").checked = true;
+        document.getElementById("radio_s").disabled = true;
+        document.getElementById("radio_f").disabled = true;
+        $( "#decslider" ).slider( "option", "disabled", true );
+      } catch (e) {
+        console.error("Initialization fail: " + e);
+      }
+    }, 500);
   
   // open an accordion soon after page load
   setTimeout(function(){ $("#identity").toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")

@@ -249,7 +249,7 @@ function checkTable(obj) {
 }
 
 function enableButton() {
-  
+  $( "#world_button" ).button( "option", "disabled", false );
 }
 
 function changePrecision() {
@@ -751,7 +751,7 @@ function changePrecision() {
       
         // set visual effects on received messages
         onVisualUpdate: function(key,info,domNode) {
-        
+                
           if (info == null) {
             return;
           }
@@ -1000,7 +1000,7 @@ function changePrecision() {
       gBandSubs.addListener(bandGrid);
       gBandSubs.addListener({onUnsubscription: function() {
           bandGrid.updateRow("My_Band_"+logonName, {currentBandwidth:"-.-"});
-        } 
+        }
       });
       gBandSubs.setRequestedMaxFrequency(0.5);
       lsClient.subscribe(gBandSubs);
