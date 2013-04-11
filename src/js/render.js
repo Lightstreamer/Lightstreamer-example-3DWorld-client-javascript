@@ -315,17 +315,17 @@ function physicsCalculator() {
     }
       
     var qx = new THREE.Quaternion();
-    qx.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), (dinamics[i].R.x*0.02) );
+    qx.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), (dinamics[i].R.x * 0.02 * rateFactor) );
     cube[i].quaternion.multiply( qx );
     cube[i].quaternion.normalize();
       
     var qy = new THREE.Quaternion();
-    qy.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), (dinamics[i].R.y*0.02) );
+    qy.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), (dinamics[i].R.y * 0.02 * rateFactor) );
     cube[i].quaternion.multiply( qy );
     cube[i].quaternion.normalize();
       
     var qz = new THREE.Quaternion();
-    qz.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), (dinamics[i].R.z*0.02) );
+    qz.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), (dinamics[i].R.z * 0.02 * rateFactor) );
     cube[i].quaternion.multiply( qz );
     cube[i].quaternion.normalize();
     }
@@ -550,6 +550,27 @@ function updateScene(plyr, posX, posY, posZ, rotX, rotY, rotZ, rotW, me, life) {
     }
   }
   
+  if ( life > 0 ) {
+    if ( plyr.indexOf("Ghost") != 0 ) {
+      var today = new Date();
+      
+      if ( parseInt(life) > (parseInt(lifes[indx]) + 4) )  {
+        var nowmillis = today.getMilliseconds();
+        if ( parseInt(life) > (parseInt(lifes[indx]) + 50) )  {
+          console.error(today + "." + nowmillis + " - ATTENZIONE: " + life + " - " + (lifes[indx]));
+        } else {
+          console.info(today +  "." + nowmillis + " - ATTENZIONE: " + life + " - " + (lifes[indx]));
+        }
+      } 
+      lifes[indx] = life;
+    
+      if ( today > (mlls[indx] + 990) ) {
+        console.log("ATTENZIONE Millis: " + today.valueOf() + ", " + mlls[indx]);
+      }
+      mlls[indx] = today.valueOf();
+    }
+  }
+  
   } catch (e) {
     console.error("Err. " + e);
     console.error(">>>>>" + plyr + "," + posX + "," + posY + "," + posZ );
@@ -685,5 +706,6 @@ function extraInfoOnOff() {
 
 sceneReady = true;
 rateFactor = (FRAME_RATE/BASE_RATE);
+console.log("Frame factor: " + rateFactor);
 physicsCalculator();
 render(); 

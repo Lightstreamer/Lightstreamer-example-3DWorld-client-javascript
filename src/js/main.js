@@ -37,6 +37,8 @@ var radioBut = 0;
 var matrix = false;
 var rendering = false;
 var chkSwitchShift = false;
+var iamWatcher = false;
+var chkDebug = false;
 var physicsMod = 0;
 
 // nickname chosen by this page's user; 
@@ -434,6 +436,50 @@ function changePrecision() {
     }
   }
   
+  function disableAllCommands() {
+    document.getElementById("radio_string").disabled = true;
+    document.getElementById("radio_binary").disabled = true;
+    document.getElementById("radio_d").disabled = true;
+    document.getElementById("radio_s").disabled = true;
+    document.getElementById("radio_f").disabled = true;
+    document.getElementById("radio_serSide").disabled = true;
+    document.getElementById("user_nick").disabled = true;
+    document.getElementById("user_msg").disabled = true;
+    
+    $( "#decslider" ).slider( "option", "disabled", true );
+    $( "#freqslider" ).slider( "option", "disabled", true );
+    $( "#feedslider" ).slider( "option", "disabled", true );
+    $( "#bwslider" ).slider( "option", "disabled", true );
+    
+    if ( physicsMod != 0 ) {
+      // force switch to client side
+      document.getElementById("radio_serSide").checked = false;
+      document.getElementById("radio_cliSide").checked = true;
+      clickCheck();
+    }
+  }
+  
+  function enableAllCommands() {
+  
+    if ( iamWatcher ) {
+      document.getElementById("radio_string").disabled = true;
+      document.getElementById("radio_binary").disabled = true;
+      document.getElementById("radio_d").disabled = true;
+      document.getElementById("radio_s").disabled = true;
+      document.getElementById("radio_f").disabled = true;
+      document.getElementById("radio_serSide").disabled = false;
+      document.getElementById("user_nick").disabled = false;
+      document.getElementById("user_msg").disabled = false;
+      
+      $( "#decslider" ).slider( "option", "disabled", true );
+      $( "#freqslider" ).slider( "option", "disabled", true );
+      $( "#feedslider" ).slider( "option", "disabled", false );
+      $( "#bwslider" ).slider( "option", "disabled", false );
+    }
+    
+    iamWatcher = false;
+  }
+  
   function clickCheck(e) {
     
     if ( (physicsMod == 0) &&  document.getElementById("radio_serSide").checked ) {
@@ -619,7 +665,27 @@ function changePrecision() {
           subsPlayers.setItems(["Custom_list_"+myWorld+"_"+precision]);
           client.subscribe(subsPlayers);
           
+          //document.getElementById("user_msg").value = "";
           clearScene();
+          
+          var myUrl = document.URL;
+          var indx = myUrl.indexOf("user_world");
+          if ( indx != -1 ) {
+            var oldWorld = myUrl.substring(indx);
+            var nindx = oldWorld.indexOf("&");
+            if (nindx != -1 ) {
+              oldWorld = oldWorld.substring(0, nindx);
+              var url = myUrl.substring(0, indx);
+              var hashf = myUrl.substring(indx);
+              window.location.replace(url+hashf.replace(oldWorld.substring(11), myWorld));
+            } else {
+              var url = myUrl.substring(0, indx);
+              var hashf = myUrl.substring(indx);
+              window.location.replace(url+hashf.replace(oldWorld.substring(11), myWorld));
+            }
+          } else {
+            window.location.replace(myUrl+"#user_world="+myWorld);
+          }
         }
       } else {
         alert("World name not valid.");
@@ -708,6 +774,7 @@ function changePrecision() {
   function get_hash(change) {
     var fragments = location.hash.substring(1).split("&");
     for (var ij = 0; ij < fragments.length; ij++) {
+      console.log("fragments: " + fragments[ij]);
       if ( fragments[ij].indexOf("user_world") == 0 ) {
         if (userWorldField) {
           userWorldField.value = fragments[ij].split("=")[1];
@@ -723,6 +790,10 @@ function changePrecision() {
             submitNick();
           }
         }
+      }
+      if ( fragments[ij].indexOf("debug_lifespan") == 0) {
+        chkDebug = true;
+        console.log("LifeSpan debug activate.");
       }
     }
   }
@@ -745,10 +816,6 @@ function changePrecision() {
       imGrid.setAutoScroll("ELEMENT", "message_scroll"); // automatic scrolling for new messages
       imGrid.setAutoCleanBehavior(false, false);
       imGrid.addListener({
-        colors: ["#FFFFE0","#FFEBCD","#F0F8FF","#CCFFCC","#FFF5EE","#E0FFFF","#F0FFF0","#F0E68C","#87CEEB","#E6E6FA","#FFB6C1","#F5FFFA","#FFFAFA","#F5F5DC","#F8F8FF","#FFE4E1","#D8BFD8","#FFF0F5","#EEE8AA"],
-        next: 0,
-        associated: {},
-      
         // set visual effects on received messages
         onVisualUpdate: function(key,info,domNode) {
                 
@@ -803,7 +870,11 @@ function changePrecision() {
       
       subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key"]);
       subsPlayers.setRequestedSnapshot("yes");
-      subsPlayers.setCommandSecondLevelFields(["nick", "msg", "lifeSpan","posY", "posZ", "rotX", "rotY", "rotZ", "rotW", "posX"]);
+      if ( chkDebug == true ) {
+        subsPlayers.setCommandSecondLevelFields(["nick", "msg", "lifeSpan", "posY", "posZ", "rotX", "rotY", "rotZ", "rotW", "posX"]);
+      } else {
+        subsPlayers.setCommandSecondLevelFields(["nick", "msg", "posY", "posZ", "rotX", "rotY", "rotZ", "rotW", "posX"]);
+      }
       subsPlayers.setRequestedMaxFrequency(0.5);
       rndrListener = {
         onItemUpdate: function(updateInfo){
@@ -940,8 +1011,14 @@ function changePrecision() {
             }
             
             if (( posX != 0 ) && (updateInfo.getValue("nick") != null) ) {
-              if ( updateScene(updateInfo.getValue("key"), posX, posY, posZ, rotX, rotY, rotZ, rotW, iam, updateInfo.getValue("lifeSpan")) ) {
-                addDeltaSub(updateInfo.getValue("key"));
+              if ( chkDebug == true ) {
+                if ( updateScene(updateInfo.getValue("key"), posX, posY, posZ, rotX, rotY, rotZ, rotW, iam, updateInfo.getValue("lifeSpan")) ) {
+                  addDeltaSub(updateInfo.getValue("key"));
+                }
+              } else {
+                if ( updateScene(updateInfo.getValue("key"), posX, posY, posZ, rotX, rotY, rotZ, rotW, iam, 0) ) {
+                  addDeltaSub(updateInfo.getValue("key"));
+                }
               }
             }
             
@@ -961,6 +1038,10 @@ function changePrecision() {
           }
         },
         onUnsubscription: function() {
+          console.log("WARN: unsubscription!");
+          document.getElementById("user_msg").value = "";
+          subsDeltaKeys.splice(0, subsDeltaKeys.length);
+          subsDeltaKeysBU.splice(0, subsDeltaKeys.length);
           clearScene();
           imGrid.clean();
         },
@@ -982,9 +1063,12 @@ function changePrecision() {
           }
           
           document.getElementById("subscriptionError").innerHTML = " ";
+          enableAllCommands();
         },
         onSubscriptionError: function(code, msg) {
           document.getElementById("subscriptionError").innerHTML = msg;
+          iamWatcher = true;
+          disableAllCommands();
         }
       });
       
@@ -992,11 +1076,14 @@ function changePrecision() {
       bandGrid.addListener({onVisualUpdate: function(key,info,dom) {
           if (info != null) {
             var v = info.getCellValue("currentBandwidth");
-            info.setCellValue("currentBandwidth", v.slice(0,-1) + " kbps.");
+            var kB = (v / 8) * 100;
+            kB = Math.round(kB) / 100;
+            info.setCellValue("currentBandwidth", v.slice(0,-1) + " Kbps");
+            bandGrid.updateRow(key, {currentBandwidthKB:kB + " KBps"});
           }
         }
       });
-      gBandSubs = new Subscription("MERGE", "My_Band_"+logonName, ["currentBandwidth"]);
+      gBandSubs = new Subscription("MERGE", "My_Band_"+logonName, ["currentBandwidth", "currentBandwidthKB"]);
       gBandSubs.addListener(bandGrid);
       gBandSubs.addListener({onUnsubscription: function() {
           bandGrid.updateRow("My_Band_"+logonName, {currentBandwidth:"-.-"});
@@ -1004,6 +1091,14 @@ function changePrecision() {
       });
       gBandSubs.setRequestedMaxFrequency(0.5);
       lsClient.subscribe(gBandSubs);
+      
+      var subStats = new Subscription("MERGE", "Statistics", ["total_players", "total_bandwidth"]);
+      subStats.addListener({onItemUpdate: function(updateInfo){
+          console.log("Stats - Total players: " + updateInfo.getValue("total_players") +", TolalBandwidth: " + updateInfo.getValue("total_bandwidth"));
+        }
+      });
+      lsClient.subscribe(subStats);
+      
     }); 
  }
 

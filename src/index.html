@@ -590,13 +590,13 @@
                     <table>
                     <td width="225px">
                       <span>My nickname:</span>
-                      <input id="user_nick" value="" />
+                      <input id="user_nick" maxlength="25" value="" />
                       <!-- <span id="Nickname"><img class="ui-icon ui-icon-info"></span> src="images/help.png"  -->
                       <span><img id="Nickname" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
                     </td>
                     <td width="305px">
                       <span>What I think:</span>
-                      <input id="user_msg" value="" />
+                      <input id="user_msg" maxlength="40" value="" />
                       <span><img id="MyMsg" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
                       <!-- <input id="nick_button" type="submit" disabled value="Change" class="note"/> -->
                     </td>
@@ -624,6 +624,9 @@
                     <tr>
                       <td class="note" style="font-weight: bold; text-align: left">Current downstream bandwidth of this client: </td>
                       <td><div data-source="lightstreamer" data-grid="band" data-item=1 data-field="currentBandwidth" class="note" style="text-align: left">--</div></td>
+                      <td class="note" style="font-weight: bold; text-align: left"> (</td>
+                      <td><div data-source="lightstreamer" data-grid="band" data-item=1 data-field="currentBandwidthKB" class="note" style="text-align: left">--</div></td>
+                      <td class="note" style="font-weight: bold; text-align: left">)</td>
                       <!--
                       <td>
                         <td width="200px">
@@ -700,7 +703,7 @@
                           <div id="bwslider"></div>
                         </td>
                         <td width="120px">
-                          <div class="note" style="text-align: left"><span id="nowBandwidth">unlimited</span> kbps</div>
+                          <div class="note" style="text-align: left"><span id="nowBandwidth">unlimited</span> Kbps</div>
                         </td>
                       </td>
                       <td>
