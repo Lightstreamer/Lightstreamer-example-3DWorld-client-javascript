@@ -496,7 +496,6 @@ function changePrecision() {
     
     if ( (physicsMod == 0) &&  document.getElementById("radio_serSide").checked ) {
       // Passare in modalità server side physics calculation.
-      //console.log("Start Server physics calculation.");
       subServerSide();
       unsubDeltas();
       stopPhysics();
@@ -522,7 +521,6 @@ function changePrecision() {
     } 
     if ( (physicsMod == 1) &&  document.getElementById("radio_cliSide").checked ) {
       // Passare in modalità client side physics calculation.
-      //console.log("Start Client physics calculation.");
       unsubServerSide();
       resubDeltas();
       startPhysics();
@@ -786,7 +784,6 @@ function changePrecision() {
   function get_hash(change) {
     var fragments = location.hash.substring(1).split("&");
     for (var ij = 0; ij < fragments.length; ij++) {
-      console.log("fragments: " + fragments[ij]);
       if ( fragments[ij].indexOf("user_world") == 0 ) {
         if (userWorldField) {
           userWorldField.value = fragments[ij].split("=")[1];
@@ -805,7 +802,6 @@ function changePrecision() {
       }
       if ( fragments[ij].indexOf("debug_lifespan") == 0) {
         chkDebug = true;
-        console.log("LifeSpan debug activate.");
       }
     }
   }
@@ -1050,7 +1046,7 @@ function changePrecision() {
           }
         },
         onUnsubscription: function() {
-          console.log("WARN: unsubscription!");
+          console.log("Warning: unsubscription!");
           document.getElementById("user_msg").value = "";
           subsDeltaKeys.splice(0, subsDeltaKeys.length);
           subsDeltaKeysBU.splice(0, subsDeltaKeys.length);

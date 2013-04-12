@@ -452,8 +452,6 @@ function updateDinamics2(plyr, command, value) {
     if (command == "dRz")  {
       dinamics[indx].R.setZ(value);
     }
-  } else {
-    console.error("Indx: " + indx + " - " + plyr);
   }
 }
 
@@ -557,24 +555,22 @@ function updateScene(plyr, posX, posY, posZ, rotX, rotY, rotZ, rotW, me, life) {
       if ( parseInt(life) > (parseInt(lifes[indx]) + 4) )  {
         var nowmillis = today.getMilliseconds();
         if ( parseInt(life) > (parseInt(lifes[indx]) + 50) )  {
-          console.error(today + "." + nowmillis + " - ATTENZIONE: " + life + " - " + (lifes[indx]));
+          console.error(today + "." + nowmillis + " - Warning: " + life + " - " + (lifes[indx]));
         } else {
-          console.info(today +  "." + nowmillis + " - ATTENZIONE: " + life + " - " + (lifes[indx]));
+          console.info(today +  "." + nowmillis + " - Warning: " + life + " - " + (lifes[indx]));
         }
       } 
       lifes[indx] = life;
     
       if ( today > (mlls[indx] + 990) ) {
-        console.log("ATTENZIONE Millis: " + today.valueOf() + ", " + mlls[indx]);
+        console.log("Warning millis: " + today.valueOf() + ", " + mlls[indx]);
       }
       mlls[indx] = today.valueOf();
     }
   }
   
   } catch (e) {
-    console.error("Err. " + e);
-    console.error(">>>>>" + plyr + "," + posX + "," + posY + "," + posZ );
-    console.error("============================================================");
+    console.error("Error: " + e + " > " + plyr + "," + posX + "," + posY + "," + posZ );
   }
   /*
   if ( goRender ) {
@@ -654,7 +650,7 @@ function stopPhysics() {
 function startPhysics() {
   goPhysics = true;
   
-  console.log("startPhysics().");
+  console.log("startPhysics.");
   physicsCalculator();
 }
 
@@ -665,7 +661,7 @@ function stopRender() {
 function startRender() {
   goRender = true;
   
-  console.log("startRender() - " + sceneReady);
+  console.log("startRender - " + sceneReady);
   
   if (sceneReady) {
     render();
@@ -706,6 +702,5 @@ function extraInfoOnOff() {
 
 sceneReady = true;
 rateFactor = (FRAME_RATE/BASE_RATE);
-console.log("Frame factor: " + rateFactor);
 physicsCalculator();
 render(); 
