@@ -206,7 +206,7 @@
                     $("#decslider").slider({
                       animate: true,
                       min: 1,
-                      max: 19,
+                      max: 15,
                       step: 1, 
                       values: [ 8 ],
                       slide: function( event, ui ) {
@@ -590,19 +590,19 @@
                     <table>
                     <td width="225px">
                       <span>My nickname:</span>
-                      <input id="user_nick" maxlength="25" value="" />
+                      <input id="user_nick" maxlength="25" value="" onfocus="setFocus();" onblur="unFocus();"/>
                       <!-- <span id="Nickname"><img class="ui-icon ui-icon-info"></span> src="images/help.png"  -->
                       <span><img id="Nickname" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
                     </td>
                     <td width="305px">
                       <span>What I think:</span>
-                      <input id="user_msg" maxlength="40" value="" />
+                      <input id="user_msg" maxlength="40" value="" onfocus="setFocus();" onblur="unFocus();" />
                       <span><img id="MyMsg" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
                       <!-- <input id="nick_button" type="submit" disabled value="Change" class="note"/> -->
                     </td>
                     <td>
                       <span>World:</span>
-                      <input id="user_world" value="Default" onfocus="enableButton();"/>
+                      <input id="user_world" maxlength="40" value="Default" onfocus="enableButton();setFocus();" onblur="unFocus()";/>
                       <input id="world_button" type="submit" disabled value="Teleport" />
                       <span><img id="Teleport" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
                       <span id="subscriptionError" style="color: #ff0000;"> </span>

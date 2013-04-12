@@ -39,6 +39,7 @@ var rendering = false;
 var chkSwitchShift = false;
 var iamWatcher = false;
 var chkDebug = false;
+var noCmds = false;
 var physicsMod = 0;
 
 // nickname chosen by this page's user; 
@@ -48,7 +49,6 @@ var myLastWorlds = "";
 // item name for the subscription logon
 var logonName = null;
 var myWorld = "Utente";
-
 
 function checkCanvas(checkBtn) {
   if ( rndrListener != null ) {
@@ -340,6 +340,14 @@ function changePrecision() {
     }
   }
   
+  function setFocus(obj) {
+    noCmds = true;
+  }
+  
+  function unFocus(obj) {
+    noCmds = false;
+  }
+  
   function KeyCheck(e) {
     var keyId = (window.event) ? event.keyCode : e.keyCode;
     var shift = (window.event) ? event.shiftKey : e.shiftKey;
@@ -352,6 +360,10 @@ function changePrecision() {
       if (myLastWorlds != document.getElementById("user_msg").value) {
         submitMsg();
       }
+    }
+    
+    if ( noCmds == true ) {
+      return ;
     }
     
     if ( (keyId == 87) || (keyId == 65) || (keyId == 83) || (keyId == 49) || (keyId == 50) || (keyId == 68) ) {
