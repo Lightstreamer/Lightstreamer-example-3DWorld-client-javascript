@@ -1086,7 +1086,7 @@ function changePrecision() {
             var v = info.getCellValue("currentBandwidth");
             var kB = (v / 8) * 100;
             kB = Math.round(kB) / 100;
-            info.setCellValue("currentBandwidth", v.slice(0,-1) + " Kbps");
+            info.setCellValue("currentBandwidth", v + " Kbps");
             bandGrid.updateRow(key, {currentBandwidthKB:kB + " KBps"});
           }
         }
@@ -1100,11 +1100,11 @@ function changePrecision() {
       gBandSubs.setRequestedMaxFrequency(0.5);
       lsClient.subscribe(gBandSubs);
       
-      var subStats = new Subscription("MERGE", "Statistics", ["total_players", "total_bandwidth"]);
+      /*var subStats = new Subscription("MERGE", "Statistics", ["total_players", "total_bandwidth"]);
       subStats.addListener({onItemUpdate: function(updateInfo){
           console.log("Stats - Total players: " + updateInfo.getValue("total_players") +", TolalBandwidth: " + updateInfo.getValue("total_bandwidth"));
         }
-      });
+      });*/
       lsClient.subscribe(subStats);
       
     }); 
