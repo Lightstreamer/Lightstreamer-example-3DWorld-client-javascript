@@ -478,7 +478,7 @@
                   
                   $(function() {
                     $( "#Teleport" ).qtip({
-                      content: "Choose a world to be teleported to. You can either enter an existing world (agree with your friends on a name) or create a new one.",
+                      content: "Choose a world to be teleported to. You can either enter an existing world (agree with your friends on a name) or create a new one. Only letters and numbers are accepted.",
                       position: { corner: { target: 'topMiddle', tooltip: 'bottomLeft' } }, style: 'helpstyle', show: { effect: { type: 'fade', length: 400 } }
                     });
                   });
@@ -558,9 +558,12 @@
     <table style="margin: 15px auto;" width="69%">
       <tr>
         <td class="note" style="align: center" >
-          This demo shows how well the real-time positions of objects in a multiplayer 3D world can be delivered over WebSockets or HTTP via Lightstreamer Server. 
-          Consider that the demo physics engine can run completely on the server side and the positional and rotational data for all the players in the game are transmitted to all the clients. 
-          In other words, the clients are "pure renderers". Otherwise the physics engine can run both on the client side and server side and the rendering is based on client side physics calculations and periodically synchronized with the server data.  <a href="http://www.lightstreamer.com/">Read the full explanation and instructions...</a>
+          This demo shows how well the real-time positions of objects in a multiplayer 3D world can be delivered over WebSockets and HTTP via Lightstreamer Server. 
+          <a href="http://blog.lightstreamer.com/">Please read the article to fully understand this application. </a>
+          <br>
+          There are two ways the demo can work. <i>First way</i>: the physics engine runs on the client side, which periodically synchronizes with the authoritative server. <i>Second way</i>: the physics engine runs 
+          on the server side only and the positional and rotational data for all the players in a world are transmitted to all the clients. In other words, the clients are pure renderers. 
+          <a href="http://blog.lightstreamer.com/">Read the full explanation and instructions... </a>
         </td>
       </tr>
     </table>
@@ -591,7 +594,7 @@
                     </td>
                     <td>
                       <span>World:</span>
-                      <input id="user_world" maxlength="40" value="Default" onfocus="enableButton();setFocus();" onblur="unFocus()";/>
+                      <input id="user_world" maxlength="40" value="Default" onfocus="enableButton();setFocus();" onblur="unFocus();" onkeyup="checkAlphanum();"/>
                       <input id="world_button" type="submit" disabled value="Teleport" />
                       <span><img id="Teleport" src="images/help.png" border="0" height="14" width="14" vspace="0" style="vertical-align: text-bottom;"></span>
                       <span id="subscriptionError" style="color: #ff0000;"> </span>

@@ -49,6 +49,7 @@ var myLastWorlds = "";
 // item name for the subscription logon
 var logonName = null;
 var myWorld = "Utente";
+var myOldWorld = "Utente";
 
 function checkCanvas(checkBtn) {
   if ( rndrListener != null ) {
@@ -356,9 +357,11 @@ function changePrecision() {
       // Return
       if ( myNick != document.getElementById("user_nick").value) {
         submitNick();
+        document.getElementById("user_nick").blur();
       } 
       if (myLastWorlds != document.getElementById("user_msg").value) {
         submitMsg();
+        document.getElementById("user_msg").blur();
       }
     }
     
@@ -660,11 +663,28 @@ function changePrecision() {
     });
   }
   
+  function isNotAlphanumeric(val){
+    return (! val.match(/^[a-zA-Z0-9]+$/));
+  } 
+  
+  function checkAlphanum() {
+    var text = document.getElementById("user_world").value ;
+    if ( text != "" ) {
+      if (isNotAlphanumeric(text)) {
+        //$( "#world_button" ).button( "option", "disabled", true );
+        //alert("Only alphanumeric please.");
+        document.getElementById("user_world").value = myOldWorld;
+      } else {
+        myOldWorld = text;
+      }
+    }
+  }
+
   function submitWorld() {
     if (document.getElementById("user_world")) {
       var text = document.getElementById("user_world").value;
       
-      if ( text.indexOf(" ") == -1 ) {
+      if ( (text.indexOf(" ") == -1) && (!isNotAlphanumeric(text)) ) {
         if (text != myWorld ) {
           myWorld = text;
           
@@ -1104,9 +1124,8 @@ function changePrecision() {
       subStats.addListener({onItemUpdate: function(updateInfo){
           console.log("Stats - Total players: " + updateInfo.getValue("total_players") +", TolalBandwidth: " + updateInfo.getValue("total_bandwidth"));
         }
-      });*/
-      lsClient.subscribe(subStats);
-      
+      });
+      lsClient.subscribe(subStats); */
     }); 
  }
 
