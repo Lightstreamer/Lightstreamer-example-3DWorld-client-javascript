@@ -182,7 +182,7 @@ function startGrid() {
       }
       
       subsDeltaKeys.splice(indx, 1);
-      lsClient.unsubscribe(subsDelta[indx]);
+      client.unsubscribe(subsDelta[indx]);
       subsDelta.splice(indx, 1);
     } else {
       var indx = subsDeltaKeysBU.indexOf(key);
@@ -270,26 +270,6 @@ function changePrecision() {
     document.getElementById("decimalInput").style.visibility = "hidden";  
   }
 }
-
-//////////////// Connect to push.lightstreamer.com and configure a StatusWidget
-  //  define("lsClient",["LightstreamerClient","StatusWidget"],function(LightstreamerClient,StatusWidget) {
-  define("lsClient",["LightstreamerClient","StatusWidget"],function(LightstreamerClient,StatusWidget) {
-    var protocolToUse = document.location.protocol != "file:" ? document.location.protocol : "http:";
-    var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");
-    lsClient.connectionSharing.enableSharing("Move3dDemo", "ATTACH", "CREATE");
-    //lsClient.connectionOptions.setForcedTransport("WS-POLLING");
-    lsClient.connectionOptions.setXDomainStreamingEnabled(false);
-   
-    lsClient.addListener(new StatusWidget("left", "0px", true));
-    lsClient.addListener({onServerError: function(errorCode, errorMsg) {
-        //document.getElementById("subscriptionError").innerHTML = "Game over for inactivity. Please refresh the page to resume."
-        $( "#dialog" ).dialog( "open" );
-      }
-    });
-    
-    lsClient.connect();
-    return lsClient;
-  });
   
   function reSubscribe() {
     try {
@@ -836,8 +816,13 @@ function changePrecision() {
     
   function createMessageGrid() {
    
-    require(["lsClient","DynaGrid","StaticGrid","Subscription"],function(lsClient,DynaGrid,StaticGrid,Subscription) {  
+    require(["js/lsClient","DynaGrid","StaticGrid","Subscription"],function(lsClient,DynaGrid,StaticGrid,Subscription) {  
       client = lsClient;
+      
+      lsClient.addListener({onServerError: function(errorCode, errorMsg) {
+          $( "#dialog" ).dialog( "open" );
+        }
+      });
       
       imGrid = new DynaGrid("players",true);
       imGrid.setMaxDynaRows("unlimited"); // the grid will expand with no limits
