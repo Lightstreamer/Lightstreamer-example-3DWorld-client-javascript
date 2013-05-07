@@ -1,5 +1,5 @@
 
-Lightstreamer 3D World Demo Client
+Lightstreamer 3D World Demo Client for JavaScript
 ============================
 
 
@@ -66,5 +66,4 @@ See Also
 Lightstreamer Compatibility Notes
 ---------------------------------
 
-- Compatible with Lightstreamer Server 5.1 or newer.
 - Compatible with Lightstreamer JavaScript Client library version 6.0 or newer.
