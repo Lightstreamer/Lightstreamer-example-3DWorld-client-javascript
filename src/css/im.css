@@ -4,10 +4,10 @@
  */
 .demoTitle {
   font-family: Verdana, Arial, Helvetica, Sans-serif;
-  font-size: 9pt;
+  font-size: 15pt;
   color: #000000;
   font-weight: bold;
-  text-align: right;
+  text-align: center;
 }
 .messagePanel {
   overflow: auto;

@@ -1,6 +1,6 @@
 
 Lightstreamer 3D World Demo Client for JavaScript
-============================
+=================================================
 
 
 This demo shows how well the real-time positions of objects in a multiplayer 3D world can be delivered over WebSockets and HTTP via Lightstreamer Server. Particular attention is paid to aspects of real-time communication and opportunities to minimize the network bandwidth utilization. 
