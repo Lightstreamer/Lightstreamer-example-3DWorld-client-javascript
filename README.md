@@ -23,10 +23,10 @@ This project include the implementation of a HTML/JavaScript client for the demo
 </table>
 
 A simple HTML client with five panels: Identity, Tuning, Matrix, Commands, and Rendering.<br>
-In the Identity panel the player can configure its nickname, send messages to other users in the same world and change the world where the player moves. 'Default' is the initial world where the player starts.<br>
-In the Tuning panel the user can choose the operating mode of the demo: client side or server side. In the first case, you can configure the maximum total bandwidth used by the entire page and the (server) resync frequency in the range from 1 per second to 1 every 20 seconds. In the second mode you can configure the max bandwidth allowed for the whole page, max frequency of updates for each player (from 1 per second to 100 per second). Here you can also choose the precision and format of the incoming data from the server.<br>
-In the Matrix panel the position of all the players in the same world is shown in a tabular view (your player is the red colored row, other active players are the blue colored rows and automatic ghost players are the black colored rows). Data in this panel are always the ones coming from the server in either mode of the demo.<br>
-In the Command panel you can find a recap of the commands that allow you to move the cuboid. The player can input the movement commands with these keys:
+In the <b>Identity</b> panel the player can configure its nickname, send messages to other users in the same world and change the world where the player moves. 'Default' is the initial world where the player starts.<br>
+In the <b>Tuning</b> panel the user can choose the operating mode of the demo: client side or server side. In the first case, you can configure the maximum total bandwidth used by the entire page and the (server) resync frequency in the range from 1 per second to 1 every 20 seconds. In the second mode you can configure the max bandwidth allowed for the whole page, max frequency of updates for each player (from 1 per second to 100 per second). Here you can also choose the precision and format of the incoming data from the server.<br>
+In the <b>Matrix</b> panel the position of all the players in the same world is shown in a tabular view (your player is the red colored row, other active players are the blue colored rows and automatic ghost players are the black colored rows). Data in this panel are always the ones coming from the server in either mode of the demo.<br>
+In the <b>Command</b> panel you can find a recap of the commands that allow you to move the cuboid. The player can input the movement commands with these keys:
 - "d": add +1 force impulse on axis X; 
 - "a": add -1 force impulse on axis X; 
 - "w": add +1 force impulse on axis Y; 
@@ -40,7 +40,7 @@ In the Command panel you can find a recap of the commands that allow you to move
 - shift + "1": add +1 torque impulse on axis Z;
 - shift + "2": add -1 torque impulse on axis Z.
 
-<br>In the Rendering panel the player can watch a 3d rendering of the scene with all the players represented by cuboids. The origin of axes is marked with a yellow sphere and the edges of the world are outlined by white lines.
+<br>In the <b>Rendering</b> panel the player can watch a 3d rendering of the scene with all the players represented by cuboids. The origin of axes is marked with a yellow sphere and the edges of the world are outlined by white lines.
 The 3d rendering is powered by [three.js library](http://mrdoob.github.com/three.js/).
 
 The demo includes the following client-side technologies:
