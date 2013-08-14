@@ -5,7 +5,7 @@ Please read [the article](http://blog.lightstreamer.com/) to fully understand th
 - First way: the physics engine runs on the client side, which periodically synchronizes with the authoritative server. 
 - Second way: the physics engine runs on the server side only and the positional and rotational data for all the players in a world are transmitted to all the clients. In other words, the clients are pure renderers.
 
-This project include the implementation of a HTML/JavaScript client for the demo.
+This project include the implementation of a HTML/JavaScript client for the demo. The page uses the <b>JavaScript Client API for Lightstreamer</b> to handle the communications with Lightstreamer Server.
 
 ## HTML Client ##
 
@@ -43,6 +43,14 @@ In the Command panel you can find a recap of the commands that allow you to move
 <br>In the Rendering panel the player can watch a 3d rendering of the scene with all the players represented by cuboids. The origin of axes is marked with a yellow sphere and the edges of the world are outlined by white lines.
 The 3d rendering is powered by [three.js library](http://mrdoob.github.com/three.js/).
 
+The demo includes the following client-side technologies:
+
+* A [Subscription](http://www.lightstreamer.com/docs/client_javascript_uni_api/Subscription.html) containing 1 item, subscribed to in <b>COMMAND</b> mode to retrieve and update the list of player in the world, feeding a [DynaGrid](http://www.lightstreamer.com/docs/client_javascript_uni_api/DynaGrid.html). Each added row automatically provokes an underlying subscription to a sub-item in <b>MERGE</b> mode, to get the real-time position for that specific player. When a row is deleted, the underlying sub-item is automatically unsubscribed from.
+* For each player in the world, a [Subscription](http://www.lightstreamer.com/docs/client_javascript_uni_api/Subscription.html) containing 1 item, subscribed to in <b>MERGE</b> mode, a custom listener is added to this subscription.
+* A [Subscription](http://www.lightstreamer.com/docs/client_javascript_uni_api/Subscription.html) containing 1 item, subscribed to in <b>DISTINCT</b> mode for logon purpose.
+* A [Subscription](http://www.lightstreamer.com/docs/client_javascript_uni_api/Subscription.html) containing 1 item, subscribed to in <b>MERGE</b> mode feeding a [StaticGrid](http://www.lightstreamer.com/docs/client_javascript_uni_api/StaticGrid.html) for downstream bandwidth real-time update.
+
+
 # Deploy #
 
 Before you can run the demo some dependencies need to be solved:
@@ -67,7 +75,16 @@ The demo is now ready to be launched. [Here](http://www.lightstreamer.com/demo/3
 
 # See Also #
 
+## Lightstreamer Adapters needed by these demo client ##
+
 * [Lightstreamer 3D World Demo Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java)
+
+## Other demo clients that may interest you ##
+
+* [Lightstreamer Chat Demo Client for JavaScript](https://github.com/Weswit/Lightstreamer-example-Chat-client-javascript)
+* [Lightstreamer Portfolio Demo Client for JavaScript](https://github.com/Weswit/Lightstreamer-example-Portfolio-client-javascript)
+* [Lightstreamer RSS Demo Client for JavaScript](https://github.com/Weswit/Lightstreamer-example-RSS-client-javascript)
+* [Lightstreamer StockList Demo Client for Unity](https://github.com/Weswit/Lightstreamer-example-StockList-client-unity)
 
 # Lightstreamer Compatibility Notes #
 
