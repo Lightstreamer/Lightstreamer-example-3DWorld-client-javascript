@@ -1,7 +1,7 @@
 # Lightstreamer 3D World Demo Client for JavaScript #
 
 This demo shows how well the real-time positions of objects in a multiplayer 3D world can be delivered over WebSockets and HTTP via Lightstreamer Server. Particular attention is paid to aspects of real-time communication and opportunities to minimize the network bandwidth utilization. 
-Please read [the article](http://blog.lightstreamer.com/) to fully understand this application and play the demo [here](http://www.lightstreamer.com/demo/3DWorldDemo/). There are two ways the demo can work:
+Please read [the article](http://blog.lightstreamer.com/) to fully understand this application and play the demo [here](http://demos.lightstreamer.com/3DWorldDemo/). There are two ways the demo can work:
 - First way: the physics engine runs on the client side, which periodically synchronizes with the authoritative server. 
 - Second way: the physics engine runs on the server side only and the positional and rotational data for all the players in a world are transmitted to all the clients. In other words, the clients are pure renderers.
 
@@ -71,7 +71,7 @@ var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOV
 ```
 and change it accordingly. 
 Anyway the [3DWorldDemo Adapter Set](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) have to be deployed in your local Lightstreamer server instance. Please check out the project and follow the installation instructions provided with it.
-The demo is now ready to be launched. [Here](http://www.lightstreamer.com/demo/3DWorldDemo/) a demostration hosted in our servers.
+The demo is now ready to be launched. [Here](http://demos.lightstreamer.com/3DWorldDemo/) a demostration hosted in our servers.
 
 # See Also #
 
