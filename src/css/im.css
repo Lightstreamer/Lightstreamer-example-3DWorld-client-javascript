@@ -15,7 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.demoTitle {
+a
+{
+  color: #009900;
+}
+a:hover
+{
+  color: #00CC00;
+  text-decoration: none;
+}
+ .demoTitle {
   font-family: Verdana, Arial, Helvetica, Sans-serif;
   font-size: 15pt;
   color: #000000;
@@ -71,27 +80,27 @@
   text-align: center;
 }
 .cursor {
-	position:absolute;
-	top:-5px;
-	left:0;
-	width:11px;
-	height:21px;
-	background:transparent url(../images/handle.png);
-	overflow: visible;
+  position:absolute;
+  top:-5px;
+  left:0;
+  width:11px;
+  height:21px;
+  background:transparent url(../images/handle.png);
+  overflow: visible;
 }
 .slideLine {
-	width:200px;
-	background-color:#bdbdbd;
-	height:10px;
-	position:relative;
+  width:200px;
+  background-color:#bdbdbd;
+  height:10px;
+  position:relative;
 }
-.note { 
-	font-family: Verdana, Arial, Helvetica, sans-serif; 
-	font-size: 7pt;
-	color: #000000; 
-	background: #ffffff;
-	font-weight: normal; 
-	text-align: left; 
+.note {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 7pt;
+  color: #000000;
+  background: #ffffff;
+  font-weight: normal;
+  text-align: left;
 }
 #wrap {
   width: 1250px;
