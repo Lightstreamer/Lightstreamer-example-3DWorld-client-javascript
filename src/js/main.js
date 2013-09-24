@@ -44,7 +44,7 @@ var physicsMod = 0;
 
 // nickname chosen by this page's user; 
 var myNick = null;
-var myLastWorlds = "";
+var myLastWords = "";
 // logonname random generated, it is used in the
 // item name for the subscription logon
 var logonName = null;
@@ -339,7 +339,7 @@ function changePrecision() {
         submitNick();
         document.getElementById("user_nick").blur();
       } 
-      if (myLastWorlds != document.getElementById("user_msg").value) {
+      if (myLastWords != document.getElementById("user_msg").value) {
         submitMsg();
         document.getElementById("user_msg").blur();
       }
@@ -701,7 +701,9 @@ function changePrecision() {
         alert("World name not valid.");
         document.getElementById("user_world").value = myWorld;
       }
-    } 
+      
+      document.getElementById("user_world").blur();
+    }
   }
   
   function submitNick() {
@@ -736,14 +738,11 @@ function changePrecision() {
       text = " ";
     }
     
-    /*if (!text && (myLastWorlds == "")) {
-      alert("Please type a message.");
-    } else*/
     if (text.indexOf(".") == 0) {
       alert(". as first character not valid!");
     } else {
       sendMyMsg(text);
-      myLastWorlds = text;
+      myLastWords = text;
     }
   } 
   
