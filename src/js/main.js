@@ -743,7 +743,6 @@ function changePrecision() {
     } else if (myLastWords != text) {
         myLastWords = text;
         sendMyMsg(text);
-        console.log("Ho spedito questo: " + text);
       }
   }
   
