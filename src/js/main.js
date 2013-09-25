@@ -740,11 +740,12 @@ function changePrecision() {
     
     if (text.indexOf(".") == 0) {
       alert(". as first character not valid!");
-    } else {
-      sendMyMsg(text);
-      myLastWords = text;
-    }
-  } 
+    } else if (myLastWords != text) {
+        myLastWords = text;
+        sendMyMsg(text);
+        console.log("Ho spedito questo: " + text);
+      }
+  }
   
   // define a random default nickname
   var userNickField = document.getElementById("user_nick");
