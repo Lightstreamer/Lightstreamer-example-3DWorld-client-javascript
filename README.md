@@ -17,7 +17,7 @@ This project includes the implementation of an HTML5 client for the demo. The pa
 <table>
   <tr>
     <td style="text-align: left">
-      &nbsp;<a href="http://demos.lightstreamer.com/3DWorldDemo" target="_blank"><img src="Sample.png"></a>&nbsp;
+      &nbsp;<a href="http://demos.lightstreamer.com/3DWorldDemo" target="_blank"><img src="screen_shot_3d.png"></a>&nbsp;
       
     </td>
     <td>
