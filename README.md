@@ -2,7 +2,7 @@
 
 This demo shows how well the real-time positions of objects in a multiplayer 3D world can be delivered over WebSockets and HTTP via Lightstreamer Server. Particular attention is paid to aspects of real-time communication and opportunities to minimize the network bandwidth utilization.
 
-__To fully understand this demo, please read the article__: [Multiplayer 3D World Synchronization Through the Web](http://blog.lightstreamer.com/)
+__To fully understand this demo, please read the article__: [Optimizing Multiplayer 3D Game Synchronization Over the Web](http://blog.lightstreamer.com/2013/10/optimizing-multiplayer-3d-game.html)
 
 You can play online with the demo at [http://demos.lightstreamer.com/3DWorldDemo/](http://demos.lightstreamer.com/3DWorldDemo/)
 
@@ -86,7 +86,7 @@ The demo is now ready to be launched. [Here](http://demos.lightstreamer.com/3DWo
 
 ## Explanatory Article ##
 
-* [Multiplayer 3D World Synchronization Through the Web](http://blog.lightstreamer.com/)
+* [Optimizing Multiplayer 3D Game Synchronization Over the Web](http://blog.lightstreamer.com/2013/10/optimizing-multiplayer-3d-game.html)
 
 ## Lightstreamer Adapters needed by these demo client ##
 
