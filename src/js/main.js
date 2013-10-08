@@ -42,6 +42,20 @@ var chkDebug = false;
 var noCmds = false;
 var physicsMod = 0;
 
+var keyCount_a = 0;
+var keyCount_w = 0;
+var keyCount_d = 0;
+var keyCount_s = 0;
+var keyCount_1 = 0;
+var keyCount_2 = 0;
+
+var keyCount_sa = 0;
+var keyCount_sw = 0;
+var keyCount_sd = 0;
+var keyCount_ss = 0;
+var keyCount_s1 = 0;
+var keyCount_s2 = 0;
+
 // nickname chosen by this page's user; 
 var myNick = null;
 var myLastWords = "";
@@ -290,9 +304,24 @@ function changePrecision() {
     if ( chkSwitchShift == true ) {
       chkSwitchShift = false;
       $( "#checkRot" ).button( "option", "label", "Position" );
+      
+      document.getElementById("1ic").innerHTML = "" + keyCount_1>0?keyCount_1:"";
+      document.getElementById("2ic").innerHTML = "" + keyCount_2>0?keyCount_2:"";
+      document.getElementById("aic").innerHTML = "" + keyCount_a>0?keyCount_a:"";
+      document.getElementById("sic").innerHTML = "" + keyCount_s>0?keyCount_s:"";
+      document.getElementById("dic").innerHTML = "" + keyCount_d>0?keyCount_d:"";
+      document.getElementById("wic").innerHTML = "" + keyCount_w>0?keyCount_w:"";
+      
     } else {
       $( "#checkRot" ).button( "option", "label", "Rotation" );
       chkSwitchShift = true;
+      
+      document.getElementById("1ic").innerHTML = "" + keyCount_s1>0?keyCount_s1:"";
+      document.getElementById("2ic").innerHTML = "" + keyCount_s2>0?keyCount_s2:"";
+      document.getElementById("aic").innerHTML = "" + keyCount_sa>0?keyCount_sa:"";
+      document.getElementById("sic").innerHTML = "" + keyCount_ss>0?keyCount_ss:"";
+      document.getElementById("dic").innerHTML = "" + keyCount_sd>0?keyCount_sd:"";
+      document.getElementById("wic").innerHTML = "" + keyCount_sw>0?keyCount_sw:"";
     }
     
     return ;
@@ -329,6 +358,216 @@ function changePrecision() {
     noCmds = false;
   }
   
+  function impulsesCounter(keyId) {
+    if ( keyId == 87 ) {
+      if (keyCount_s > 0) {
+        keyCount_s--;
+        if ( chkSwitchShift == false ) {
+          if (keyCount_s == 0 ) {
+            document.getElementById("sic").innerHTML = "";
+          } else {
+            document.getElementById("sic").innerHTML = "" + keyCount_s;
+          }
+        }
+      } else {
+        keyCount_w++;
+        if ( chkSwitchShift == false ) {
+          document.getElementById("wic").innerHTML = "" + keyCount_w;
+        }
+      }
+    }
+    if ( keyId == 83 ) {
+      if (keyCount_w > 0) {
+        keyCount_w--;
+        if ( chkSwitchShift == false ) {
+          if (keyCount_w == 0 ) {
+            document.getElementById("wic").innerHTML = "";
+          } else {
+            document.getElementById("wic").innerHTML = "" + keyCount_w;
+          }
+        }
+      } else {
+        keyCount_s++;
+        if ( chkSwitchShift == false ) {
+          document.getElementById("sic").innerHTML = "" + keyCount_s;
+        }
+      }
+    }
+    if ( keyId == 65 ) {
+      if (keyCount_d > 0) {
+        keyCount_d--;
+        if ( chkSwitchShift == false ) {
+          if (keyCount_d == 0 ) {
+            document.getElementById("dic").innerHTML = "";
+          } else {
+            document.getElementById("dic").innerHTML = "" + keyCount_d;
+          }
+        }
+      } else {
+        keyCount_a++;
+        if ( chkSwitchShift == false ) {
+          document.getElementById("aic").innerHTML = "" + keyCount_a;
+        }
+      }
+    }
+    if ( keyId == 68 ) {
+      if (keyCount_a > 0) {
+        keyCount_a--;
+        if ( chkSwitchShift == false ) {
+          if (keyCount_a == 0 ) {
+            document.getElementById("aic").innerHTML = "";
+          } else {
+            document.getElementById("aic").innerHTML = "" + keyCount_a;
+          }
+        }
+      } else {
+        keyCount_d++;
+        if ( chkSwitchShift == false ) {
+          document.getElementById("dic").innerHTML = "" + keyCount_d;
+        }
+      }
+    }
+    if ( keyId == 49 ) {
+      if (keyCount_2 > 0) {
+        keyCount_2--;
+        if ( chkSwitchShift == false ) {
+          if (keyCount_2 == 0 ) {
+            document.getElementById("2ic").innerHTML = "";
+          } else {
+            document.getElementById("2ic").innerHTML = "" + keyCount_2;
+          }
+        }
+      } else {
+        keyCount_1++;
+        if ( chkSwitchShift == false ) {
+          document.getElementById("1ic").innerHTML = "" + keyCount_1;
+        }
+      }
+    }
+    if ( keyId == 50 ) {
+      if (keyCount_1 > 0) {
+        keyCount_1--;
+        if ( chkSwitchShift == false ) {
+          if (keyCount_1 == 0 ) {
+            document.getElementById("1ic").innerHTML = "";
+          } else {
+            document.getElementById("1ic").innerHTML = "" + keyCount_1;
+          }
+        }
+      } else {
+        keyCount_2++;
+        if ( chkSwitchShift == false ) {
+          document.getElementById("2ic").innerHTML = "" + keyCount_2;
+        }
+      }
+    }
+  }
+
+  function impulsesShiftCounter(keyId) {
+    if ( keyId == 87 ) {
+      if (keyCount_ss > 0) {
+        keyCount_ss--;
+        if ( chkSwitchShift == true ) {
+          if (keyCount_ss == 0 ) {
+            document.getElementById("sic").innerHTML = "";
+          } else {
+            document.getElementById("sic").innerHTML = "" + keyCount_ss;
+          }
+        }
+      } else {
+        keyCount_sw++;
+        if ( chkSwitchShift == true ) {
+          document.getElementById("wic").innerHTML = "" + keyCount_sw;
+        }
+      }
+    }
+    if ( keyId == 83 ) {
+      if (keyCount_sw > 0) {
+        keyCount_sw--;
+        if ( chkSwitchShift == true ) {
+          if (keyCount_sw == 0 ) {
+            document.getElementById("wic").innerHTML = "";
+          } else {
+            document.getElementById("wic").innerHTML = "" + keyCount_sw;
+          }
+        }
+      } else {
+        keyCount_ss++;
+        if ( chkSwitchShift == true ) {
+          document.getElementById("sic").innerHTML = "" + keyCount_ss;
+        }
+      }
+    }
+    if ( keyId == 65 ) {
+      if (keyCount_sd > 0) {
+        keyCount_sd--;
+        if ( chkSwitchShift == true ) {
+          if (keyCount_sd == 0 ) {
+            document.getElementById("dic").innerHTML = "";
+          } else {
+            document.getElementById("dic").innerHTML = "" + keyCount_sd;
+          }
+        }
+      } else {
+        keyCount_sa++;
+        if ( chkSwitchShift == true ) {
+          document.getElementById("aic").innerHTML = "" + keyCount_sa;
+        }
+      }
+    }
+    if ( keyId == 68 ) {
+      if (keyCount_sa > 0) {
+        keyCount_sa--;
+        if ( chkSwitchShift == true ) {
+          if (keyCount_sa == 0 ) {
+            document.getElementById("aic").innerHTML = "";
+          } else {
+            document.getElementById("aic").innerHTML = "" + keyCount_sa;
+          }
+        }
+      } else {
+        keyCount_sd++;
+        if ( chkSwitchShift == true ) {
+          document.getElementById("dic").innerHTML = "" + keyCount_sd;
+        }
+      }
+    }
+    if ( keyId == 49 ) {
+      if (keyCount_s2 > 0) {
+        keyCount_s2--;
+        if ( chkSwitchShift == true ) {
+          if (keyCount_s2 == 0 ) {
+            document.getElementById("2ic").innerHTML = "";
+          } else {
+            document.getElementById("2ic").innerHTML = "" + keyCount_s2;
+          }
+        }
+      } else {
+        keyCount_s1++;
+        if ( chkSwitchShift == true ) {
+          document.getElementById("1ic").innerHTML = "" + keyCount_s1;
+        }
+      }
+    }
+    if ( keyId == 50 ) {
+      if (keyCount_s1 > 0) {
+        keyCount_s1--;
+        if ( chkSwitchShift == true ) {
+          if (keyCount_s1 == 0 ) {
+            document.getElementById("1ic").innerHTML = "";
+          } else {
+            document.getElementById("1ic").innerHTML = "" + keyCount_s1;
+          }
+        }
+      } else {
+        keyCount_s2++;
+        if ( chkSwitchShift == true ) {
+          document.getElementById("2ic").innerHTML = "" + keyCount_s2;
+        }
+      }
+    }
+  }
+ 
   function KeyCheck(e) {
     var keyId = (window.event) ? event.keyCode : e.keyCode;
     var shift = (window.event) ? event.shiftKey : e.shiftKey;
@@ -352,8 +591,10 @@ function changePrecision() {
     if ( (keyId == 87) || (keyId == 65) || (keyId == 83) || (keyId == 49) || (keyId == 50) || (keyId == 68) ) {
       if ( client != null ) {
         if ( shift ) {
-           msg = "10" + keyId;
+          impulsesShiftCounter(keyId);
+          msg = "10" + keyId;
         } else {
+          impulsesCounter(keyId);
           msg = keyId;
         }
       
@@ -382,6 +623,12 @@ function changePrecision() {
 
   function submitKey(key) {
     if ( client != null ) {
+      if ( (""+key).indexOf("10") > -1 ) {
+        impulsesShiftCounter((""+key).substr(2,2));
+      } else {
+        impulsesCounter(key);
+      }
+    
       client.sendMessage(key, "InputKey", 30000, {
         onAbort: function(originalMex, snt) {
           if ( !snt ) {
@@ -407,8 +654,11 @@ function changePrecision() {
   function submitKeySmall(key) {
     if ( client != null ) {
       if ( chkSwitchShift == true ) {
+        impulsesShiftCounter(key);
         key = "10"+key;
-      } 
+      } else {
+        impulsesCounter(key);
+      }
       client.sendMessage(key, "InputKey", 30000, {
         onAbort: function(originalMex, snt) {
           if ( !snt ) {
