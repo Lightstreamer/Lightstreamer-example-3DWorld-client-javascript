@@ -305,23 +305,119 @@ function changePrecision() {
       chkSwitchShift = false;
       $( "#checkRot" ).button( "option", "label", "Position" );
       
-      document.getElementById("1ic").innerHTML = "" + keyCount_1>0?keyCount_1:"";
-      document.getElementById("2ic").innerHTML = "" + keyCount_2>0?keyCount_2:"";
-      document.getElementById("aic").innerHTML = "" + keyCount_a>0?keyCount_a:"";
-      document.getElementById("sic").innerHTML = "" + keyCount_s>0?keyCount_s:"";
-      document.getElementById("dic").innerHTML = "" + keyCount_d>0?keyCount_d:"";
-      document.getElementById("wic").innerHTML = "" + keyCount_w>0?keyCount_w:"";
+      if ( document.getElementById("impcounter_w") != null ) {
+        document.getElementById("impcounter_w").style.display = "";
+      }
+      var parent = document.getElementById("wic");
+      updateImp_Counter(parent, "impcounter_w",  keyCount_w);
       
+      if ( document.getElementById("impcounter_s") != null ) {
+        document.getElementById("impcounter_s").style.display = "";
+      }
+      var parent = document.getElementById("sic");
+      updateImp_Counter(parent, "impcounter_s",  keyCount_s);
+      
+      if ( document.getElementById("impcounter_a") != null ) {
+        document.getElementById("impcounter_a").style.display = "";
+      }
+      var parent = document.getElementById("aic");
+       updateImp_Counter(parent, "impcounter_a",  keyCount_a);
+      
+      if ( document.getElementById("impcounter_d") != null ) {
+        document.getElementById("impcounter_d").style.display = "";
+      }
+      var parent = document.getElementById("dic");
+      updateImp_Counter(parent, "impcounter_d",  keyCount_d);
+      
+      if ( document.getElementById("impcounter_2") != null ) {
+        document.getElementById("impcounter_2").style.display = "";
+      }
+      var parent = document.getElementById("2ic");
+      updateImp_Counter(parent, "impcounter_2",  keyCount_2);
+      
+      if ( document.getElementById("impcounter_1") != null ) {
+        document.getElementById("impcounter_1").style.display = "";
+      }
+      var parent = document.getElementById("1ic");
+      updateImp_Counter(parent, "impcounter_1",  keyCount_1);
+      
+      if ( document.getElementById("impcounter_sw") != null ) {
+        document.getElementById("impcounter_sw").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_ss") != null ) {
+        document.getElementById("impcounter_ss").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_sa") != null ) {
+        document.getElementById("impcounter_sa").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_sd") != null ) {
+        document.getElementById("impcounter_sd").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_s2") != null ) {
+        document.getElementById("impcounter_s2").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_s1") != null ) {
+        document.getElementById("impcounter_s1").style.display = "none";
+      }
     } else {
       $( "#checkRot" ).button( "option", "label", "Rotation" );
       chkSwitchShift = true;
       
-      document.getElementById("1ic").innerHTML = "" + keyCount_s1>0?keyCount_s1:"";
-      document.getElementById("2ic").innerHTML = "" + keyCount_s2>0?keyCount_s2:"";
-      document.getElementById("aic").innerHTML = "" + keyCount_sa>0?keyCount_sa:"";
-      document.getElementById("sic").innerHTML = "" + keyCount_ss>0?keyCount_ss:"";
-      document.getElementById("dic").innerHTML = "" + keyCount_sd>0?keyCount_sd:"";
-      document.getElementById("wic").innerHTML = "" + keyCount_sw>0?keyCount_sw:"";
+      if ( document.getElementById("impcounter_w") != null ) {
+        document.getElementById("impcounter_w").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_s") != null ) {
+        document.getElementById("impcounter_s").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_a") != null ) {
+        document.getElementById("impcounter_a").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_d") != null ) {
+        document.getElementById("impcounter_d").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_2") != null ) {
+        document.getElementById("impcounter_2").style.display = "none";
+      }
+      if ( document.getElementById("impcounter_1") != null ) {
+        document.getElementById("impcounter_1").style.display = "none";
+      }
+
+      if ( document.getElementById("impcounter_sw") != null ) {
+        document.getElementById("impcounter_sw").style.display = "";
+      }
+      var parent = document.getElementById("wic");
+      updateImp_Counter(parent, "impcounter_sw",  keyCount_sw);
+      
+      if ( document.getElementById("impcounter_ss") != null ) {
+        document.getElementById("impcounter_ss").style.display = "";
+      }
+      var parent = document.getElementById("sic");
+      updateImp_Counter(parent, "impcounter_ss",  keyCount_ss);
+      
+      if ( document.getElementById("impcounter_sa") != null ) {
+        document.getElementById("impcounter_sa").style.display = "";
+      }      
+      var parent = document.getElementById("aic");
+      updateImp_Counter(parent, "impcounter_sa",  keyCount_sa);
+      
+      if ( document.getElementById("impcounter_sd") != null ) {
+        document.getElementById("impcounter_sd").style.display = "";
+      }      
+      var parent = document.getElementById("dic");
+      updateImp_Counter(parent, "impcounter_sd",  keyCount_sd);
+      
+      if ( document.getElementById("impcounter_s2") != null ) {
+        document.getElementById("impcounter_s2").style.display = "";
+      }
+      var parent = document.getElementById("2ic");
+      updateImp_Counter(parent, "impcounter_s2",  keyCount_s2);
+      
+      if ( document.getElementById("impcounter_s1") != null ) {
+        document.getElementById("impcounter_s1").style.display = "";
+      }
+      var parent = document.getElementById("1ic");
+      updateImp_Counter(parent, "impcounter_s1",  keyCount_s1);
+      
     }
     
     return ;
@@ -358,21 +454,42 @@ function changePrecision() {
     noCmds = false;
   }
   
+  function updateImp_Counter(parent, idDiv, count) {
+    var div = null;
+    var div = document.getElementById(idDiv);
+    
+    if ( div == null ) {
+      var div = document.createElement('div');
+      div.id = idDiv;
+    
+      div.style.position = 'absolute';
+      div.style.left = (parent.style.left + 29)+'px';
+      div.style.top = (parent.style.top + 20)+'px';
+      div.style.fontSize = '5pt';
+      div.style.zIndex = "50";
+    
+      parent.appendChild(div);
+    }
+    if ( count > 0 ) {
+      div.innerHTML = "" + count;
+    } else {
+      div.innerHTML = "";
+    }
+  }
+  
   function impulsesCounter(keyId) {
     if ( keyId == 87 ) {
       if (keyCount_s > 0) {
         keyCount_s--;
         if ( chkSwitchShift == false ) {
-          if (keyCount_s == 0 ) {
-            document.getElementById("sic").innerHTML = "";
-          } else {
-            document.getElementById("sic").innerHTML = "" + keyCount_s;
-          }
+          var parent = document.getElementById("sic");
+          updateImp_Counter(parent, "impcounter_s",  keyCount_s);
         }
       } else {
         keyCount_w++;
         if ( chkSwitchShift == false ) {
-          document.getElementById("wic").innerHTML = "" + keyCount_w;
+          var parent = document.getElementById("wic");
+          updateImp_Counter(parent, "impcounter_w",  keyCount_w);
         }
       }
     }
@@ -380,16 +497,14 @@ function changePrecision() {
       if (keyCount_w > 0) {
         keyCount_w--;
         if ( chkSwitchShift == false ) {
-          if (keyCount_w == 0 ) {
-            document.getElementById("wic").innerHTML = "";
-          } else {
-            document.getElementById("wic").innerHTML = "" + keyCount_w;
-          }
+          var parent = document.getElementById("wic");
+          updateImp_Counter(parent, "impcounter_w",  keyCount_w);
         }
       } else {
         keyCount_s++;
         if ( chkSwitchShift == false ) {
-          document.getElementById("sic").innerHTML = "" + keyCount_s;
+          var parent = document.getElementById("sic");
+          updateImp_Counter(parent, "impcounter_s",  keyCount_s);
         }
       }
     }
@@ -397,16 +512,14 @@ function changePrecision() {
       if (keyCount_d > 0) {
         keyCount_d--;
         if ( chkSwitchShift == false ) {
-          if (keyCount_d == 0 ) {
-            document.getElementById("dic").innerHTML = "";
-          } else {
-            document.getElementById("dic").innerHTML = "" + keyCount_d;
-          }
+          var parent = document.getElementById("dic");
+          updateImp_Counter(parent, "impcounter_d",  keyCount_d);
         }
       } else {
         keyCount_a++;
         if ( chkSwitchShift == false ) {
-          document.getElementById("aic").innerHTML = "" + keyCount_a;
+          var parent = document.getElementById("aic");
+          updateImp_Counter(parent, "impcounter_a",  keyCount_a);
         }
       }
     }
@@ -414,16 +527,14 @@ function changePrecision() {
       if (keyCount_a > 0) {
         keyCount_a--;
         if ( chkSwitchShift == false ) {
-          if (keyCount_a == 0 ) {
-            document.getElementById("aic").innerHTML = "";
-          } else {
-            document.getElementById("aic").innerHTML = "" + keyCount_a;
-          }
+          var parent = document.getElementById("aic");
+          updateImp_Counter(parent, "impcounter_a",  keyCount_a);
         }
       } else {
         keyCount_d++;
         if ( chkSwitchShift == false ) {
-          document.getElementById("dic").innerHTML = "" + keyCount_d;
+          var parent = document.getElementById("dic");
+          updateImp_Counter(parent, "impcounter_d",  keyCount_d);
         }
       }
     }
@@ -431,16 +542,14 @@ function changePrecision() {
       if (keyCount_2 > 0) {
         keyCount_2--;
         if ( chkSwitchShift == false ) {
-          if (keyCount_2 == 0 ) {
-            document.getElementById("2ic").innerHTML = "";
-          } else {
-            document.getElementById("2ic").innerHTML = "" + keyCount_2;
-          }
+          var parent = document.getElementById("2ic");
+          updateImp_Counter(parent, "impcounter_2",  keyCount_2);
         }
       } else {
         keyCount_1++;
         if ( chkSwitchShift == false ) {
-          document.getElementById("1ic").innerHTML = "" + keyCount_1;
+          var parent = document.getElementById("1ic");
+          updateImp_Counter(parent, "impcounter_1",  keyCount_1);
         }
       }
     }
@@ -448,16 +557,14 @@ function changePrecision() {
       if (keyCount_1 > 0) {
         keyCount_1--;
         if ( chkSwitchShift == false ) {
-          if (keyCount_1 == 0 ) {
-            document.getElementById("1ic").innerHTML = "";
-          } else {
-            document.getElementById("1ic").innerHTML = "" + keyCount_1;
-          }
+          var parent = document.getElementById("1ic");
+          updateImp_Counter(parent, "impcounter_1",  keyCount_1);
         }
       } else {
         keyCount_2++;
         if ( chkSwitchShift == false ) {
-          document.getElementById("2ic").innerHTML = "" + keyCount_2;
+          var parent = document.getElementById("2ic");
+          updateImp_Counter(parent, "impcounter_2",  keyCount_2);
         }
       }
     }
@@ -468,16 +575,14 @@ function changePrecision() {
       if (keyCount_ss > 0) {
         keyCount_ss--;
         if ( chkSwitchShift == true ) {
-          if (keyCount_ss == 0 ) {
-            document.getElementById("sic").innerHTML = "";
-          } else {
-            document.getElementById("sic").innerHTML = "" + keyCount_ss;
-          }
+          var parent = document.getElementById("sic");
+          updateImp_Counter(parent, "impcounter_ss",  keyCount_ss);
         }
       } else {
         keyCount_sw++;
         if ( chkSwitchShift == true ) {
-          document.getElementById("wic").innerHTML = "" + keyCount_sw;
+          var parent = document.getElementById("wic");
+          updateImp_Counter(parent, "impcounter_sw",  keyCount_sw);
         }
       }
     }
@@ -485,16 +590,14 @@ function changePrecision() {
       if (keyCount_sw > 0) {
         keyCount_sw--;
         if ( chkSwitchShift == true ) {
-          if (keyCount_sw == 0 ) {
-            document.getElementById("wic").innerHTML = "";
-          } else {
-            document.getElementById("wic").innerHTML = "" + keyCount_sw;
-          }
+          var parent = document.getElementById("wic");
+          updateImp_Counter(parent, "impcounter_sw",  keyCount_sw);
         }
       } else {
         keyCount_ss++;
         if ( chkSwitchShift == true ) {
-          document.getElementById("sic").innerHTML = "" + keyCount_ss;
+          var parent = document.getElementById("sic");
+          updateImp_Counter(parent, "impcounter_ss",  keyCount_ss);
         }
       }
     }
@@ -502,16 +605,14 @@ function changePrecision() {
       if (keyCount_sd > 0) {
         keyCount_sd--;
         if ( chkSwitchShift == true ) {
-          if (keyCount_sd == 0 ) {
-            document.getElementById("dic").innerHTML = "";
-          } else {
-            document.getElementById("dic").innerHTML = "" + keyCount_sd;
-          }
+          var parent = document.getElementById("dic");
+          updateImp_Counter(parent, "impcounter_sd",  keyCount_sd);
         }
       } else {
         keyCount_sa++;
         if ( chkSwitchShift == true ) {
-          document.getElementById("aic").innerHTML = "" + keyCount_sa;
+          var parent = document.getElementById("aic");
+          updateImp_Counter(parent, "impcounter_sa",  keyCount_sa);
         }
       }
     }
@@ -519,16 +620,14 @@ function changePrecision() {
       if (keyCount_sa > 0) {
         keyCount_sa--;
         if ( chkSwitchShift == true ) {
-          if (keyCount_sa == 0 ) {
-            document.getElementById("aic").innerHTML = "";
-          } else {
-            document.getElementById("aic").innerHTML = "" + keyCount_sa;
-          }
+          var parent = document.getElementById("aic");
+          updateImp_Counter(parent, "impcounter_sa",  keyCount_sa);
         }
       } else {
         keyCount_sd++;
         if ( chkSwitchShift == true ) {
-          document.getElementById("dic").innerHTML = "" + keyCount_sd;
+          var parent = document.getElementById("dic");
+          updateImp_Counter(parent, "impcounter_sd",  keyCount_sd);
         }
       }
     }
@@ -536,16 +635,14 @@ function changePrecision() {
       if (keyCount_s2 > 0) {
         keyCount_s2--;
         if ( chkSwitchShift == true ) {
-          if (keyCount_s2 == 0 ) {
-            document.getElementById("2ic").innerHTML = "";
-          } else {
-            document.getElementById("2ic").innerHTML = "" + keyCount_s2;
-          }
+          var parent = document.getElementById("2ic");
+          updateImp_Counter(parent, "impcounter_s2",  keyCount_s2);
         }
       } else {
         keyCount_s1++;
         if ( chkSwitchShift == true ) {
-          document.getElementById("1ic").innerHTML = "" + keyCount_s1;
+          var parent = document.getElementById("1ic");
+          updateImp_Counter(parent, "impcounter_s1",  keyCount_s1);
         }
       }
     }
@@ -553,16 +650,14 @@ function changePrecision() {
       if (keyCount_s1 > 0) {
         keyCount_s1--;
         if ( chkSwitchShift == true ) {
-          if (keyCount_s1 == 0 ) {
-            document.getElementById("1ic").innerHTML = "";
-          } else {
-            document.getElementById("1ic").innerHTML = "" + keyCount_s1;
-          }
+          var parent = document.getElementById("1ic");
+          updateImp_Counter(parent, "impcounter_s1",  keyCount_s1);
         }
       } else {
         keyCount_s2++;
         if ( chkSwitchShift == true ) {
-          document.getElementById("2ic").innerHTML = "" + keyCount_s2;
+          var parent = document.getElementById("2ic");
+          updateImp_Counter(parent, "impcounter_s2",  keyCount_s2);
         }
       }
     }
