@@ -132,7 +132,7 @@
                   $(document).ready(function() {
                     $("#freqslider").slider({
                       animate: true,
-                      min: 0.05,
+                      min: 0.0,
                       max: 1.0,
                       step: 0.05, 
                       values: [ 0.5 ],
@@ -142,6 +142,10 @@
                       change: function(event, ui) { 
                         var rv = updateFreqInd(ui.value);
                         if ( subsPlayers ) {
+                        
+                          if ( subsPlayers.getRequestedMaxFrequency(rv) < 0.0001 ) {
+                            resubPlayers();
+                          }
                           subsPlayers.setRequestedMaxFrequency(rv);
                         }
                       }

@@ -147,7 +147,7 @@ function startGrid() {
     if ( indx == -1) {
       try {
         require(["Subscription"],function(Subscription) {  
-          var tmp = new Subscription("MERGE",key,["dVx", "dVy", "dVz", "dRx", "dRy", "dRz"]);
+          var tmp = new Subscription("MERGE",key,["nick", "msg", "dVx", "dVy", "dVz", "dRx", "dRy", "dRz"]);
           
           tmp.setRequestedSnapshot("yes");
           tmp.setRequestedMaxFrequency("unlimited");
@@ -171,6 +171,26 @@ function startGrid() {
               }
               if ( updInfo.isValueChanged("dRz") ) {
                 updateDinamics2(updInfo.getItemName(), "dRz",updInfo.getValue("dRz"));
+              }
+              
+              if ( updInfo.isValueChanged("nick") ) {
+                if ( updInfo.getValue("nick") != null) {
+                  var iam = false;
+                  if ( (updInfo.getValue("nick") == myNick) || (updInfo.getValue("nick") == (precision+logonName)) || (updInfo.getValue("nick") == (logonName)) ) {
+                    iam = true;
+                  } else {
+                    iam = false;
+                  }
+                  updateNick(updInfo.getItemName(), updInfo.getValue("nick"), iam);
+                }
+              }
+                
+              if ( updInfo.isValueChanged("msg") ) {
+                if ( updInfo.getValue("msg") != null ) {
+                  updateLastMsg(updInfo.getItemName(), updInfo.getValue("msg"));
+                } else if ( updInfo.getValue("msg") == "" ) {
+                  updateLastMsg(updInfo.getItemName(), "");
+                }
               }
             }
           });
@@ -241,6 +261,11 @@ function startGrid() {
     
       client.subscribe(tmpSub);
     }
+  }
+  
+  function resubPlayers() {
+    client.unsubscribe(subsPlayers);
+    client.subscribe(subsPlayers);
   }
 
 function checkTable(obj) {
@@ -826,6 +851,7 @@ function changePrecision() {
       // Passare in modalità server side physics calculation.
       subServerSide();
       unsubDeltas();
+      resubPlayers();
       stopPhysics();
       physicsMod = 1;
       
@@ -863,7 +889,7 @@ function changePrecision() {
       
       subsPlayers.setRequestedMaxFrequency(0.5);
       // Reset frequency slider
-      $( "#freqslider" ).slider( "option", "min", 0.05 );
+      $( "#freqslider" ).slider( "option", "min", 0.0 );
       $( "#freqslider" ).slider( "option", "max", 1.0 );
       $( "#freqslider" ).slider( "option", "step", 0.05 );
       $( "#freqslider" ).slider( "option", "values", [0.5]);
@@ -1543,7 +1569,7 @@ function changePrecision() {
     if ( v > 1 ) {
       v+=0.1;
     } else {
-      v+=0.001;
+      v+=0.0000001;
     }
     var val = Number(v.toString().substring(0,5));
     if (val == maxFreqVal) {
@@ -1551,7 +1577,14 @@ function changePrecision() {
       document.getElementById("nowFrequency").innerHTML = val;
     } else {
       if ( physicsMod == 0) {
-        document.getElementById("nowFrequency").innerHTML = Math.round(Number((1/v).toString().substring(0,5)))+"";
+        if ( v < 0.05 ) {
+          document.getElementById("nowFrequency").innerHTML = "never";
+          document.getElementById("um").innerHTML = " ";
+          val = 0.000001;
+        } else {
+          document.getElementById("nowFrequency").innerHTML = Math.round(Number((1/v).toString().substring(0,5)))+"";
+          document.getElementById("um").innerHTML = " seconds";
+        }
       } else {
         document.getElementById("nowFrequency").innerHTML = txt;
       }
