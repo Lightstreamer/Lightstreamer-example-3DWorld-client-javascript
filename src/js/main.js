@@ -406,7 +406,7 @@ function startGrid() {
     if ( indx == -1) {
       try {
         require(["Subscription"],function(Subscription) {  
-          var tmp = new Subscription("MERGE",key,["nick", "msg", "Vx", "Vy", "Vz", "momx", "momy", "momz"]);
+          var tmp = new Subscription("MERGE",key,["Vx", "Vy", "Vz", "momx", "momy", "momz"]);
           
           tmp.setRequestedSnapshot("yes");
           tmp.setRequestedMaxFrequency("unlimited");
