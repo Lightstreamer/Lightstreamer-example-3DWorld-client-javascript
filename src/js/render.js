@@ -60,12 +60,94 @@ var group = new THREE.Object3D();
 
 try { 
   renderer = new THREE.WebGLRenderer(); 
-  materialLines = new THREE.MeshBasicMaterial( { wireframe: true, opacity: 0.2 } );
+
+  materialLines = new THREE.MeshBasicMaterial( { wireframe: true, color: 0x2f2f2f } );
   
   var geometryLines = new THREE.CubeGeometry( 160, 90, 120 );
   var meshLines = new THREE.Mesh( geometryLines, materialLines );
   
   group.add( meshLines );
+  
+  /*
+  
+  var sizeX = 60, sizeZ = 80, step = 10;
+  var material = new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 0.2 } );
+  
+  var plane1 = new THREE.Geometry();
+  plane1.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
+  plane1.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
+  plane1.vertices.push( new THREE.Vector3( -80, 45, 60 ) );
+  plane1.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
+  
+  var plane2 = new THREE.Geometry();
+  plane2.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
+  plane2.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
+  plane2.vertices.push( new THREE.Vector3( -80, 45, -60 ) );
+  plane2.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
+  
+  var plane3 = new THREE.Geometry();
+  plane3.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
+  plane3.vertices.push( new THREE.Vector3( -80, 45, 60 ) );
+  plane3.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
+  plane3.vertices.push( new THREE.Vector3( -80, 45, -60 ) );
+  
+  var plane4 = new THREE.Geometry();
+  plane4.vertices.push( new THREE.Vector3( -80, 45, 60 ) );
+  plane4.vertices.push( new THREE.Vector3( -80, 45, -60 ) );
+  plane4.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
+  plane4.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
+
+  var plane5 = new THREE.Geometry();
+  plane5.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
+  plane5.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
+  plane5.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
+  plane5.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
+  
+  var plane6 = new THREE.Geometry();
+  plane6.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
+  plane6.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
+  plane6.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
+  plane6.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
+  
+  var plane7 = new THREE.Geometry();
+  plane7.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
+  plane7.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
+  plane7.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
+  plane7.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
+  
+  var plane8 = new THREE.Geometry();
+  plane8.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
+  plane8.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
+  
+  var line8 = new THREE.Line( plane8, material );
+  line8.type = THREE.LinePieces;
+  group.add( line8 );
+  
+  var line7 = new THREE.Line( plane7, material );
+  line7.type = THREE.LinePieces;
+  group.add( line7 );
+  
+  var line5 = new THREE.Line( plane5, material );
+  line5.type = THREE.LinePieces;
+  group.add( line5 );
+  
+  var line4 = new THREE.Line( plane4, material );
+  line4.type = THREE.LinePieces;
+  group.add( line4 );
+  
+  var line1 = new THREE.Line( plane1, material );
+  line1.type = THREE.LinePieces;
+  group.add( line1 );
+  
+  var line2 = new THREE.Line( plane2, material );
+  line2.type = THREE.LinePieces;
+  group.add( line2 );
+  
+  var line3 = new THREE.Line( plane3, material );
+  line3.type = THREE.LinePieces;
+  group.add( line3 );
+
+  */
   
   camera = new THREE.PerspectiveCamera(45, WIDTH/HEIGHT, 0.1, 10000); 
   
@@ -205,7 +287,7 @@ var aX = new THREE.Mesh(textaX, materialAxisLabel);
 aX.position.x = -21;
 aX.position.y = -45;
 aX.position.z = -50;
-aX.useQuaternion = true;
+//aX.useQuaternion = true;
 aX.quaternion.x = 0.7071067811;
 aX.quaternion.y = 0;
 aX.quaternion.z = 0;
@@ -226,7 +308,7 @@ var aY = new THREE.Mesh(textaY, materialAxisLabel);
 aY.position.x = -75;
 aY.position.y = -15;
 aY.position.z = -60;
-aY.useQuaternion = true;
+//aY.useQuaternion = true;
 aY.quaternion.x = 0;
 aY.quaternion.y = 0;
 aY.quaternion.z = 0;
@@ -434,22 +516,22 @@ function updateDinamics2(plyr, command, value) {
   var indx = players.indexOf(plyr);
   
   if ( indx != -1 ) {
-    if (command == "dVx")  {
+    if (command == "Vx")  {
       dinamics[indx].V.setX(value);
     }
-    if (command == "dVy")  {
+    if (command == "Vy")  {
       dinamics[indx].V.setY(value);
     }
-    if (command == "dVz")  {
+    if (command == "Vz")  {
       dinamics[indx].V.setZ(value);
     }
-    if (command == "dRx")  {
+    if (command == "momx")  {
       dinamics[indx].R.setX(value);
     }
-    if (command == "dRy")  {
+    if (command == "momy")  {
       dinamics[indx].R.setY(value);
     }
-    if (command == "dRz")  {
+    if (command == "momz")  {
       dinamics[indx].R.setZ(value);
     }
   }

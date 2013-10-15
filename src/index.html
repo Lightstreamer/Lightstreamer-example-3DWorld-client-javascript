@@ -141,13 +141,13 @@
                       },
                       change: function(event, ui) { 
                         var rv = updateFreqInd(ui.value);
-                        if ( subsPlayers ) {
-                        
-                          if ( subsPlayers.getRequestedMaxFrequency() < 0.0001 ) {
-                            resubPlayers();
-                          }
-                          subsPlayers.setRequestedMaxFrequency(rv);
-                        }
+                          //if ( subsPlayers ) {
+                          //
+                          //if ( subsPlayers.getRequestedMaxFrequency() < 0.0001 ) {
+                          //resubPlayers();
+                          //}
+                          //subsPlayers.setRequestedMaxFrequency(rv);
+                          updFrequencyDyns(rv);
                       }
                     });
                   });

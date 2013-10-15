@@ -21,12 +21,16 @@ var client = null;
 // Subscriptions towards Lightstreamer server
 var gBandSubs;
 var subsPlayers;
+var subsDyns;
 var subsLogon;
 var subSrvSide;
 var subsDeltaKeys = new Array();
 var subsDelta = new Array();
 var subsDeltaBU = new Array();
 var subsDeltaKeysBU = new Array();
+var subsDynsKeys = new Array();
+var subsDyns = new Array();
+var nicks = new Array();
 
 // subsPlayers listeners
 var imGrid = null;
@@ -41,6 +45,7 @@ var iamWatcher = false;
 var chkDebug = false;
 var noCmds = false;
 var physicsMod = 0;
+var freqDyns = 0.5;
 
 var keyCount_a = 0;
 var keyCount_w = 0;
@@ -58,6 +63,7 @@ var keyCount_s2 = 0;
 
 // nickname chosen by this page's user; 
 var myNick = null;
+var whoIam = "";
 var myLastWords = "";
 // logonname random generated, it is used in the
 // item name for the subscription logon
@@ -79,7 +85,12 @@ function checkCanvas(checkBtn) {
 
 function stopGrid() {
   console.log("stopGrid.");
-  subsPlayers.removeListener(imGrid);
+  //subsPlayers.removeListener(imGrid);
+  var ik = 0
+  while ( subsDyns.length > ik ) {
+    subsDyns[ik].removeListener(imGrid);
+    ik++
+  }
 }
 
 function startGrid() {
@@ -87,7 +98,8 @@ function startGrid() {
   var cubes = getScene();
   if ( cubes != null ) {
     for (var ik=0;ik<cubes.length;ik++) {
-      imGrid.updateRow("Custom_list_"+myWorld+"_"+precision +" "+cubes[ik].name, {nick:"."+getNick(ik),
+      //imGrid.updateRow("Custom_list_"+myWorld+"_"+precision +" "+cubes[ik].name, {nick:"."+getNick(ik),
+      imGrid.updateRow(cubes[ik].name, {nick:"."+getNick(ik),
                   posX:cubes[ik].position.x,
                   posY:cubes[ik].position.y,
                   posZ:cubes[ik].position.z,
@@ -99,7 +111,12 @@ function startGrid() {
     }
   }
   console.log("startGrid.");
-  subsPlayers.addListener(imGrid);
+  //subsPlayers.addListener(imGrid);
+  var ik = 0
+  while ( subsDyns.length > ik ) {
+    subsDyns[ik].addListener(imGrid);
+    ik++
+  }
 }
 
   function subServerSide() {
@@ -135,6 +152,248 @@ function startGrid() {
     }
   }
 
+  function unsubDyns() {
+    var tmp;
+    
+    while (subsDyns.length > 0) {
+      tmp = subsDyns.pop();
+      if ( tmp.isActive() == true ) {
+        client.unsubscribe(tmp);
+      }
+    }
+    
+    while (subsDynsKeys.length > 0) {
+      subsDynsKeys.pop();
+    }
+  }
+  
+  function updFrequencyDyns(rv) {
+    var indx = 0;
+    
+    freqDyns = rv;
+    while (indx < subsDyns.length ) {
+      if (subsDyns[indx].isActive() == false) {
+        subsDyns[indx].setRequestedMaxFrequency(rv);
+        client.subscribe(subsDyns[indx]);
+      } else {
+        if ( rv < 0.001 ) {
+          client.unsubscribe(subsDyns[indx]);
+        } else {
+          subsDyns[indx].setRequestedMaxFrequency(rv);
+        }
+      }
+      indx++
+    }
+  }
+  
+  function removeDynsSub(key) {
+    var indx = subsDynsKeys.indexOf(key);
+    
+    if ( indx != -1 ) {
+      var tmp = subsDyns[indx];
+      
+      if ( tmp.isActive() == true ) {
+        client.unsubscribe(tmp);
+      }
+      subsDynsKeys.splice(indx, 1);
+      subsDyns.splice(indx, 1);
+      if ( matrix == true ) {
+        imGrid.removeRow(key);
+        tmp.removeListener(imGrid);
+      }
+    }
+  }
+  
+  function addDynsSub(key) {
+    var indx = subsDynsKeys.indexOf(key);
+    
+    if ( indx == -1 ) {
+      try {
+        require(["Subscription"],function(Subscription) {  
+          var tmp;
+          if ( chkDebug == true ) {
+            tmp = new Subscription("MERGE",key,["posX", "posY", "posZ", "rotX", "rotY", "rotZ", "rotW", "lifeSpan"]);
+          } else {
+            tmp = new Subscription("MERGE",key,["posX", "posY", "posZ", "rotX", "rotY", "rotZ", "rotW"]);
+          }
+          
+          tmp.setRequestedSnapshot("yes");
+          tmp.setRequestedMaxFrequency(freqDyns);
+          //tmp.addListener(imGrid);
+          tmp.addListener({
+            onEndOfSnapshot: function(key, itemPos) {
+              //if (freqDyns < 0.0001 ) {
+              //  client.unsubscribe(subsDyns[subsDynsKeys.indexOf(key)]);
+              //}
+            },
+            onItemUpdate: function(updateInfo){
+              var posX = null;
+              var posY = null;
+              var posZ = null;
+              var rotX = null;
+              var rotY = null;
+              var rotZ = null;
+              var rotW = null;
+              var r, d;
+              
+              if ( subsDynsKeys.indexOf(updateInfo.getItemName()) == -1 ) {
+                return ;
+              }
+              
+              if ( precision == "bd" ) {
+                
+                updateInfo.forEachChangedField(function(fieldName,num,newValue) {
+                  if (newValue != null) {
+                    if ( ( fieldName != "nick" ) ) {
+                      r = fromBase64(newValue);
+                      d = getMyDouble(r);
+                      switch (fieldName) {
+                        case "posX":
+                          posX = d;
+                          break;
+                        case "posY":
+                          posY = d;
+                          break;
+                        case "posZ":
+                          posZ = d;
+                          break;
+                        case "rotX":
+                          rotX = d;
+                          break;
+                        case "rotY":
+                          rotY = d;
+                          break;
+                        case "rotZ":
+                          rotZ = d;
+                          break;
+                        case "rotW":
+                          rotW = d;
+                          break;
+                      }
+                    }
+                  } 
+                });
+              
+              } else if ( precision == "bs" ) {
+              
+                updateInfo.forEachChangedField(function(fieldName,num,newValue) {
+                  if (newValue != null) {
+                    if ( ( fieldName != "nick" ) ) {
+                      r = fromBase64(newValue);
+                      d = getMyFloat(r);
+                      switch (fieldName) {
+                        case "posX":
+                          posX = d;
+                          break;
+                        case "posY":
+                          posY = d;
+                          break;
+                        case "posZ":
+                          posZ = d;
+                          break;
+                        case "rotX":
+                          rotX = d;
+                          break;
+                        case "rotY":
+                          rotY = d;
+                          break;
+                        case "rotZ":
+                          rotZ = d;
+                          break;
+                        case "rotW":
+                          rotW = d;
+                          break;
+                      }
+                    } 
+                  }
+                });
+              
+              } else {
+              
+                updateInfo.forEachChangedField(function(fieldName,num,newValue) {
+                  if (newValue != null) {
+                    if ( ( fieldName != "nick" ) ) {
+                      d = (newValue * 1.0);
+                      switch (fieldName) {
+                        case "posX":
+                          posX = d;
+                          break;
+                        case "posY":
+                          posY = d;
+                          break;
+                        case "posZ":
+                          posZ = d;
+                          break;
+                        case "rotX":
+                          if ( (d > -1) && (d <= 1) ) {
+                            rotX = d;
+                          }
+                          break;
+                        case "rotY":
+                          if ( (d > -1) && (d <= 1) ) {
+                            rotY = d;
+                          }
+                          break;
+                        case "rotZ":
+                          if ( (d > -1) && (d <= 1) ) {
+                            rotZ = d;
+                          }
+                          break;
+                        case "rotW":
+                          if ( (d > -1) && (d <= 1) ) {
+                            rotW = d;
+                          }
+                          break;
+                      }
+                    }
+                  }
+                });
+              }
+              
+              var iam = false;
+              //console.log("Iam: " + whoIam + " upd:" + updateInfo.getItemName());
+              if ( whoIam == updateInfo.getItemName() ) {
+                iam = true;
+              } else {
+                iam = false;
+              }
+              
+              var nn = nicks[updateInfo.getItemName()];
+              if ( chkDebug == true ) {
+                if ( updateScene(updateInfo.getItemName(), posX, posY, posZ, rotX, rotY, rotZ, rotW, iam, updateInfo.getValue("lifeSpan")) ) {
+                  if ( nn != null ) {
+                    updateNick(updateInfo.getItemName(), nn, iam);
+                  }
+                  addDeltaSub(updateInfo.getItemName());
+                  if (freqDyns < 0.0001 ) {
+                    client.unsubscribe(subsDyns[subsDynsKeys.indexOf(updateInfo.getItemName())]);
+                  }
+                }
+              } else {
+                if ( updateScene(updateInfo.getItemName(), posX, posY, posZ, rotX, rotY, rotZ, rotW, iam, 0) ) {
+                  if ( nn != null ) {
+                    updateNick(updateInfo.getItemName(), nn, iam);
+                  }
+                  addDeltaSub(updateInfo.getItemName());
+                }
+                if ( (freqDyns < 0.0001) && (posX != 0) ) {
+                  client.unsubscribe(subsDyns[subsDynsKeys.indexOf(updateInfo.getItemName())]);
+                }
+              }
+            }
+          });
+          
+          client.subscribe(tmp);
+          var indy = subsDynsKeys.push(key) - 1;
+          subsDyns[indy] = tmp;
+          if ( matrix ) {
+            tmp.addListener(imGrid);
+          }
+          });
+      } catch(e) {console.error(e);}
+    }
+  }
+  
   function addDeltaSub(key) {
     var indx;
     
@@ -147,30 +406,30 @@ function startGrid() {
     if ( indx == -1) {
       try {
         require(["Subscription"],function(Subscription) {  
-          var tmp = new Subscription("MERGE",key,["nick", "msg", "dVx", "dVy", "dVz", "dRx", "dRy", "dRz"]);
+          var tmp = new Subscription("MERGE",key,["nick", "msg", "Vx", "Vy", "Vz", "momx", "momy", "momz"]);
           
           tmp.setRequestedSnapshot("yes");
           tmp.setRequestedMaxFrequency("unlimited");
           tmp.addListener({
             onItemUpdate: function(updInfo) {
               
-              if ( updInfo.isValueChanged("dVx") ) {
-                updateDinamics2(updInfo.getItemName(), "dVx", updInfo.getValue("dVx"));
+              if ( updInfo.isValueChanged("Vx") ) {
+                updateDinamics2(updInfo.getItemName(), "Vx", updInfo.getValue("Vx"));
               }
-              if ( updInfo.isValueChanged("dVy") ) {
-                updateDinamics2(updInfo.getItemName(), "dVy", updInfo.getValue("dVy"));
+              if ( updInfo.isValueChanged("Vy") ) {
+                updateDinamics2(updInfo.getItemName(), "Vy", updInfo.getValue("Vy"));
               }
-              if ( updInfo.isValueChanged("dVz") ) {
-                updateDinamics2(updInfo.getItemName(), "dVz", updInfo.getValue("dVz"));
+              if ( updInfo.isValueChanged("Vz") ) {
+                updateDinamics2(updInfo.getItemName(), "Vz", updInfo.getValue("Vz"));
               }
-              if ( updInfo.isValueChanged("dRx") ) {
-                updateDinamics2(updInfo.getItemName(), "dRx", updInfo.getValue("dRx"));
+              if ( updInfo.isValueChanged("momx") ) {
+                updateDinamics2(updInfo.getItemName(), "momx", updInfo.getValue("momx"));
               }
-              if ( updInfo.isValueChanged("dRy") ) {
-                updateDinamics2(updInfo.getItemName(), "dRy",updInfo.getValue("dRy"));
+              if ( updInfo.isValueChanged("momy") ) {
+                updateDinamics2(updInfo.getItemName(), "momy",updInfo.getValue("momy"));
               }
-              if ( updInfo.isValueChanged("dRz") ) {
-                updateDinamics2(updInfo.getItemName(), "dRz",updInfo.getValue("dRz"));
+              if ( updInfo.isValueChanged("momz") ) {
+                updateDinamics2(updInfo.getItemName(), "momz",updInfo.getValue("momz"));
               }
               
               if ( updInfo.isValueChanged("nick") ) {
@@ -209,7 +468,7 @@ function startGrid() {
   }
 
   function removeDeltaSub(key) {
-    if (physicsMod == 0) { 
+    if (physicsMod == 0) {
       var indx = subsDeltaKeys.indexOf(key);
       if ( indx == -1) {
         return ;
@@ -314,6 +573,7 @@ function changePrecision() {
     try {
       client.unsubscribe(subsPlayers);
       unsubDeltas();
+      unsubDyns();
     
       subsPlayers.setItems(["Custom_list_"+myWorld+"_"+precision]);
       
@@ -851,11 +1111,12 @@ function changePrecision() {
       // Passare in modalità server side physics calculation.
       subServerSide();
       unsubDeltas();
-      resubPlayers();
+      //resubPlayers();
       stopPhysics();
       physicsMod = 1;
       
-      subsPlayers.setRequestedMaxFrequency(33.0);
+      //subsPlayers.setRequestedMaxFrequency(33.0);
+      updFrequencyDyns(33.0);
       // Reset frequency slider
       $( "#freqslider" ).slider( "option", "min", 1 );
       $( "#freqslider" ).slider( "option", "max", 100 );
@@ -887,7 +1148,8 @@ function changePrecision() {
       document.getElementById("radio_s").checked = true;
       document.getElementById("radio_d").checked = false;
       
-      subsPlayers.setRequestedMaxFrequency(0.5);
+      //subsPlayers.setRequestedMaxFrequency(0.5);
+      updFrequencyDyns(0.5);
       // Reset frequency slider
       $( "#freqslider" ).slider( "option", "min", 0.0 );
       $( "#freqslider" ).slider( "option", "max", 1.0 );
@@ -1041,6 +1303,7 @@ function changePrecision() {
           
           client.unsubscribe(subsPlayers);
           unsubDeltas();
+          unsubDyns();
           client.unsubscribe(subsLogon);
           
           subsPlayers.setItems(["Custom_list_"+myWorld+"_"+precision]);
@@ -1186,7 +1449,7 @@ function changePrecision() {
     
   function createMessageGrid() {
    
-    require(["js/lsClient","DynaGrid","StaticGrid","Subscription"],function(lsClient,DynaGrid,StaticGrid,Subscription) {  
+    require(["js/lsClient","DynaGrid","StaticGrid","Subscription"],function(lsClient,DynaGrid,StaticGrid,Subscription) {
       client = lsClient;
       
       lsClient.addListener({onServerError: function(errorCode, errorMsg) {
@@ -1205,8 +1468,10 @@ function changePrecision() {
           if (info == null) {
             return;
           }
+         
+
           if ( info.getCellValue("nick").indexOf(".") == 0) {
-            info.setCellValue("nick", info.getCellValue("nick").substring(1));
+              info.setCellValue("nick", info.getCellValue("nick").substring(1));
           } else if ( precision == "bd" ) {
             
             info.forEachChangedField(function(fieldName,newValue) {
@@ -1235,188 +1500,67 @@ function changePrecision() {
             // Skip.
           }
           
-          if (info.getChangedFieldValue("nick") != null ) {
-            if ( (info.getCellValue("nick") == myNick) || (info.getCellValue("nick") == (precision+logonName)) || (info.getCellValue("nick") == (logonName))) {
-              domNode.style.fontWeight = "700";
-              domNode.style.color = "#FF0000";
-              domNode.style.backgroundColor = "#E5E5E5";
-            } else if ( !info.getCellValue("nick").indexOf("Ghost") == 0) { 
-              domNode.style.backgroundColor = "#E5E5E5";
-              domNode.style.color = "#0F87FF";
-            } else {
-              domNode.style.backgroundColor = "#E5E5E5";
-              domNode.style.color = "#000000";
-            }
+          if ( (key == myNick) || (key == (logonName+"_"+precision)) || (info.getCellValue("nick") == (logonName))) {
+            domNode.style.fontWeight = "700";
+            domNode.style.color = "#FF0000";
+            domNode.style.backgroundColor = "#E5E5E5";
+          } else if ( !key.indexOf("Ghost") == 0) {
+            domNode.style.backgroundColor = "#E5E5E5";
+            domNode.style.color = "#0F87FF";
+          } else {
+            domNode.style.backgroundColor = "#E5E5E5";
+            domNode.style.color = "#000000";
           }
         }
       });
       
-      subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key"]);
+      subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key", "nick", "msg"]);
       subsPlayers.setRequestedSnapshot("yes");
-      if ( chkDebug == true ) {
-        subsPlayers.setCommandSecondLevelFields(["nick", "msg", "lifeSpan", "posY", "posZ", "rotX", "rotY", "rotZ", "rotW", "posX"]);
-      } else {
-        subsPlayers.setCommandSecondLevelFields(["nick", "msg", "posY", "posZ", "rotX", "rotY", "rotZ", "rotW", "posX"]);
-      }
-      subsPlayers.setRequestedMaxFrequency(0.5);
+
       rndrListener = {
         onItemUpdate: function(updateInfo){
-          var posX = null;
-          var posY = null;
-          var posZ = null;
-          var rotX = null;
-          var rotY = null;
-          var rotZ = null;
-          var rotW = null;
-          var r, d;
-          
-          if ( precision == "bd" ) {
-            
-            updateInfo.forEachChangedField(function(fieldName,num,newValue) {
-              if (newValue != null) {
-                if ( ( fieldName != "nick" ) && ( fieldName != "msg" ) && ( fieldName != "dVx" ) && ( fieldName != "dVy" ) && ( fieldName != "dVz" ) && ( fieldName != "dRx" ) && ( fieldName != "dRy" ) && ( fieldName != "dRz" ) ) {
-                  r = fromBase64(newValue);
-                  d = getMyDouble(r);
-                  switch (fieldName) {
-                    case "posX":
-                      posX = d;
-                      break;
-                    case "posY":
-                      posY = d;
-                      break;
-                    case "posZ":
-                      posZ = d;
-                      break;
-                    case "rotX":
-                      rotX = d;
-                      break;
-                    case "rotY":
-                      rotY = d;
-                      break;
-                    case "rotZ":
-                      rotZ = d;
-                      break;
-                    case "rotW":
-                      rotW = d;
-                      break;
-                  }
-                }
-              } 
-            });
-          
-          } else if ( precision == "bs" ) {
-          
-            updateInfo.forEachChangedField(function(fieldName,num,newValue) {
-              if (newValue != null) {
-                if ( ( fieldName != "nick" ) && ( fieldName != "msg" ) && ( fieldName != "dVx" ) && ( fieldName != "dVy" ) && ( fieldName != "dVz" ) && ( fieldName != "dRx" ) && ( fieldName != "dRy" ) && ( fieldName != "dRz" ) ) {
-                  r = fromBase64(newValue);
-                  d = getMyFloat(r);
-                  switch (fieldName) {
-                    case "posX":
-                      posX = d;
-                      break;
-                    case "posY":
-                      posY = d;
-                      break;
-                    case "posZ":
-                      posZ = d;
-                      break;
-                    case "rotX":
-                      rotX = d;
-                      break;
-                    case "rotY":
-                      rotY = d;
-                      break;
-                    case "rotZ":
-                      rotZ = d;
-                      break;
-                    case "rotW":
-                      rotW = d;
-                      break;
-                  }
-                } 
-              }
-            });
-          
-          } else {
-          
-            updateInfo.forEachChangedField(function(fieldName,num,newValue) {
-              if (newValue != null) {
-                if ( ( fieldName != "nick" ) && ( fieldName != "msg" ) && ( fieldName != "dVx" ) && ( fieldName != "dVy" ) && ( fieldName != "dVz" ) && ( fieldName != "dRx" ) && ( fieldName != "dRy" ) && ( fieldName != "dRz" ) ) {
-                  d = (newValue * 1.0);
-                  switch (fieldName) {
-                    case "posX":
-                      posX = d;
-                      break;
-                    case "posY":
-                      posY = d;
-                      break;
-                    case "posZ":
-                      posZ = d;
-                      break;
-                    case "rotX":
-                      if ( (d > -1) && (d <= 1) ) {
-                        rotX = d;
-                      }
-                      break;
-                    case "rotY":
-                      if ( (d > -1) && (d <= 1) ) {
-                        rotY = d;
-                      }
-                      break;
-                    case "rotZ":
-                      if ( (d > -1) && (d <= 1) ) {
-                        rotZ = d;
-                      }
-                      break;
-                    case "rotW":
-                      if ( (d > -1) && (d <= 1) ) {
-                        rotW = d;
-                      }
-                      break;
-                  }
-                }
-              }
-            });
-          }
-          
           var iam = false;
-          if ( updateInfo.getValue("command") == "DELETE" ) {
+          
+          if ( updateInfo.getValue("command") == "ADD" ) {
+            
+            if ( (updateInfo.getValue("key") == myNick) || (updateInfo.getValue("key") == (logonName+"_"+precision)) || (updateInfo.getValue("key") == (logonName)) ) {
+              iam = true;
+              whoIam = updateInfo.getValue("key");
+            } else {
+              iam = false;
+            }
+            
+            addDynsSub(updateInfo.getValue("key"));
+          } else if ( updateInfo.getValue("command") == "DELETE" ) {
             removeFromScene(updateInfo.getValue("key"));
+            removeDynsSub(updateInfo.getValue("key"));
             removeDeltaSub(updateInfo.getValue("key"));
-          } else {  
-            if ( updateInfo.isValueChanged("nick") ) {
-              if ( (updateInfo.getValue("nick") == myNick) || (updateInfo.getValue("nick") == (precision+logonName)) || (updateInfo.getValue("nick") == (logonName)) ) {
-                iam = true;
-              } else {
-                iam = false;
-              }
-            }
+          } 
             
-            if (( posX != 0 ) && (updateInfo.getValue("nick") != null) ) {
-              if ( chkDebug == true ) {
-                if ( updateScene(updateInfo.getValue("key"), posX, posY, posZ, rotX, rotY, rotZ, rotW, iam, updateInfo.getValue("lifeSpan")) ) {
-                  addDeltaSub(updateInfo.getValue("key"));
-                }
-              } else {
-                if ( updateScene(updateInfo.getValue("key"), posX, posY, posZ, rotX, rotY, rotZ, rotW, iam, 0) ) {
-                  addDeltaSub(updateInfo.getValue("key"));
-                }
-              }
-            }
-            
+          if ( updateInfo.getValue("command") != "DELETE" ) {
             if ( updateInfo.isValueChanged("nick") ) {
               if ( updateInfo.getValue("nick") != null) {
+                if ( (updateInfo.getValue("key") == myNick) || (updateInfo.getValue("key") == (logonName+"_"+precision)) || (updateInfo.getValue("key") == (logonName)) ) {
+                  iam = true;
+                  whoIam = updateInfo.getValue("key");
+                } else {
+                  iam = false;
+                }
+              
                 updateNick(updateInfo.getValue("key"), updateInfo.getValue("nick"), iam);
+                nicks[updateInfo.getValue("key")] = updateInfo.getValue("nick");
+                if ( matrix ) {
+                  imGrid.updateRow(updateInfo.getValue("key"), {nick: "."+updateInfo.getValue("nick")});
+                }
               }
             }
+          }
               
-            if ( updateInfo.isValueChanged("msg") ) {
-              if ( updateInfo.getValue("msg") != null ) {
-                updateLastMsg(updateInfo.getValue("key"), updateInfo.getValue("msg"));
-              } else if ( updateInfo.getValue("msg") == "" ) {
-                updateLastMsg(updateInfo.getValue("key"), "");
-              }
+          if ( updateInfo.isValueChanged("msg") ) {
+            if ( updateInfo.getValue("msg") != null ) {
+              updateLastMsg(updateInfo.getValue("key"), updateInfo.getValue("msg"));
+            } else if ( updateInfo.getValue("msg") == "" ) {
+              updateLastMsg(updateInfo.getValue("key"), "");
             }
           }
         },
@@ -1425,6 +1569,8 @@ function changePrecision() {
           document.getElementById("user_msg").value = "";
           subsDeltaKeys.splice(0, subsDeltaKeys.length);
           subsDeltaKeysBU.splice(0, subsDeltaKeys.length);
+          subsDyns.splice(0, subsDeltaKeys.length);
+          subsDynsKeys.splice(0, subsDeltaKeys.length);
           clearScene();
           imGrid.clean();
         },
@@ -1437,7 +1583,6 @@ function changePrecision() {
       subsPlayers.addListener(rndrListener);
       
       lsClient.subscribe(subsPlayers);
-      
       
       subsLogon = new Subscription("DISTINCT", "c_logon_"+myWorld+"_"+logonName+"_"+physicsMod, ["Test"]);
       subsLogon.addListener({onSubscription: function(){
