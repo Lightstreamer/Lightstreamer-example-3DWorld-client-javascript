@@ -49,16 +49,26 @@ In the <b>Command</b> panel, you can find a recap of the commands that allow you
 <br>In the <b>Rendering</b> panel, the player can see a 3D rendering of the scene with all the players represented by cuboids. The origin of axes is marked with a yellow sphere and the edges of the world are outlined by white lines.
 The 3D rendering is powered by [three.js library](http://mrdoob.github.com/three.js/).
 
-The demo includes the following client-side technologies:
+The clients receive the real-time data by subscribing to Lightstreamer items, with a set of fields, using a subscription mode.
 
-A Subscription to an item in MERGE mode, to get the downstream bandwidth in real time.
+* There exists an item for each world in the game (actually, there is one item for each combination of world and representation precision, but let's keep the explanation simple). Such item works in <b>COMMAND</b> mode and delivers the dynamic list of players in that world, signaling players entering and leaving the world, in addition to notifying nickname changes and chat messages.
 
-* A [Subscription](http://www.lightstreamer.com/docs/client_javascript_uni_api/Subscription.html)  to an item in <b>COMMAND</b> mode, to get the list of players in a world,
-feeding a [DynaGrid](http://www.lightstreamer.com/docs/client_javascript_uni_api/DynaGrid.html) (for the matrix widget). Each added row automatically provokes an underlying subscription to a sub-item in <b>MERGE</b> mode, to get the real-time coordinates for that specific player. When a row is deleted, the underlying sub-item is automatically unsubscribed from.
-* For each player in a world, a [Subscription](http://www.lightstreamer.com/docs/client_javascript_uni_api/Subscription.html) to an item in <b>MERGE</b> mode, with unlimited frequency, to receive the changes of the velocity vector and the angular momentum for all the objects in that world. These items are subscribed to only in client-side mode.
-* A [Subscription](http://www.lightstreamer.com/docs/client_javascript_uni_api/Subscription.html)  to an item in <b>DISTINCT</b> mode, to implement presence (each player signals her presence by keeping this subscription; by closing the page, the automatic unsubscription determines the loss of presence).
-* A [Subscription](http://www.lightstreamer.com/docs/client_javascript_uni_api/Subscription.html) to an item in <b>MERGE</b> mode, feeding a [StaticGrid](http://www.lightstreamer.com/docs/client_javascript_uni_api/StaticGrid.html), to get the downstream bandwidth in real time..
+    The fields available for this item are: "key" (the unique identifier of each player), "command" (add, update, or delete), "nick" (the current nickname), and "msg" (the current chat message).
+     
+* For each player that enters a world, a specific item is created by the server (and subscribed by the clients) to carry all the real-time coordinates and movements for that player. This item works in <b>MERGE</b> mode and it is subscribed-to/unsubscribed-from by each client in that world based on the commands received as part of the first item above.
 
+    The fields available for this item are:
+
+    - The coordinates and the quaternions, which represent the current position of the object: "posX", "posY", "posZ", "rotX", "rotY", "rotZ", "rotW". 
+    This set of fields above is subscribed to in server-side mode, to get the actual positions in real time and render the objects accordingly. It subscribed to in client-side as well, to get the periodic authoritative resynchronizations (unless the resync period is set to 'never').
+    The matrix widget uses these fields to feed a Lightstreamer widget called [DynaGrid](http://www.lightstreamer.com/docs/client_javascript_uni_api/DynaGrid.html).
+
+    - The velocity vector and the angular momentum, which represent the current movement of the object: "Vx", "Vy", "Vz", "momx", "momy", "momz". 
+    This set of fields is subscribed to in client-side mode only, to receive the input for the client-side physics engine.
+     
+* Each client subscribes to an item in <b>DISTINCT</b> mode to implement presence. In other words, each player signals her presence by keeping this subscription active. By leaving the page, the automatic unsubscription determines the loss of presence, and the server can let all the other players know that the user has gone away (by leveraging the COMMAND-mode item above).
+     
+* Each client subscribes to an item in <b>MERGE</b> mode, to know the current downstream bandwidth (used by its own connection) in real time.
 
 # Deploy #
 
