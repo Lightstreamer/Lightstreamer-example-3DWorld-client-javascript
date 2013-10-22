@@ -31,6 +31,7 @@ var subsDeltaKeysBU = new Array();
 var subsDynsKeys = new Array();
 var subsDyns = new Array();
 var nicks = new Array();
+var msgs = new Array();
 
 // subsPlayers listeners
 var imGrid = null;
@@ -221,6 +222,9 @@ function startGrid() {
           tmp.setRequestedMaxFrequency(freqDyns);
           //tmp.addListener(imGrid);
           tmp.addListener({
+            
+            itemKey: key,
+          
             onEndOfSnapshot: function(key, itemPos) {
               //if (freqDyns < 0.0001 ) {
               //  client.unsubscribe(subsDyns[subsDynsKeys.indexOf(key)]);
@@ -379,6 +383,15 @@ function startGrid() {
                 if ( (freqDyns < 0.0001) && (posX != 0) ) {
                   client.unsubscribe(subsDyns[subsDynsKeys.indexOf(updateInfo.getItemName())]);
                 }
+              }
+              
+              if ( msgs[updateInfo.getItemName()] ) {
+                updateLastMsg(updateInfo.getItemName(), msgs[updateInfo.getItemName()]);
+              }
+            },
+            onUnsubscription: function() {
+              if ( whoIam == this.itemKey ) {
+                clearKeyCounts();
               }
             }
           });
@@ -584,7 +597,60 @@ function changePrecision() {
     }
   }
   
+  function clearKeyCounts() {
+    var parent = null;
+    
+    keyCount_a = 0;
+    parent = document.getElementById("aic");
+    updateImp_Counter(parent, "impcounter_a",  keyCount_a);
+    
+    keyCount_w = 0;
+    parent = document.getElementById("wic");
+    updateImp_Counter(parent, "impcounter_w",  keyCount_w);
+    
+    keyCount_d = 0;
+    parent = document.getElementById("dic");
+    updateImp_Counter(parent, "impcounter_d",  keyCount_d);
+    
+    keyCount_s = 0;
+    parent = document.getElementById("sic");
+    updateImp_Counter(parent, "impcounter_s",  keyCount_s);
+    
+    keyCount_1 = 0;
+    parent = document.getElementById("1ic");
+    updateImp_Counter(parent, "impcounter_1",  keyCount_1);
+    
+    keyCount_2 = 0;
+    parent = document.getElementById("2ic");
+    updateImp_Counter(parent, "impcounter_2",  keyCount_2);
+
+    keyCount_sa = 0;
+    parent = document.getElementById("aic");
+    updateImp_Counter(parent, "impcounter_sa",  keyCount_sa);
+    
+    keyCount_sw = 0;
+    parent = document.getElementById("wic");
+    updateImp_Counter(parent, "impcounter_sw",  keyCount_sw);
+    
+    keyCount_sd = 0;
+    parent = document.getElementById("dic");
+    updateImp_Counter(parent, "impcounter_sd",  keyCount_sd);
+    
+    keyCount_ss = 0;
+    parent = document.getElementById("sic");
+    updateImp_Counter(parent, "impcounter_ss",  keyCount_ss);
+    
+    keyCount_s1 = 0;
+    parent = document.getElementById("1ic");
+    updateImp_Counter(parent, "impcounter_s1",  keyCount_s1);
+    
+    keyCount_s2 = 0;
+    parent = document.getElementById("2ic");
+    updateImp_Counter(parent, "impcounter_s2",  keyCount_s2);
+  }
+  
   function switchShift() {
+    var parent = null;
     
     if ( chkSwitchShift == true ) {
       chkSwitchShift = false;
@@ -593,37 +659,37 @@ function changePrecision() {
       if ( document.getElementById("impcounter_w") != null ) {
         document.getElementById("impcounter_w").style.display = "";
       }
-      var parent = document.getElementById("wic");
+      parent = document.getElementById("wic");
       updateImp_Counter(parent, "impcounter_w",  keyCount_w);
       
       if ( document.getElementById("impcounter_s") != null ) {
         document.getElementById("impcounter_s").style.display = "";
       }
-      var parent = document.getElementById("sic");
+      parent = document.getElementById("sic");
       updateImp_Counter(parent, "impcounter_s",  keyCount_s);
       
       if ( document.getElementById("impcounter_a") != null ) {
         document.getElementById("impcounter_a").style.display = "";
       }
-      var parent = document.getElementById("aic");
-       updateImp_Counter(parent, "impcounter_a",  keyCount_a);
+      parent = document.getElementById("aic");
+      updateImp_Counter(parent, "impcounter_a",  keyCount_a);
       
       if ( document.getElementById("impcounter_d") != null ) {
         document.getElementById("impcounter_d").style.display = "";
       }
-      var parent = document.getElementById("dic");
+      parent = document.getElementById("dic");
       updateImp_Counter(parent, "impcounter_d",  keyCount_d);
       
       if ( document.getElementById("impcounter_2") != null ) {
         document.getElementById("impcounter_2").style.display = "";
       }
-      var parent = document.getElementById("2ic");
+      parent = document.getElementById("2ic");
       updateImp_Counter(parent, "impcounter_2",  keyCount_2);
       
       if ( document.getElementById("impcounter_1") != null ) {
         document.getElementById("impcounter_1").style.display = "";
       }
-      var parent = document.getElementById("1ic");
+      parent = document.getElementById("1ic");
       updateImp_Counter(parent, "impcounter_1",  keyCount_1);
       
       if ( document.getElementById("impcounter_sw") != null ) {
@@ -670,37 +736,37 @@ function changePrecision() {
       if ( document.getElementById("impcounter_sw") != null ) {
         document.getElementById("impcounter_sw").style.display = "";
       }
-      var parent = document.getElementById("wic");
+      parent = document.getElementById("wic");
       updateImp_Counter(parent, "impcounter_sw",  keyCount_sw);
       
       if ( document.getElementById("impcounter_ss") != null ) {
         document.getElementById("impcounter_ss").style.display = "";
       }
-      var parent = document.getElementById("sic");
+      parent = document.getElementById("sic");
       updateImp_Counter(parent, "impcounter_ss",  keyCount_ss);
       
       if ( document.getElementById("impcounter_sa") != null ) {
         document.getElementById("impcounter_sa").style.display = "";
       }      
-      var parent = document.getElementById("aic");
+      parent = document.getElementById("aic");
       updateImp_Counter(parent, "impcounter_sa",  keyCount_sa);
       
       if ( document.getElementById("impcounter_sd") != null ) {
         document.getElementById("impcounter_sd").style.display = "";
       }      
-      var parent = document.getElementById("dic");
+      parent = document.getElementById("dic");
       updateImp_Counter(parent, "impcounter_sd",  keyCount_sd);
       
       if ( document.getElementById("impcounter_s2") != null ) {
         document.getElementById("impcounter_s2").style.display = "";
       }
-      var parent = document.getElementById("2ic");
+      parent = document.getElementById("2ic");
       updateImp_Counter(parent, "impcounter_s2",  keyCount_s2);
       
       if ( document.getElementById("impcounter_s1") != null ) {
         document.getElementById("impcounter_s1").style.display = "";
       }
-      var parent = document.getElementById("1ic");
+      parent = document.getElementById("1ic");
       updateImp_Counter(parent, "impcounter_s1",  keyCount_s1);
       
     }
@@ -1559,6 +1625,7 @@ function changePrecision() {
           if ( updateInfo.isValueChanged("msg") ) {
             if ( updateInfo.getValue("msg") != null ) {
               updateLastMsg(updateInfo.getValue("key"), updateInfo.getValue("msg"));
+              msgs[updateInfo.getValue("key")] = updateInfo.getValue("msg");
             } else if ( updateInfo.getValue("msg") == "" ) {
               updateLastMsg(updateInfo.getValue("key"), "");
             }
