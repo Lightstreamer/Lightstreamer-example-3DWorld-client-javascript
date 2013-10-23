@@ -363,10 +363,14 @@ function startGrid() {
               }
               
               var nn = nicks[updateInfo.getItemName()];
+              var mm = msgs[updateInfo.getItemName()];
               if ( chkDebug == true ) {
                 if ( updateScene(updateInfo.getItemName(), posX, posY, posZ, rotX, rotY, rotZ, rotW, iam, updateInfo.getValue("lifeSpan")) ) {
                   if ( nn != null ) {
                     updateNick(updateInfo.getItemName(), nn, iam);
+                  }
+                  if ( mm != null ) {
+                    updateLastMsg(updateInfo.getItemName(), mm);
                   }
                   addDeltaSub(updateInfo.getItemName());
                   if (freqDyns < 0.0001 ) {
@@ -378,15 +382,14 @@ function startGrid() {
                   if ( nn != null ) {
                     updateNick(updateInfo.getItemName(), nn, iam);
                   }
+                  if ( mm != null ) {
+                    updateLastMsg(updateInfo.getItemName(), mm);
+                  }
                   addDeltaSub(updateInfo.getItemName());
                 }
                 if ( (freqDyns < 0.0001) && (posX != 0) ) {
                   client.unsubscribe(subsDyns[subsDynsKeys.indexOf(updateInfo.getItemName())]);
                 }
-              }
-              
-              if ( msgs[updateInfo.getItemName()] ) {
-                updateLastMsg(updateInfo.getItemName(), msgs[updateInfo.getItemName()]);
               }
             },
             onUnsubscription: function() {
@@ -418,7 +421,7 @@ function startGrid() {
     
     if ( indx == -1) {
       try {
-        require(["Subscription"],function(Subscription) {  
+        require(["Subscription"],function(Subscription) {
           var tmp = new Subscription("MERGE",key,["Vx", "Vy", "Vz", "momx", "momy", "momz"]);
           
           tmp.setRequestedSnapshot("yes");
@@ -443,26 +446,6 @@ function startGrid() {
               }
               if ( updInfo.isValueChanged("momz") ) {
                 updateDinamics2(updInfo.getItemName(), "momz",updInfo.getValue("momz"));
-              }
-              
-              if ( updInfo.isValueChanged("nick") ) {
-                if ( updInfo.getValue("nick") != null) {
-                  var iam = false;
-                  if ( (updInfo.getValue("nick") == myNick) || (updInfo.getValue("nick") == (precision+logonName)) || (updInfo.getValue("nick") == (logonName)) ) {
-                    iam = true;
-                  } else {
-                    iam = false;
-                  }
-                  updateNick(updInfo.getItemName(), updInfo.getValue("nick"), iam);
-                }
-              }
-                
-              if ( updInfo.isValueChanged("msg") ) {
-                if ( updInfo.getValue("msg") != null ) {
-                  updateLastMsg(updInfo.getItemName(), updInfo.getValue("msg"));
-                } else if ( updInfo.getValue("msg") == "" ) {
-                  updateLastMsg(updInfo.getItemName(), "");
-                }
               }
             }
           });
