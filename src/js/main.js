@@ -1670,17 +1670,18 @@ function changePrecision() {
       lsClient.subscribe(subsPlayers);
       
       subsLogon = new Subscription("DISTINCT", "c_logon_"+myWorld+"_"+logonName+"_"+physicsMod, ["Test"]);
-      subsLogon.addListener({onSubscription: function(){
-          if (myNick != logonName) {
-            setTimeout(function(){sendNickMsg(myNick)},300);
-          }
-          
+      subsLogon.addListener({
+        onSubscription: function(){
           document.getElementById("subscriptionError").innerHTML = " ";
           enableAllCommands();
           
           if (oldSubsPlayers != null) {
             client.unsubscribe(oldSubsPlayers);
             oldSubsPlayers = null;
+          }
+          
+          if (myNick != logonName) {
+            setTimeout(function(){sendNickMsg(myNick)},50);
           }
         },
         onSubscriptionError: function(code, msg) {
