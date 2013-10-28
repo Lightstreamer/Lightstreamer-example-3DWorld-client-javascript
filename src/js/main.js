@@ -1372,11 +1372,6 @@ function changePrecision() {
           
           oldSubsPlayer = subsPlayers;
           oldSubsPlayer.removeListener(rndrListener);
-          require(["Subscription"],function(Subscription) {
-            subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key", "nick", "msg"]);
-          });
-          subsPlayers.setRequestedSnapshot("yes");
-          subsPlayers.addListener(rndrListener);
           
           //client.unsubscribe(subsPlayers);
           unsubDeltas();
@@ -1391,7 +1386,14 @@ function changePrecision() {
             imGrid.clean();
           }
           
-          client.subscribe(subsPlayers);
+          require(["Subscription"],function(Subscription) {
+            subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key", "nick", "msg"]);
+          
+            subsPlayers.setRequestedSnapshot("yes");
+            subsPlayers.addListener(rndrListener);
+            
+            client.subscribe(subsPlayers);
+          });
           
           //document.getElementById("user_msg").value = "";
           clearScene();
