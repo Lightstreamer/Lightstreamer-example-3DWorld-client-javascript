@@ -22,6 +22,7 @@ var client = null;
 var gBandSubs;
 var subsPlayers;
 var oldSubsPlayers = null;
+var oldSubsLogon = null;
 var subsDyns;
 var subsLogon;
 var subSrvSide;
@@ -583,16 +584,28 @@ function changePrecision() {
   
   function reSubscribe() {
     try {
-      client.unsubscribe(subsPlayers);
+      oldSubsPlayers = subsPlayers;
+      oldSubsPlayers.removeListener(rndrListener);
+      
+      // Really need these calls?
       unsubDeltas();
       unsubDyns();
     
-      subsPlayers.setItems(["Custom_list_"+myWorld+"_"+precision]);
-      
-      client.subscribe(subsPlayers);
+      require(["Subscription"],function(Subscription) {
+        subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key", "nick", "msg"]);
+
+        subsPlayers.setRequestedSnapshot("yes");
+        subsPlayers.addListener(rndrListener);
+
+        client.subscribe(subsPlayers);
+      });
+      if (myNick != logonName) {
+        setTimeout(function(){sendNickMsg(myNick)},50);
+      }
+
       clearScene();
     } catch (x) {
-    
+      console.error("Re-subscribe procedure for precision changes failed", e);
     }
   }
   
@@ -1253,7 +1266,7 @@ function changePrecision() {
       
       radioBut = 0;
       
-       if (document.getElementById("radio_f").checked  && !precision.indexOf("s") == 0) {
+      if (document.getElementById("radio_f").checked  && !precision.indexOf("s") == 0) {
          precision = "s"+document.getElementById("nowDecimals").innerHTML;
          reSubscribe();
          document.getElementById("decimalInput").style.visibility = "";
@@ -1366,17 +1379,16 @@ function changePrecision() {
         if (text != myWorld ) {
           myWorld = text;
           
-          // clono subsPlayers e poi faccio questo 
-          // subsPlayers.setItems(["Custom_list_"+myWorld+"_"+precision]);
-          // client.subscribe(subsPlayers);
-          
-          oldSubsPlayer = subsPlayers;
-          oldSubsPlayer.removeListener(rndrListener);
+          oldSubsPlayers = subsPlayers;
+          oldSubsPlayers.removeListener(rndrListener);
           
           //client.unsubscribe(subsPlayers);
           unsubDeltas();
           unsubDyns();
-          client.unsubscribe(subsLogon);
+          
+          oldSubsLogon = subsLogon;
+          //oldSubsLogon.removeListener(rndrListener);
+          //client.unsubscribe(subsLogon);
           
           subsDeltaKeys.splice(0, subsDeltaKeys.length);
           subsDeltaKeysBU.splice(0, subsDeltaKeys.length);
@@ -1386,13 +1398,16 @@ function changePrecision() {
             imGrid.clean();
           }
           
-          require(["Subscription"],function(Subscription) {
+          require(["Subscription","js/LogonListener"],function(Subscription,LogonListener) {
             subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key", "nick", "msg"]);
           
             subsPlayers.setRequestedSnapshot("yes");
             subsPlayers.addListener(rndrListener);
             
             client.subscribe(subsPlayers);
+            
+            subsLogon = new Subscription("DISTINCT", "c_logon_", ["Test"]);
+            subsLogon.addListener(new LogonListener(oldSubsPlayers,oldSubsLogon,document.getElementById("subscriptionError")));
           });
           
           //document.getElementById("user_msg").value = "";
@@ -1535,7 +1550,7 @@ function changePrecision() {
     
   function createMessageGrid() {
    
-    require(["js/lsClient","DynaGrid","StaticGrid","Subscription"],function(lsClient,DynaGrid,StaticGrid,Subscription) {
+    require(["js/lsClient","js/LogonListener","DynaGrid","StaticGrid","Subscription"],function(lsClient,LogonListener,DynaGrid,StaticGrid,Subscription) {
       client = lsClient;
       
       lsClient.addListener({onServerError: function(errorCode, errorMsg) {
@@ -1625,6 +1640,7 @@ function changePrecision() {
             
           if ( updateInfo.getValue("command") != "DELETE" ) {
             if ( updateInfo.isValueChanged("nick") ) {
+              console.error("Nick: " + updateInfo.getValue("nick"));
               if ( updateInfo.getValue("nick") != null) {
                 if ( (updateInfo.getValue("key") == myNick) || (updateInfo.getValue("key") == (logonName+"_"+precision)) || (updateInfo.getValue("key") == (logonName)) ) {
                   iam = true;
@@ -1640,14 +1656,14 @@ function changePrecision() {
                 }
               }
             }
-          }
               
-          if ( updateInfo.isValueChanged("msg") ) {
-            if ( updateInfo.getValue("msg") != null ) {
-              updateLastMsg(updateInfo.getValue("key"), updateInfo.getValue("msg"));
-              msgs[updateInfo.getValue("key")] = updateInfo.getValue("msg");
-            } else if ( updateInfo.getValue("msg") == "" ) {
-              updateLastMsg(updateInfo.getValue("key"), "");
+            if ( updateInfo.isValueChanged("msg") ) {
+              if ( updateInfo.getValue("msg") != null ) {
+                updateLastMsg(updateInfo.getValue("key"), updateInfo.getValue("msg"));
+                msgs[updateInfo.getValue("key")] = updateInfo.getValue("msg");
+              } else if ( updateInfo.getValue("msg") == "" ) {
+                updateLastMsg(updateInfo.getValue("key"), "");
+              }
             }
           }
         },
@@ -1672,26 +1688,7 @@ function changePrecision() {
       lsClient.subscribe(subsPlayers);
       
       subsLogon = new Subscription("DISTINCT", "c_logon_"+myWorld+"_"+logonName+"_"+physicsMod, ["Test"]);
-      subsLogon.addListener({
-        onSubscription: function(){
-          document.getElementById("subscriptionError").innerHTML = " ";
-          enableAllCommands();
-          
-          if (oldSubsPlayers != null) {
-            client.unsubscribe(oldSubsPlayers);
-            oldSubsPlayers = null;
-          }
-          
-          if (myNick != logonName) {
-            setTimeout(function(){sendNickMsg(myNick)},50);
-          }
-        },
-        onSubscriptionError: function(code, msg) {
-          document.getElementById("subscriptionError").innerHTML = msg;
-          iamWatcher = true;
-          disableAllCommands();
-        }
-      });
+      subsLogon.addListener(new LogonListener(oldSubsPlayers,oldSubsLogon,document.getElementById("subscriptionError")));
       
       var bandGrid = new StaticGrid("band",true);
       bandGrid.addListener({onVisualUpdate: function(key,info,dom) {
