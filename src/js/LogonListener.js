@@ -4,8 +4,6 @@ define(["./lsClient"], function(lsClient) {
     this.subsPlayers = subsPlayers;
     this.subsLogon = subsLogon;
     this.errorSpan = errorSpan;
-    
-    console.error("Qua.");
   };
 
   LogonListener.prototype = {

@@ -1640,7 +1640,6 @@ function changePrecision() {
             
           if ( updateInfo.getValue("command") != "DELETE" ) {
             if ( updateInfo.isValueChanged("nick") ) {
-              console.error("Nick: " + updateInfo.getValue("nick"));
               if ( updateInfo.getValue("nick") != null) {
                 if ( (updateInfo.getValue("key") == myNick) || (updateInfo.getValue("key") == (logonName+"_"+precision)) || (updateInfo.getValue("key") == (logonName)) ) {
                   iam = true;
