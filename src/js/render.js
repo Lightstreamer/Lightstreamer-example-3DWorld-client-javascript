@@ -61,17 +61,19 @@ var group = new THREE.Object3D();
 try { 
   renderer = new THREE.WebGLRenderer(); 
 
+  /*
+  //The wireframe has changed since r61, with ugly diagonal lines.
+  
   materialLines = new THREE.MeshBasicMaterial( { wireframe: true, color: 0x2f2f2f } );
   
   var geometryLines = new THREE.CubeGeometry( 160, 90, 120 );
   var meshLines = new THREE.Mesh( geometryLines, materialLines );
   
   group.add( meshLines );
-  
-  /*
+  */
   
   var sizeX = 60, sizeZ = 80, step = 10;
-  var material = new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 0.2 } );
+  var material = new THREE.LineBasicMaterial( { color: 0x2f2f2f, opacity: 0.2 } );
   
   var plane1 = new THREE.Geometry();
   plane1.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
@@ -146,8 +148,6 @@ try {
   var line3 = new THREE.Line( plane3, material );
   line3.type = THREE.LinePieces;
   group.add( line3 );
-
-  */
   
   camera = new THREE.PerspectiveCamera(45, WIDTH/HEIGHT, 0.1, 10000); 
   
@@ -329,7 +329,7 @@ var aZ = new THREE.Mesh(textaZ, materialAxisLabel);
 aZ.position.x = -80;
 aZ.position.y = -41;
 aZ.position.z = 15;
-aZ.useQuaternion = true;
+//aZ.useQuaternion = true;
 aZ.quaternion.x = 0;
 aZ.quaternion.y = 0.7071067811;
 aZ.quaternion.z = 0;
@@ -586,7 +586,7 @@ function updateScene(plyr, posX, posY, posZ, rotX, rotY, rotZ, rotW, me, life) {
       }
     }
     cube[indx].name = plyr;
-    cube[indx].useQuaternion = true;
+    //cube[indx].useQuaternion = true;
     cube[indx].quaternion = new THREE.Quaternion(rotX,rotY,rotZ,rotW);
     dinamics[indx] = {V: new THREE.Vector3( 0, 0, 0 ), R: new THREE.Vector3( 0, 0, 0 )};
   }

@@ -79,7 +79,7 @@ Before you can run the demo, some dependencies need to be solved:
    [online generator](http://www.lightstreamer.com/distros/Lightstreamer_Allegro-Presto-Vivace_5_1_1_Colosseo_20130305/Lightstreamer/DOCS-SDKs/sdk_client_javascript/tools/generator.html).
    In that case, be sure to include the LightstreamerClient, Subscription, DynaGrid, and StatusWidget modules and to use the "Use AMD" version.
 -  Get the require.js file form the [requirejs.org](http://requirejs.org/docs/download.html) and put it in the src/js folder of the demo.
--  Download [Three.js](http://github.com/mrdoob/three.js/zipball/master) and copy the three.min.js file to the src/js folder of the demo. The demo requires Three.js v.57 or higher.
+-  Download [Three.js](http://github.com/mrdoob/three.js/zipball/master) and copy the three.min.js file to the src/js folder of the demo. The demo requires Three.js r61 or higher.
 -  Please note that the demo uses a jQuery customized theme, included in this project.
 
 You can deploy this Demo in order to use the Lightstreamer server as a Web server too, or in any external Web Server you are running. 
