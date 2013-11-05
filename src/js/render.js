@@ -56,10 +56,8 @@ var materialSphere = new THREE.MeshLambertMaterial( { color: 0xffc32b } );
 var materialAxisLabel = new THREE.MeshLambertMaterial( { color: 0x2a2a2a } );
 var materialMsgs = new THREE.MeshLambertMaterial( { color: 0xffc32b } );
 
-var group = new THREE.Object3D();
-
 try { 
-  renderer = new THREE.WebGLRenderer(); 
+  renderer = new THREE.WebGLRenderer({ antialias: true }); 
 
   /*
   //The wireframe has changed since r61, with ugly diagonal lines.
@@ -123,31 +121,31 @@ try {
   
   var line8 = new THREE.Line( plane8, material );
   line8.type = THREE.LinePieces;
-  group.add( line8 );
+  scene.add( line8 );
   
   var line7 = new THREE.Line( plane7, material );
   line7.type = THREE.LinePieces;
-  group.add( line7 );
+  scene.add( line7 );
   
   var line5 = new THREE.Line( plane5, material );
   line5.type = THREE.LinePieces;
-  group.add( line5 );
+  scene.add( line5 );
   
   var line4 = new THREE.Line( plane4, material );
   line4.type = THREE.LinePieces;
-  group.add( line4 );
+  scene.add( line4 );
   
   var line1 = new THREE.Line( plane1, material );
   line1.type = THREE.LinePieces;
-  group.add( line1 );
+  scene.add( line1 );
   
   var line2 = new THREE.Line( plane2, material );
   line2.type = THREE.LinePieces;
-  group.add( line2 );
+  scene.add( line2 );
   
   var line3 = new THREE.Line( plane3, material );
   line3.type = THREE.LinePieces;
-  group.add( line3 );
+  scene.add( line3 );
   
   camera = new THREE.PerspectiveCamera(45, WIDTH/HEIGHT, 0.1, 10000); 
   
@@ -226,31 +224,31 @@ try {
   
   var line8 = new THREE.Line( plane8, material );
   line8.type = THREE.LinePieces;
-  group.add( line8 );
+  scene.add( line8 );
   
   var line7 = new THREE.Line( plane7, material );
   line7.type = THREE.LinePieces;
-  group.add( line7 );
+  scene.add( line7 );
   
   var line5 = new THREE.Line( plane5, material );
   line5.type = THREE.LinePieces;
-  group.add( line5 );
+  scene.add( line5 );
   
   var line4 = new THREE.Line( plane4, material );
   line4.type = THREE.LinePieces;
-  group.add( line4 );
+  scene.add( line4 );
   
   var line1 = new THREE.Line( plane1, material );
   line1.type = THREE.LinePieces;
-  group.add( line1 );
+  scene.add( line1 );
   
   var line2 = new THREE.Line( plane2, material );
   line2.type = THREE.LinePieces;
-  group.add( line2 );
+  scene.add( line2 );
   
   var line3 = new THREE.Line( plane3, material );
   line3.type = THREE.LinePieces;
-  group.add( line3 );
+  scene.add( line3 );
   
   camera = new THREE.PerspectiveCamera(45, WIDTH/HEIGHT, 1, 10000); 
 }
@@ -273,7 +271,7 @@ var geometry = new THREE.CubeGeometry(2,4,2);
 var sphere = new THREE.Mesh( new THREE.SphereGeometry( 1, 0.2, 0.2 ), materialSphere );
 sphere.name = "Centro";
 
-group.add( sphere );
+scene.add( sphere );
 
 // Add axis name.
 var textaX = new THREE.TextGeometry( "x", {
@@ -292,7 +290,7 @@ aX.quaternion.x = 0.7071067811;
 aX.quaternion.y = 0;
 aX.quaternion.z = 0;
 aX.quaternion.w = 0.7071067811;
-group.add( aX );
+scene.add( aX );
 
 var textaY = new THREE.TextGeometry( "y", {
             size: 50,
@@ -313,7 +311,7 @@ aY.quaternion.x = 0;
 aY.quaternion.y = 0;
 aY.quaternion.z = 0;
 aY.quaternion.w = 1;
-group.add( aY );
+scene.add( aY );
 
 var textaZ = new THREE.TextGeometry( "z", {
             size: 50,
@@ -334,9 +332,9 @@ aZ.quaternion.x = 0;
 aZ.quaternion.y = 0.7071067811;
 aZ.quaternion.z = 0;
 aZ.quaternion.w = 0.7071067811;
-group.add( aZ );
+scene.add( aZ );
 
-scene.add( group );
+// scene.add( group );
 camera.position.z = 140;
 camera.lookAt( sphere.position );
 
@@ -417,6 +415,7 @@ function render() {
   if ( goRender ) {
     requestAnimationFrame( render );
   }
+  
   renderer.render(scene, camera); 
 }
 
@@ -425,6 +424,9 @@ function getScene() {
 }
 
 function updateNick(player, nick, me) {
+
+  console.log("UPDATE NICK!");
+
   var indx = players.indexOf(player);
   
   if ( indx > -1 ) {
@@ -439,7 +441,7 @@ function updateNick(player, nick, me) {
     text3d.computeBoundingBox();
     
     if ( extraInfo ) {
-      group.remove(texts[indx]);
+      scene.remove(texts[indx]);
     }
 
     if ( me ) {
@@ -455,13 +457,16 @@ function updateNick(player, nick, me) {
     texts[indx].position.y = cube[indx].position.y+1;
     texts[indx].position.z = cube[indx].position.z+2;
     if ( extraInfo ) {
-      group.add(texts[indx]);
+      scene.add(texts[indx]);
     }
     nicks[indx] = nick;
   }
 }
 
 function updateLastMsg(plyr, msg) {
+
+  console.log("UPDATE MSG!");
+
   var indx = players.indexOf(plyr);
   
   if ( !extraInfo ) {
@@ -491,7 +496,7 @@ function updateLastMsg(plyr, msg) {
     text3d.computeBoundingBox();
     
     if ( extraInfo ) {
-      group.remove(msgs[indx]);
+      scene.remove(msgs[indx]);
     }
     
     msgs[indx] = new THREE.Mesh(text3d, materialMsgs);
@@ -499,7 +504,7 @@ function updateLastMsg(plyr, msg) {
     msgs[indx].position.y = cube[indx].position.y-3;
     msgs[indx].position.z = cube[indx].position.z+2;
     if ( extraInfo ) {
-      group.add(msgs[indx]);
+      scene.add(msgs[indx]);
     }
   }
 }
@@ -513,6 +518,9 @@ function getNick(indx) {
 }
 
 function updateDinamics2(plyr, command, value) {
+
+  console.log("UPDATE DYNS!");
+
   var indx = players.indexOf(plyr);
   
   if ( indx != -1 ) {
@@ -623,10 +631,10 @@ function updateScene(plyr, posX, posY, posZ, rotX, rotY, rotZ, rotW, me, life) {
   }
   
   if ( addObjs ) {
-    group.add( cube[indx] );
+    scene.add( cube[indx] );
     if ( extraInfo ) {
-      group.add( texts[indx] );
-      group.add( msgs[indx] );
+      scene.add( texts[indx] );
+      scene.add( msgs[indx] );
     }
   }
   
@@ -672,11 +680,11 @@ function clearScene() {
     nicks.pop();
     dinamics.pop();
     tmpNicks = texts.pop();
-    group.remove(tmpBox);
-    group.remove(tmpNicks);
+    scene.remove(tmpBox);
+    scene.remove(tmpNicks);
     
     tmpBox = msgs.pop();
-    group.remove(tmpBox);
+    scene.remove(tmpBox);
   }
   
   render();
@@ -688,9 +696,9 @@ function removeFromScene(plyr) {
     return ;
   }
   
-  group.remove(cube[indx]);
-  group.remove(texts[indx]);
-  group.remove(msgs[indx]);
+  scene.remove(cube[indx]);
+  scene.remove(texts[indx]);
+  scene.remove(msgs[indx]);
   
   players.splice(indx, 1);
   cube.splice(indx, 1);
@@ -753,8 +761,8 @@ function startRender() {
 function clearExtraInfo() {
   
   for (var i = 0; i < texts.length; i++) {
-    group.remove(texts[i]);
-    group.remove(msgs[i]);
+    scene.remove(texts[i]);
+    scene.remove(msgs[i]);
   }
   
   render();
@@ -763,8 +771,8 @@ function clearExtraInfo() {
 function addExtraInfo() {
   
   for (var i = 0; i < texts.length; i++) {
-    group.add(texts[i]);
-    group.add(msgs[i]);
+    scene.add(texts[i]);
+    scene.add(msgs[i]);
   }
   
   render();
