@@ -587,9 +587,16 @@ function changePrecision() {
       oldSubsPlayers = subsPlayers;
       oldSubsPlayers.removeListener(rndrListener);
       
-      // Really need these calls?
       unsubDeltas();
       unsubDyns();
+      
+      subsDeltaKeys.splice(0, subsDeltaKeys.length);
+      subsDeltaKeysBU.splice(0, subsDeltaKeys.length);
+      subsDyns.splice(0, subsDeltaKeys.length);
+      subsDynsKeys.splice(0, subsDeltaKeys.length);
+      if (matrix) {
+        imGrid.clean();
+      }
     
       require(["Subscription"],function(Subscription) {
         subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key", "nick", "msg"]);
