@@ -1681,10 +1681,14 @@ function changePrecision() {
           subsDyns.splice(0, subsDeltaKeys.length);
           subsDynsKeys.splice(0, subsDeltaKeys.length);
           clearScene();
-          imGrid.clean();
+          if ( imGrid != null ) {
+            imGrid.clean();
+          }
         },
         onSubscription: function(){
-          subsLogon.setItemGroup("c_logon_"+myWorld+"_"+logonName+"_"+physicsMod);
+          if (subsLogon.isActive()==false) {
+            subsLogon.setItemGroup("c_logon_"+myWorld+"_"+logonName+"_"+physicsMod);
+          }
           client.subscribe(subsLogon);
         }
       };
