@@ -1706,8 +1706,8 @@ function changePrecision() {
             var v = info.getCellValue("currentBandwidth");
             var kB = (v / 8) * 100;
             kB = Math.round(kB) / 100;
-            info.setCellValue("currentBandwidth", v + " Kbps");
-            bandGrid.updateRow(key, {currentBandwidthKB:kB + " KBps"});
+            info.setCellValue("currentBandwidth", v + " kbps");
+            bandGrid.updateRow(key, {currentBandwidthKB:kB + " kBps"});
           }
         }
       });
