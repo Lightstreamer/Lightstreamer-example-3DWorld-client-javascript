@@ -1,4 +1,4 @@
-# Lightstreamer 3D World Demo Client for JavaScript #
+# Lightstreamer - 3D World Demo - Three.js Client #
 
 This demo shows how well the real-time positions of objects in a multiplayer 3D world can be delivered over WebSockets and HTTP via Lightstreamer Server. Particular attention is paid to aspects of real-time communication and opportunities to minimize the network bandwidth utilization.
 
@@ -100,14 +100,14 @@ The demo is now ready to be launched. [Here](http://demos.lightstreamer.com/3DWo
 
 ## Lightstreamer Adapters needed by these demo client ##
 
-* [Lightstreamer 3D World Demo Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java)
+* [Lightstreamer - 3D World Demo - Java SE Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java)
 
 ## Other demo clients that may interest you ##
 
-* [Lightstreamer Chat Demo Client for JavaScript](https://github.com/Weswit/Lightstreamer-example-Chat-client-javascript)
-* [Lightstreamer Portfolio Demo Client for JavaScript](https://github.com/Weswit/Lightstreamer-example-Portfolio-client-javascript)
-* [Lightstreamer RSS Demo Client for JavaScript](https://github.com/Weswit/Lightstreamer-example-RSS-client-javascript)
-* [Lightstreamer StockList Demo Client for Unity](https://github.com/Weswit/Lightstreamer-example-StockList-client-unity)
+* [Lightstreamer - Basic Chat Demo - HTML Client](https://github.com/Weswit/Lightstreamer-example-Chat-client-javascript)
+* [Lightstreamer - Portfolio Demo - HTML Client](https://github.com/Weswit/Lightstreamer-example-Portfolio-client-javascript)
+* [Lightstreamer - RSS News Demo - HTML Client](https://github.com/Weswit/Lightstreamer-example-RSS-client-javascript)
+* [Lightstreamer - Basic Stock-List Demo - Unity Client](https://github.com/Weswit/Lightstreamer-example-StockList-client-unity)
 
 # Lightstreamer Compatibility Notes #
 
