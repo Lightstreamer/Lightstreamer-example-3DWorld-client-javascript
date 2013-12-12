@@ -105,7 +105,7 @@ The demo is now ready to be launched. [Here](http://demos.lightstreamer.com/3DWo
 ## Other demo clients that may interest you ##
 
 * [Lightstreamer - Basic Chat Demo - HTML Client](https://github.com/Weswit/Lightstreamer-example-Chat-client-javascript)
-* [Lightstreamer - Portfolio Demo - HTML Client](https://github.com/Weswit/Lightstreamer-example-Portfolio-client-javascript)
+* [Lightstreamer - Portfolio Demos - HTML Clients](https://github.com/Weswit/Lightstreamer-example-Portfolio-client-javascript)
 * [Lightstreamer - RSS News Demo - HTML Client](https://github.com/Weswit/Lightstreamer-example-RSS-client-javascript)
 * [Lightstreamer - Basic Stock-List Demo - Unity Client](https://github.com/Weswit/Lightstreamer-example-StockList-client-unity)
 
