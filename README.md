@@ -100,7 +100,7 @@ The demo is now ready to be launched. [Here](http://demos.lightstreamer.com/3DWo
 
 ## Lightstreamer Adapters needed by these demo client ##
 
-* [Lightstreamer - 3D World Demo - Java SE Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java)
+* [Lightstreamer - 3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java)
 
 ## Other demo clients that may interest you ##
 
