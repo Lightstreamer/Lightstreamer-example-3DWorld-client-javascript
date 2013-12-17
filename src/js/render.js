@@ -28,7 +28,7 @@ var msgs = new Array();
 var dinamics = new Array();
 var sceneReady = false;
 
-var FRAME_RATE = 30;
+var FRAME_RATE = 50;
 var BASE_RATE = 10;
 var rateFactor = 0;
 
