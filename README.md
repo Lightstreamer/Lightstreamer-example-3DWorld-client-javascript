@@ -1,6 +1,6 @@
 # Lightstreamer - 3D World Demo - Three.js Client #
 
-<!-- START DESCRIPTION 3D World Demo -->
+<!-- START DESCRIPTION lightstreamer-example-3dworld-client-javascript -->
 
 <!--
   This is a test 
@@ -76,7 +76,7 @@ The clients receive the real-time data by subscribing to Lightstreamer items, wi
      
 * Each client subscribes to an item in <b>MERGE</b> mode, to know the current downstream bandwidth (used by its own connection) in real time.
 
-<!-- END DESCRIPTION 3D World Demo -->
+<!-- END DESCRIPTION lightstreamer-example-3dworld-client-javascript -->
 
 # Deploy #
 
