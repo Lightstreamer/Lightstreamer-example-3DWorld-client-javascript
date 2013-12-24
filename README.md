@@ -1,5 +1,6 @@
 # Lightstreamer - 3D World Demo - Three.js Client #
 
+<!-- START DESCRIPTION 3D World Demo -->
 
 <!--
   This is a test 
@@ -75,6 +76,8 @@ The clients receive the real-time data by subscribing to Lightstreamer items, wi
      
 * Each client subscribes to an item in <b>MERGE</b> mode, to know the current downstream bandwidth (used by its own connection) in real time.
 
+<!-- END DESCRIPTION 3D World Demo -->
+
 # Deploy #
 
 Before you can run the demo, some dependencies need to be solved:
@@ -104,8 +107,11 @@ The demo is now ready to be launched. [Here](http://demos.lightstreamer.com/3DWo
 * [Optimizing Multiplayer 3D Game Synchronization Over the Web](http://blog.lightstreamer.com/2013/10/optimizing-multiplayer-3d-game.html)
 
 ## Lightstreamer Adapters needed by these demo client ##
+<!-- START RELATED_ENTRIES -->
 
 * [Lightstreamer - 3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java)
+
+<!-- END RELATED_ENTRIES -->
 
 ## Other demo clients that may interest you ##
 
