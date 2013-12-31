@@ -51,7 +51,7 @@ In the <b>Command</b> panel, you can find a recap of the commands that allow you
 <br>In the <b>Rendering</b> panel, the player can see a 3D rendering of the scene with all the players represented by cuboids. The origin of axes is marked with a yellow sphere and the edges of the world are outlined by white lines.
 The 3D rendering is powered by [three.js library](http://mrdoob.github.com/three.js/).
 
-The clients receive the real-time data by subscribing to Lightstreamer items, with a set of fields, using a subscription mode.
+The clients receive the real-time data by [subscribing](http://www.lightstreamer.com/docs/client_javascript_uni_api/Subscription.html) to Lightstreamer items, with a set of fields, using a subscription mode.
 
 * There exists an item for each world in the game (actually, there is one item for each combination of world and representation precision, but let's keep the explanation simple). Such item works in <b>COMMAND</b> mode and delivers the dynamic list of players in that world, signaling players entering and leaving the world, in addition to notifying nickname changes and chat messages.
 
