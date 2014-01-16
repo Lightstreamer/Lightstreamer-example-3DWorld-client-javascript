@@ -16,18 +16,6 @@ This project includes the implementation of an HTML5 client for the demo. The pa
 
 ## HTML Client ##
 
-<table>
-  <tr>
-    <td style="text-align: left">
-      &nbsp;<a href="http://demos.lightstreamer.com/3DWorldDemo" target="_blank"><img src="screen_shot_3d.png"></a>&nbsp;
-      
-    </td>
-    <td>
-      &nbsp;An online demonstration is hosted on our servers at:<br>
-      &nbsp;<a href="http://demos.lightstreamer.com/3DWorldDemo" target="_blank">http://demos.lightstreamer.com/3DWorldDemo</a>
-    </td>
-  </tr>
-</table>
 [![Screenshot](screen_shot_rendering.png)](http://demos.lightstreamer.com/3DWorldDemo/)<br>
 An online demonstration is hosted on our servers at: [http://demos.lightstreamer.com/3DWorldDemo/](http://demos.lightstreamer.com/3DWorldDemo/)<br>
 
