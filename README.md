@@ -31,6 +31,9 @@ This project includes the implementation of an HTML5 client for the demo. The pa
 
 A simple HTML client with five panels: Identity, Tuning, Matrix, Commands, and Rendering.<br>
 In the <b>Identity</b> panel, the player can configure their nickname, send messages to other users in the same world, and change the world where the player moves. 'Default' is the initial world where the player starts.<br>
+
+[![Screenshot Identity](screen_shot_identity.png)](http://demos.lightstreamer.com/3DWorldDemo/)
+
 In the <b>Tuning</b> panel, the user can choose the operating mode of the demo: client side or server side. In the first case, you can configure the maximum total bandwidth used by the entire page and the (server) resync frequency in the range from 1 per second to never. In the second mode you can configure the max bandwidth allowed for the whole page, max frequency of updates for each player (from 1 per second to 100 per second). Here you can also choose the precision and format of the incoming data from the server.<br>
 In the <b>Matrix</b> panel, the position of all the players in the same world is shown in a tabular view (your player data are in red, other active players are 
 in blue, and automatic ghost players are in black). Data in this panel are always coming from the server in either mode of the demo.<br>
@@ -102,14 +105,14 @@ The demo is now ready to be launched. [Here](http://demos.lightstreamer.com/3DWo
 
 * [Optimizing Multiplayer 3D Game Synchronization Over the Web](http://blog.lightstreamer.com/2013/10/optimizing-multiplayer-3d-game.html)
 
-## Lightstreamer Adapters needed by these demo client ##
+## Lightstreamer Adapters Needed by These Demo Client ##
 <!-- START RELATED_ENTRIES -->
 
 * [Lightstreamer - 3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java)
 
 <!-- END RELATED_ENTRIES -->
 
-## Other demo clients that may interest you ##
+## Related Projects ##
 
 * [Lightstreamer - Basic Chat Demo - HTML Client](https://github.com/Weswit/Lightstreamer-example-Chat-client-javascript)
 * [Lightstreamer - Portfolio Demos - HTML Clients](https://github.com/Weswit/Lightstreamer-example-Portfolio-client-javascript)
