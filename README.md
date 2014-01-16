@@ -28,12 +28,11 @@ This project includes the implementation of an HTML5 client for the demo. The pa
     </td>
   </tr>
 </table>
+[![Screenshot](screen_shot_rendering.png)](http://demos.lightstreamer.com/3DWorldDemo/)<br>
+An online demonstration is hosted on our servers at: [http://demos.lightstreamer.com/3DWorldDemo/](http://demos.lightstreamer.com/3DWorldDemo/)<br>
 
 A simple HTML client with five panels: Identity, Tuning, Matrix, Commands, and Rendering.<br>
 In the <b>Identity</b> panel, the player can configure their nickname, send messages to other users in the same world, and change the world where the player moves. 'Default' is the initial world where the player starts.<br>
-
-[![Screenshot Identity](screen_shot_identity.png)](http://demos.lightstreamer.com/3DWorldDemo/)
-
 In the <b>Tuning</b> panel, the user can choose the operating mode of the demo: client side or server side. In the first case, you can configure the maximum total bandwidth used by the entire page and the (server) resync frequency in the range from 1 per second to never. In the second mode you can configure the max bandwidth allowed for the whole page, max frequency of updates for each player (from 1 per second to 100 per second). Here you can also choose the precision and format of the incoming data from the server.<br>
 In the <b>Matrix</b> panel, the position of all the players in the same world is shown in a tabular view (your player data are in red, other active players are 
 in blue, and automatic ghost players are in black). Data in this panel are always coming from the server in either mode of the demo.<br>
@@ -50,7 +49,6 @@ In the <b>Command</b> panel, you can find a recap of the commands that allow you
 - shift + "s": add -1 torque impulse on axis Y;
 - shift + "1": add +1 torque impulse on axis Z;
 - shift + "2": add -1 torque impulse on axis Z.
-
 <br>In the <b>Rendering</b> panel, the player can see a 3D rendering of the scene with all the players represented by cuboids. The origin of axes is marked with a yellow sphere and the edges of the world are outlined by white lines.
 The 3D rendering is powered by [three.js library](http://mrdoob.github.com/three.js/).
 
