@@ -87,8 +87,6 @@ The demo is now ready to be launched. [Here](http://demos.lightstreamer.com/3DWo
 
 # See Also #
 
-## Explanatory Article ##
-
 * [Optimizing Multiplayer 3D Game Synchronization Over the Web](http://blog.lightstreamer.com/2013/10/optimizing-multiplayer-3d-game.html)
 
 ## Lightstreamer Adapters Needed by These Demo Client ##
