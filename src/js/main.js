@@ -390,7 +390,6 @@ function startGrid() {
                   if ( mm != null ) {
                     updateLastMsg(updateInfo.getItemName(), mm);
                   }
-                  console.log("addDeltaSub: " + updateInfo.getItemName());
                   addDeltaSub(updateInfo.getItemName());
                 }
                 if ( (freqDyns < 0.0001) && (posX != null) ) {
@@ -528,10 +527,13 @@ function startGrid() {
     while  ( subsDeltaKeysBU.length > 0 ) {
       keyT = subsDeltaKeysBU.pop();
       tmpSub = subsDeltaBU.pop();
-      indx = subsDeltaKeys.push(keyT);
-      subsDelta[indx] = tmpSub;
-    
-      client.subscribe(tmpSub);
+      
+      indx = subsDeltaKeys.indexOf(keyT);
+      if ( indx == -1 ) {
+        indx = subsDeltaKeys.push(keyT);
+        subsDelta[indx] = tmpSub;
+        client.subscribe(tmpSub);
+      }
     }
   }
   
@@ -591,7 +593,7 @@ function changePrecision() {
       unsubDyns();
       
       subsDeltaKeys.splice(0, subsDeltaKeys.length);
-      subsDeltaKeysBU.splice(0, subsDeltaKeys.length);
+      subsDeltaKeysBU.splice(0, subsDeltaKeysBU.length);
       subsDyns.splice(0, subsDeltaKeys.length);
       subsDynsKeys.splice(0, subsDeltaKeys.length);
       if (matrix) {
@@ -1398,7 +1400,7 @@ function changePrecision() {
           //client.unsubscribe(subsLogon);
           
           subsDeltaKeys.splice(0, subsDeltaKeys.length);
-          subsDeltaKeysBU.splice(0, subsDeltaKeys.length);
+          subsDeltaKeysBU.splice(0, subsDeltaKeysBU.length);
           subsDyns.splice(0, subsDeltaKeys.length);
           subsDynsKeys.splice(0, subsDeltaKeys.length);
           if (matrix) {
@@ -1676,10 +1678,14 @@ function changePrecision() {
         onUnsubscription: function() {
           console.log("Warning: unsubscription!");
           document.getElementById("user_msg").value = "";
-          subsDeltaKeys.splice(0, subsDeltaKeys.length);
-          subsDeltaKeysBU.splice(0, subsDeltaKeys.length);
+          
+          //subsDeltaKeys.splice(0, subsDeltaKeys.length);
+          //subsDeltaKeysBU.splice(0, subsDeltaKeys.length);
+          unsubDeltas();
+          
           subsDyns.splice(0, subsDeltaKeys.length);
           subsDynsKeys.splice(0, subsDeltaKeys.length);
+          
           clearScene();
           if ( imGrid != null ) {
             imGrid.clean();
