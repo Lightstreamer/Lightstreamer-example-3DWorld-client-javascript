@@ -546,6 +546,54 @@
                       width: 350,
                       modal: true});
                   });
+                  
+                  $(document).ready(function(){
+                    /////////////// Initializations
+  
+                    document.getElementById("user_nick").disabled = false;   
+                    document.getElementById("user_world").disabled = false;   
+                    document.getElementById("world_button").disabled = true;   
+                    
+                    document.getElementById("binary_dDesc").style.verticalAlign="bottom";
+                    document.getElementById("binary_sDesc").style.verticalAlign="bottom";
+                    document.getElementById("chkBin").style.verticalAlign="bottom";
+                    document.getElementById("chkStr").style.verticalAlign="bottom";
+                    document.getElementById("chkCside").style.verticalAlign="bottom";
+                    document.getElementById("chkSside").style.verticalAlign="bottom";
+                    
+                    document.getElementById("user_msg").innerHTML = "";
+
+                    document.getElementById("radio_cliSide").checked = true;
+                    
+                    setTimeout(function(){ 
+                        try {
+                          document.getElementById("radio_binary").checked = true;
+                          document.getElementById("radio_string").disabled = true;
+                          document.getElementById("radio_binary").disabled = true;
+                          
+                          document.getElementById("radio_d").disabled = true;
+                          document.getElementById("radio_s").checked = true;
+                          document.getElementById("radio_s").disabled = true;
+                          document.getElementById("radio_f").disabled = true;
+                          $( "#decslider" ).slider( "option", "disabled", true );
+                        } catch (e) {
+                          console.error("Initialization fail: " + e);
+                        }
+                      }, 500);
+                    
+                    // open an accordion soon after page load
+                    setTimeout(function(){ $("#identity").toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")
+                      .find("> .ui-icon").toggleClass("ui-icon-triangle-1-e ui-icon-triangle-1-s").end()
+                      .next().toggleClass("ui-accordion-content-active").slideToggle(); }, 750);
+                    
+                    setTimeout(function(){ 
+                      $("#rendering").toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")
+                        .find("> .ui-icon").toggleClass("ui-icon-triangle-1-e ui-icon-triangle-1-s").end()
+                        .next().toggleClass("ui-accordion-content-active").slideToggle();
+                      checkTable({id: "rendering"});
+                      }, 900);
+                  });
+
             </script>
   
     <table style="margin: 25px;" width="100%" border="0">  
@@ -941,69 +989,20 @@
 
   </div>
 
-      <script src="js/three.min.js"></script>
-      <script src="js/helvetiker_regular.typeface.js"></script>
-      <script src="js/droid_serif_bold.typeface.js"></script>
-      <script src="js/droid_serif_regular.typeface.js"></script>
+  <script src="js/three.min.js"></script>
+  <script src="js/helvetiker_regular.typeface.js"></script>
+  <script src="js/droid_serif_bold.typeface.js"></script>
+  <script src="js/droid_serif_regular.typeface.js"></script>
       
-<script type="text/javascript">
+  <script src="js/require.js"></script>
+  <script src="js/lightstreamer.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/floatencoding_b64.js"></script>
 
-  /////////////// Initializations
-  
-  document.getElementById("user_nick").disabled = false;   
-  document.getElementById("user_world").disabled = false;   
-  document.getElementById("world_button").disabled = true;   
-  
-  document.getElementById("binary_dDesc").style.verticalAlign="bottom";
-  document.getElementById("binary_sDesc").style.verticalAlign="bottom";
-  document.getElementById("chkBin").style.verticalAlign="bottom";
-  document.getElementById("chkStr").style.verticalAlign="bottom";
-  document.getElementById("chkCside").style.verticalAlign="bottom";
-  document.getElementById("chkSside").style.verticalAlign="bottom";
-  
-  document.getElementById("user_msg").innerHTML = "";
-
-  document.getElementById("radio_cliSide").checked = true;
-  
-  setTimeout(function(){ 
-      try {
-        document.getElementById("radio_binary").checked = true;
-        document.getElementById("radio_string").disabled = true;
-        document.getElementById("radio_binary").disabled = true;
-        
-        document.getElementById("radio_d").disabled = true;
-        document.getElementById("radio_s").checked = true;
-        document.getElementById("radio_s").disabled = true;
-        document.getElementById("radio_f").disabled = true;
-        $( "#decslider" ).slider( "option", "disabled", true );
-      } catch (e) {
-        console.error("Initialization fail: " + e);
-      }
-    }, 500);
-  
-  // open an accordion soon after page load
-  setTimeout(function(){ $("#identity").toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")
-    .find("> .ui-icon").toggleClass("ui-icon-triangle-1-e ui-icon-triangle-1-s").end()
-    .next().toggleClass("ui-accordion-content-active").slideToggle(); }, 750);
-  
-  setTimeout(function(){ 
-    $("#rendering").toggleClass("ui-accordion-header-active ui-state-active ui-state-default ui-corner-bottom")
-      .find("> .ui-icon").toggleClass("ui-icon-triangle-1-e ui-icon-triangle-1-s").end()
-      .next().toggleClass("ui-accordion-content-active").slideToggle();
-    checkTable({id: "rendering"});
-    }, 900);
-  
-</script>
-
-<script src="js/require.js"></script>
-<script src="js/lightstreamer.js"></script>
-<script src="js/render.js"></script>
-<script src="js/main.js"></script>
-<script src="js/floatencoding_b64.js"></script>
-
-<div id="dialog" title="Game Over" class="note">
-  <p>Game over for inactivity. Please refresh the page to resume.</p>
-</div>
+  <div id="dialog" title="Game Over" class="note">
+    <p>Game over for inactivity. Please refresh the page to resume.</p>
+  </div>
 
 </body>
 
