@@ -4,9 +4,14 @@
 
 This demo shows how well the real-time positions of objects in a multiplayer 3D world can be delivered over WebSockets and HTTP via Lightstreamer Server. Particular attention is paid to aspects of real-time communication and opportunities to minimize the network bandwidth utilization.
 
-__To fully understand this demo, please read the article__: [Optimizing Multiplayer 3D Game Synchronization Over the Web](http://blog.lightstreamer.com/2013/10/optimizing-multiplayer-3d-game.html)
+## Live Demo
 
-You can play online with the demo at [http://demos.lightstreamer.com/3DWorldDemo/](http://demos.lightstreamer.com/3DWorldDemo/)
+[![screenshot](screen_shot_rendering.png)](http://demos.lightstreamer.com/3DWorldDemo)
+###[![](http://demos.lightstreamer.com/site/img/play.png) View live demo](http://demos.lightstreamer.com/3DWorldDemo)
+
+## Details
+
+__To fully understand this demo, please read the article__: [Optimizing Multiplayer 3D Game Synchronization Over the Web](http://blog.lightstreamer.com/2013/10/optimizing-multiplayer-3d-game.html)
 
 There are two ways the demo can work.
 - First way: the physics engine runs on the client side, which periodically synchronizes with the authoritative server. 
@@ -14,10 +19,7 @@ There are two ways the demo can work.
 
 This project includes the implementation of an HTML5 client for the demo. The page uses the <b>JavaScript Client API for Lightstreamer</b> to handle the communication with Lightstreamer Server.
 
-## HTML Client ##
-
-[![Screenshot](screen_shot_rendering.png)](http://demos.lightstreamer.com/3DWorldDemo/)<br>
-An online demonstration is hosted on our servers at: [http://demos.lightstreamer.com/3DWorldDemo/](http://demos.lightstreamer.com/3DWorldDemo/)<br>
+### HTML Client
 
 A simple HTML client with five panels: Identity, Tuning, Matrix, Commands, and Rendering.<br>
 In the <b>Identity</b> panel, the player can configure their nickname, send messages to other users in the same world, and change the world where the player moves. 'Default' is the initial world where the player starts.<br>
@@ -63,27 +65,29 @@ The clients receive the real-time data by [subscribing](http://www.lightstreamer
 
 <!-- END DESCRIPTION lightstreamer-example-3dworld-client-javascript -->
 
-# Deploy #
+## Install
+
+Note that the [3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) adapters have to be deployed in your local Lightstreamer server instance. Please check out that project and follow the installation instructions provided with it.
 
 Before you can run the demo, some dependencies need to be solved:
 
--  Get the lightstreamer.js file from the [Lightstreamer 5 Colosseo distribution](http://www.lightstreamer.com/download) 
-   and put it in the src/js folder of the demo. Alternatively, you can build a lightstreamer.js file from the 
+-  Get the `lightstreamer.js` file from the [Lightstreamer 5 Colosseo distribution](http://www.lightstreamer.com/download) 
+   and put it in the `src/js` folder of the demo. Alternatively, you can build a `lightstreamer.js` file from the 
    [online generator](http://www.lightstreamer.com/distros/Lightstreamer_Allegro-Presto-Vivace_5_1_1_Colosseo_20130305/Lightstreamer/DOCS-SDKs/sdk_client_javascript/tools/generator.html).
    In that case, be sure to include the LightstreamerClient, Subscription, DynaGrid, and StatusWidget modules and to use the "Use AMD" version.
--  Get the require.js file form the [requirejs.org](http://requirejs.org/docs/download.html) and put it in the src/js folder of the demo.
--  Download [Three.js](http://github.com/mrdoob/three.js/zipball/master) and copy the three.min.js file to the src/js folder of the demo. The demo requires Three.js r61 or higher.
+-  Get the `require.js` file form the [requirejs.org](http://requirejs.org/docs/download.html) and put it in the `src/js` folder of the demo.
+-  Download [Three.js](http://github.com/mrdoob/three.js/zipball/master) and copy the `three.min.js` file to the `src/js` folder of the demo. The demo requires Three.js r61 or higher.
 -  Please note that the demo uses a jQuery customized theme, included in this project.
 
 You can deploy this Demo in order to use the Lightstreamer server as a Web server too, or in any external Web Server you are running. 
-If you choose the former case, create a "3DWorldDemo" folder in the <LS_HOME>/pages/demos folder and copy here all the files and subfolders from the src directory of this project. The client demo configuration assumes that Lightstreamer Server, Lightstreamer 3D World Adapter, and this client are launched on the same machine.
+If you choose the former case, create a `3DWorldDemo` folder in the `<LS_HOME>/pages/demos` folder and copy here all the files and subfolders from the `src` directory of this project. The client demo configuration assumes that Lightstreamer Server, Lightstreamer 3D World Adapter, and this client are launched on the same machine.
 If you need to target a different Lightstreamer server, search this line in lsClient.js:
 ```js
 var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");
 ```
 and change it accordingly. 
-In any case, the [3DWorldDemo Adapter Set](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) have to be deployed in your local Lightstreamer server instance. Please check out that project and follow the installation instructions provided with it.
-The demo is now ready to be launched. [Here](http://demos.lightstreamer.com/3DWorldDemo/) a demostration hosted on our servers.
+
+The demo is now ready to be launched. 
 
 # See Also #
 
