@@ -89,24 +89,24 @@ and change it accordingly.
 
 The demo is now ready to be launched. 
 
-# See Also #
+## See Also
 
 * [Optimizing Multiplayer 3D Game Synchronization Over the Web](http://blog.lightstreamer.com/2013/10/optimizing-multiplayer-3d-game.html)
 
-## Lightstreamer Adapters Needed by These Demo Client ##
+### Lightstreamer Adapters Needed by This Client
 <!-- START RELATED_ENTRIES -->
 
 * [Lightstreamer - 3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java)
 
 <!-- END RELATED_ENTRIES -->
 
-## Related Projects ##
+### Related Projects
 
 * [Lightstreamer - Basic Chat Demo - HTML Client](https://github.com/Weswit/Lightstreamer-example-Chat-client-javascript)
 * [Lightstreamer - Portfolio Demos - HTML Clients](https://github.com/Weswit/Lightstreamer-example-Portfolio-client-javascript)
 * [Lightstreamer - RSS News Demo - HTML Client](https://github.com/Weswit/Lightstreamer-example-RSS-client-javascript)
 * [Lightstreamer - Basic Stock-List Demo - Unity Client](https://github.com/Weswit/Lightstreamer-example-StockList-client-unity)
 
-# Lightstreamer Compatibility Notes #
+## Lightstreamer Compatibility Notes #
 
 - Compatible with Lightstreamer JavaScript Client library version 6.0 or newer.
