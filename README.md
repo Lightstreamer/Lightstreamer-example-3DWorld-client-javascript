@@ -67,7 +67,7 @@ The clients receive the real-time data by [subscribing](http://www.lightstreamer
 
 ## Install
 
-Note that the [3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) adapters have to be deployed in your local Lightstreamer server instance. Please check out that project and follow the installation instructions provided with it.
+Note that, as prerequisite, the [3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) has to be deployed in your local Lightstreamer server instance. Please check out that project and follow the installation instructions provided with it.
 
 Before you can run the demo, some dependencies need to be solved:
 
