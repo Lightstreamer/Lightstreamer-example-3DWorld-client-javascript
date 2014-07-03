@@ -67,27 +67,15 @@ The clients receive the real-time data by [subscribing](http://www.lightstreamer
 
 ## Install
 
-Note that, as prerequisite, the [3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) has to be deployed in your local Lightstreamer server instance. Please check out that project and follow the installation instructions provided with it.
-
-Before you can run the demo, some dependencies need to be solved:
-
--  Get the `lightstreamer.js` file from the [Lightstreamer 5 Colosseo distribution](http://www.lightstreamer.com/download) 
-   and put it in the `src/js` folder of the demo. Alternatively, you can build a `lightstreamer.js` file from the 
-   [online generator](http://www.lightstreamer.com/distros/Lightstreamer_Allegro-Presto-Vivace_5_1_1_Colosseo_20130305/Lightstreamer/DOCS-SDKs/sdk_client_javascript/tools/generator.html).
-   In that case, be sure to include the LightstreamerClient, Subscription, DynaGrid, and StatusWidget modules and to use the "Use AMD" version.
--  Get the `require.js` file form the [requirejs.org](http://requirejs.org/docs/download.html) and put it in the `src/js` folder of the demo.
--  Download [Three.js](http://github.com/mrdoob/three.js/zipball/master) and copy the `three.min.js` file to the `src/js` folder of the demo. The demo requires Three.js r61 or higher.
+* As prerequisite, the [3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) has to be deployed in your local Lightstreamer server instance. Please check out that project and follow the installation instructions provided with it.
+* Get the `lightstreamer.js` file from the [Lightstreamer 5 Colosseo distribution](http://www.lightstreamer.com/download) and put it in the `src/js` folder of the demo. Alternatively, you can build a `lightstreamer.js` file from the [online generator](http://www.lightstreamer.com/distros/Lightstreamer_Allegro-Presto-Vivace_5_1_1_Colosseo_20130305/Lightstreamer/DOCS-SDKs/sdk_client_javascript/tools/generator.html).
+  In that case, be sure to include the LightstreamerClient, Subscription, DynaGrid, and StatusWidget modules and to use the "Use AMD" version.
+*  Get the `require.js` file form the [requirejs.org](http://requirejs.org/docs/download.html) and put it in the `src/js` folder of the demo.
+- Download [Three.js](http://github.com/mrdoob/three.js/zipball/master) and copy the `three.min.js` file to the `src/js` folder of the demo. The demo requires Three.js r61 or higher.
 -  Please note that the demo uses a jQuery customized theme, included in this project.
-
-You can deploy this Demo in order to use the Lightstreamer server as a Web server too, or in any external Web Server you are running. 
-If you choose the former case, create a `3DWorldDemo` folder in the `<LS_HOME>/pages/demos` folder and copy here all the files and subfolders from the `src` directory of this project. The client demo configuration assumes that Lightstreamer Server, Lightstreamer 3D World Adapter, and this client are launched on the same machine.
-If you need to target a different Lightstreamer server, search this line in lsClient.js:
-```js
-var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");
-```
-and change it accordingly. 
-
-The demo is now ready to be launched. 
+* Deploy this demo on the Lightstreamer Server (used as Web server) or in any external Web Server. If you choose the former, please create the folder `<LS_HOME>/pages/demos/3DWorldDemo` and copy here the contents of the `/src` folder of this project.
+The client demo configuration assumes that Lightstreamer Server, Lightstreamer Adapters and this client are launched on the same machine. If you need to targeting a different Lightstreamer server please search in `lsClient.js` this line:<BR/> `var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");`<BR/> and change it accordingly.
+* Open your browser and point it to: [http://localhost:8080/demos/3DWorldDemo/](http://localhost:8080/demos/BananaDarts/)
 
 ## See Also
 
