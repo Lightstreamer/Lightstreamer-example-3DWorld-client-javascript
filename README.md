@@ -23,7 +23,7 @@ This project includes the implementation of an HTML5 client for the demo. The pa
 
 A simple HTML client with five panels: Identity, Tuning, Matrix, Commands, and Rendering.<br>
 In the <b>Identity</b> panel, the player can configure their nickname, send messages to other users in the same world, and change the world where the player moves. 'Default' is the initial world where the player starts.<br>
-In the <b>Tuning</b> panel, the user can choose the operating mode of the demo: client side or server side. In the first case, you can configure the maximum total bandwidth used by the entire page and the (server) resync frequency in the range from 1 per second to never. In the second mode you can configure the max bandwidth allowed for the whole page, max frequency of updates for each player (from 1 per second to 100 per second). Here you can also choose the precision and format of the incoming data from the server.<br>
+In the <b>Tuning</b> panel, the user can choose the operating mode of the demo: client side or server side. In the first case, you can configure the maximum total bandwidth used by the entire page and the (server) resync frequency in the range from 1 per second to never. In the second mode, you can configure the max bandwidth allowed for the whole page, max frequency of updates for each player (from 1 per second to 100 per second). Here you can also choose the precision and format of the incoming data from the server.<br>
 In the <b>Matrix</b> panel, the position of all the players in the same world is shown in a tabular view (your player data are in red, other active players are 
 in blue, and automatic ghost players are in black). Data in this panel are always coming from the server in either mode of the demo.<br>
 In the <b>Command</b> panel, you can find a recap of the commands that allow you to move the cuboid. The player can input the movement commands with these keys:
@@ -48,12 +48,12 @@ The clients receive the real-time data by [subscribing](http://www.lightstreamer
 
     The fields available for this item are: "key" (the unique identifier of each player), "command" (add, update, or delete), "nick" (the current nickname), and "msg" (the current chat message).
      
-* For each player that enters a world, a specific item is created by the server (and subscribed by the clients) to carry all the real-time coordinates and movements for that player. This item works in <b>MERGE</b> mode and it is subscribed-to/unsubscribed-from by each client in that world based on the commands received as part of the first item above.
+* For each player that enters a world, a specific item is created by the server (and subscribed by the clients) to carry all the real-time coordinates and movements for that player. This item works in <b>MERGE</b> mode and it is subscribed-to/unsubscribed-from by each client in that world, based on the commands received as part of the first item above.
 
     The fields available for this item are:
 
     - The coordinates and the quaternions, which represent the current position of the object: "posX", "posY", "posZ", "rotX", "rotY", "rotZ", "rotW". 
-    This set of fields above is subscribed to in server-side mode, to get the actual positions in real time and render the objects accordingly. It subscribed to in client-side as well, to get the periodic authoritative resynchronizations (unless the resync period is set to 'never').
+    This set of fields above is subscribed to in server-side mode, to get the actual positions in real-time and render the objects accordingly. It subscribed to in client-side as well, to get the periodic authoritative resynchronizations (unless the resync period is set to 'never').
     The matrix widget uses these fields to feed a Lightstreamer widget called [DynaGrid](http://www.lightstreamer.com/docs/client_javascript_uni_api/DynaGrid.html).
 
     - The velocity vector and the angular momentum, which represent the current movement of the object: "Vx", "Vy", "Vz", "momx", "momy", "momz". 
@@ -61,20 +61,20 @@ The clients receive the real-time data by [subscribing](http://www.lightstreamer
      
 * Each client subscribes to an item in <b>DISTINCT</b> mode to implement presence. In other words, each player signals her presence by keeping this subscription active. By leaving the page, the automatic unsubscription determines the loss of presence, and the server can let all the other players know that the user has gone away (by leveraging the COMMAND-mode item above).
      
-* Each client subscribes to an item in <b>MERGE</b> mode, to know the current downstream bandwidth (used by its own connection) in real time.
+* Each client subscribes to an item in <b>MERGE</b> mode, to know the current downstream bandwidth (used by its own connection) in real-time.
 
 <!-- END DESCRIPTION lightstreamer-example-3dworld-client-javascript -->
 
 ## Install
-If you want to install a version of this demo pointing to your local Lightstreamer server, follow these steps.
+If you want to install a version of this demo pointing to your local Lightstreamer server, follow these steps:
 * As prerequisite, the [3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) has to be deployed in your local Lightstreamer server instance. Please check out that project and follow the installation instructions provided with it.
 * Get the `lightstreamer.js` file from the [Lightstreamer 5 Colosseo distribution](http://www.lightstreamer.com/download) and put it in the `src/js` folder of the demo. Alternatively, you can build a `lightstreamer.js` file from the [online generator](http://www.lightstreamer.com/distros/Lightstreamer_Allegro-Presto-Vivace_5_1_1_Colosseo_20130305/Lightstreamer/DOCS-SDKs/sdk_client_javascript/tools/generator.html).
   In that case, be sure to include the LightstreamerClient, Subscription, DynaGrid, and StatusWidget modules and to use the "Use AMD" version.
-*  Get the `require.js` file form the [requirejs.org](http://requirejs.org/docs/download.html) and put it in the `src/js` folder of the demo.
+* Get the `require.js` file form the [requirejs.org](http://requirejs.org/docs/download.html) and put it in the `src/js` folder of the demo.
 - Download [Three.js](http://github.com/mrdoob/three.js/zipball/master) and copy the `three.min.js` file to the `src/js` folder of the demo. The demo requires Three.js r61 or higher.
 -  Please note that the demo uses a jQuery customized theme, included in this project.
 * Deploy this demo on the Lightstreamer Server (used as Web server) or in any external Web Server. If you choose the former, please create the folder `<LS_HOME>/pages/demos/3DWorldDemo` and copy here the contents of the `/src` folder of this project.
-The client demo configuration assumes that Lightstreamer Server, Lightstreamer Adapters and this client are launched on the same machine. If you need to targeting a different Lightstreamer server please search in `lsClient.js` this line:<BR/> `var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");`<BR/> and change it accordingly.
+The client demo configuration assumes that Lightstreamer Server, Lightstreamer Adapters, and this client are launched on the same machine. If you need to target a different Lightstreamer server, please search in `lsClient.js` this line:<BR/> `var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");`<BR/> and change it accordingly.
 * Open your browser and point it to: [http://localhost:8080/demos/3DWorldDemo/](http://localhost:8080/demos/3DWorldDemo/)
 
 ## See Also
