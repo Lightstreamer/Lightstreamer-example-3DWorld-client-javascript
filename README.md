@@ -68,7 +68,7 @@ The clients receive the real-time data by [subscribing](http://www.lightstreamer
 ## Install
 If you want to install a version of this demo pointing to your local Lightstreamer server, follow these steps:
 * As prerequisite, the [3D World Demo - Java Adapter](https://github.com/Weswit/Lightstreamer-example-3DWorld-adapter-java) has to be deployed in your local Lightstreamer server instance. Please check out that project and follow the installation instructions provided with it.
-* Get the `lightstreamer.js` file from the [Lightstreamer 5 Colosseo distribution](http://www.lightstreamer.com/download) and put it in the `src/js` folder of the demo. Alternatively, you can build a `lightstreamer.js` file from the [online generator](http://www.lightstreamer.com/distros/Lightstreamer_Allegro-Presto-Vivace_5_1_1_Colosseo_20130305/Lightstreamer/DOCS-SDKs/sdk_client_javascript/tools/generator.html).
+* Get the `lightstreamer.js` file from the [Lightstreamer 5 Colosseo distribution](http://www.lightstreamer.com/download) and put it in the `src/js` folder of the demo. Alternatively, you can build a `lightstreamer.js` file from the [online generator](http://www.lightstreamer.com/docs/client_javascript_tools/generator.html).
   In that case, be sure to include the LightstreamerClient, Subscription, DynaGrid, and StatusWidget modules and to use the "Use AMD" version.
 * Get the `require.js` file form the [requirejs.org](http://requirejs.org/docs/download.html) and put it in the `src/js` folder of the demo.
 - Download [Three.js](http://github.com/mrdoob/three.js/zipball/master) and copy the `three.min.js` file to the `src/js` folder of the demo. The demo requires Three.js r61 or higher.
