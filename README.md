@@ -6,9 +6,9 @@ This demo shows how well the real-time positions of objects in a multiplayer 3D 
 
 ## Live Demo
 
-[![screenshot](screen_shot_rendering.png)](http://demos.lightstreamer.com/3DWorldDemo)
+[![screenshot](screen_shot_rendering.png)](https://demos.lightstreamer.com/3DWorldDemo/)
 
-### [![](http://demos.lightstreamer.com/site/img/play.png) View live demo](http://demos.lightstreamer.com/3DWorldDemo)
+### [![](http://demos.lightstreamer.com/site/img/play.png) View live demo](https://demos.lightstreamer.com/3DWorldDemo/)
 
 ## Details
 
