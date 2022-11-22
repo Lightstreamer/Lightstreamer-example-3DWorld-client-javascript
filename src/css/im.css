@@ -29,7 +29,6 @@ a:hover
   font-size: 15pt;
   color: #000000;
   font-weight: bold;
-  text-align: center;
 }
 .messagePanel {
   overflow: auto;
