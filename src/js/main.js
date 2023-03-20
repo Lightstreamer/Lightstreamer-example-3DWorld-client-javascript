@@ -176,13 +176,13 @@ function startGrid() {
     freqDyns = rv;
     while (indx < subsDyns.length ) {
       if (subsDyns[indx].isActive() == false) {
-        subsDyns[indx].setRequestedMaxFrequency(rv);
+        subsDyns[indx].setRequestedMaxFrequency(String(rv));
         client.subscribe(subsDyns[indx]);
       } else {
         if ( rv < 0.001 ) {
           client.unsubscribe(subsDyns[indx]);
         } else {
-          subsDyns[indx].setRequestedMaxFrequency(rv);
+          subsDyns[indx].setRequestedMaxFrequency(String(rv));
         }
       }
       indx++
@@ -222,9 +222,9 @@ function startGrid() {
           
           tmp.setRequestedSnapshot("yes");
           if (freqDyns >= 0.0001 ) {
-            tmp.setRequestedMaxFrequency(freqDyns);
+            tmp.setRequestedMaxFrequency(String(freqDyns));
           } else {
-            tmp.setRequestedMaxFrequency(1);
+            tmp.setRequestedMaxFrequency("1");
           }
           
           tmp.addListener({
@@ -1195,14 +1195,14 @@ function changePrecision() {
   function clickCheck(e) {
     
     if ( (physicsMod == 0) &&  document.getElementById("radio_serSide").checked ) {
-      // Passare in modalità server side physics calculation.
+      // Passare in modalitï¿½ server side physics calculation.
       subServerSide();
       unsubDeltas();
       //resubPlayers();
       stopPhysics();
       physicsMod = 1;
       
-      //subsPlayers.setRequestedMaxFrequency(33.0);
+      //subsPlayers.setRequestedMaxFrequency("33.0");
       updFrequencyDyns(33.0);
       // Reset frequency slider
       $( "#freqslider" ).slider( "option", "min", 1 );
@@ -1222,7 +1222,7 @@ function changePrecision() {
       $( "#decslider" ).slider( "option", "disabled", false );
     } 
     if ( (physicsMod == 1) &&  document.getElementById("radio_cliSide").checked ) {
-      // Passare in modalità client side physics calculation.
+      // Passare in modalitï¿½ client side physics calculation.
       unsubServerSide();
       resubDeltas();
       startPhysics();
@@ -1235,7 +1235,7 @@ function changePrecision() {
       document.getElementById("radio_s").checked = true;
       document.getElementById("radio_d").checked = false;
       
-      //subsPlayers.setRequestedMaxFrequency(0.5);
+      //subsPlayers.setRequestedMaxFrequency("0.5");
       updFrequencyDyns(0.5);
       // Reset frequency slider
       $( "#freqslider" ).slider( "option", "min", 0.0 );
@@ -1472,12 +1472,12 @@ function changePrecision() {
     if (document.getElementById("user_msg")) {
       text = new String(document.getElementById("user_msg").value, "UTF_8");
       
-      text = text.replace(/à/g, "a");
-      text = text.replace(/è/g, "e");
-      text = text.replace(/é/g, "e");
-      text = text.replace(/ì/g, "i");
-      text = text.replace(/ò/g, "o");
-      text = text.replace(/ù/g, "u");
+      text = text.replace(/ï¿½/g, "a");
+      text = text.replace(/ï¿½/g, "e");
+      text = text.replace(/ï¿½/g, "e");
+      text = text.replace(/ï¿½/g, "i");
+      text = text.replace(/ï¿½/g, "o");
+      text = text.replace(/ï¿½/g, "u");
     } else {
       text = " ";
     }
@@ -1723,7 +1723,7 @@ function changePrecision() {
           bandGrid.updateRow("My_Band_"+logonName, {currentBandwidth:"-.-"});
         }
       });
-      gBandSubs.setRequestedMaxFrequency(0.5);
+      gBandSubs.setRequestedMaxFrequency("0.5");
       lsClient.subscribe(gBandSubs);
       
       /*var subStats = new Subscription("MERGE", "Statistics", ["total_players", "total_bandwidth"]);

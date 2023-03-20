@@ -17,10 +17,6 @@
 define(["LightstreamerClient","StatusWidget"],function(LightstreamerClient,StatusWidget) {
   var protocolToUse = document.location.protocol != "file:" ? document.location.protocol : "http:";
   var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");
-  
-  //This setting concerns the CPU usage optimization for cases where IE browsers without WebScokets support are in use.
-  //Please note that the used method of the client library is undocumented since it should be considered private.
-  lsClient.connectionOptions.setXDomainStreamingEnabled(false);
    
   lsClient.addListener(new StatusWidget("left", "0px", true));
 

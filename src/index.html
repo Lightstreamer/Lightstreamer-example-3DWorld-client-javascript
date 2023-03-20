@@ -146,7 +146,7 @@
                           //if ( subsPlayers.getRequestedMaxFrequency() < 0.0001 ) {
                           //resubPlayers();
                           //}
-                          //subsPlayers.setRequestedMaxFrequency(rv);
+                          //subsPlayers.setRequestedMaxFrequency(String(rv));
                           updFrequencyDyns(rv);
                       }
                     });
@@ -165,7 +165,7 @@
                       change: function(event, ui) { 
                         var rv = updateBandFreqInd(ui.value);
                         if ( gBandSubs ) {
-                          gBandSubs.setRequestedMaxFrequency(1/rv);
+                          gBandSubs.setRequestedMaxFrequency(String(1/rv));
                         }
                       }
                     });
