@@ -69,10 +69,7 @@ The clients receive the real-time data by [subscribing](https://lightstreamer.co
 ## Install
 If you want to install a version of this demo pointing to your local Lightstreamer server, follow these steps:
 * As prerequisite, the [3D World Demo - Java Adapter](https://github.com/Lightstreamer/Lightstreamer-example-3DWorld-adapter-java) has to be deployed in your local Lightstreamer server instance. Please check out that project and follow the installation instructions provided with it.
-* Get the `lightstreamer.min.js` file for Web Client SDK version 8.0.x from [npm](https://www.npmjs.com/package/lightstreamer-client-web/v/8.0.7) or [unpkg](https://unpkg.com/lightstreamer-client-web@8.0/lightstreamer.min.js) and put it in the `src/js` folder of the demo.
-  Alternatively, you can generate a customized `lightstreamer.min.js` library containing only the classes you actually use;
-  see the build instructions on the [GitHub page](https://github.com/Lightstreamer/Lightstreamer-lib-client-javascript#building).
-  In that case, be sure to include the LightstreamerClient, Subscription, DynaGrid, ConnectionSharing, and StatusWidget modules.
+* Get the `lightstreamer.min.js` file from [npm](https://www.npmjs.com/package/lightstreamer-client-web) or [unpkg](https://unpkg.com/lightstreamer-client-web/lightstreamer.min.js) and put it in the `src/js` folder of the demo.
 * Get the `require.js` file form the [requirejs.org](http://requirejs.org/docs/download.html) and put it in the `src/js` folder of the demo.
 - Download [Three.js](http://github.com/mrdoob/three.js/zipball/master) and copy the `three.min.js` file to the `src/js` folder of the demo. The demo requires Three.js r61 or higher.
 -  Please note that the demo uses a jQuery customized theme, included in this project.
