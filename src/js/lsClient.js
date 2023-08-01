@@ -18,7 +18,7 @@ import {LightstreamerClient, StatusWidget, ConsoleLoggerProvider, ConsoleLogLeve
 LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.WARN));
 
   var protocolToUse = document.location.protocol != "file:" ? document.location.protocol : "http:";
-  var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");
+  export var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");
    
   lsClient.addListener(new StatusWidget("left", "0px", true));
 
