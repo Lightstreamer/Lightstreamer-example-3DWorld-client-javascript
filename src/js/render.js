@@ -1,19 +1,14 @@
-/*
-  Copyright (c) Lightstreamer Srl
+import * as THREE from 'three';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import droid_serif_bold from 'three/fonts/droid/droid_serif_bold.typeface.json'
+import droid_serif_regular from 'three/fonts/droid/droid_serif_regular.typeface.json'
+import helvetiker_regular from 'three/fonts/helvetiker_regular.typeface.json'
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
-
+const loader = new FontLoader();
+const font_droid_serif_bold = loader.parse(droid_serif_bold);
+const font_droid_serif_regular = loader.parse(droid_serif_regular);
+const font_helvetiker_regular = loader.parse(helvetiker_regular);
 
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
@@ -419,13 +414,11 @@ function render() {
   renderer.render(scene, camera); 
 }
 
-function getScene() {
+export function getScene() {
   return cube;
 }
 
-function updateNick(player, nick, me) {
-
-  console.log("UPDATE NICK!");
+export function updateNick(player, nick, me) {
 
   var indx = players.indexOf(player);
   
@@ -463,9 +456,7 @@ function updateNick(player, nick, me) {
   }
 }
 
-function updateLastMsg(plyr, msg) {
-
-  console.log("UPDATE MSG!");
+export function updateLastMsg(plyr, msg) {
 
   var indx = players.indexOf(plyr);
   
@@ -509,7 +500,7 @@ function updateLastMsg(plyr, msg) {
   }
 }
 
-function getNick(indx) {
+export function getNick(indx) {
   if ( indx > -1 ) {
     return nicks[indx];
   } else {
@@ -517,9 +508,7 @@ function getNick(indx) {
   }
 }
 
-function updateDinamics2(plyr, command, value) {
-
-  console.log("UPDATE DYNS!");
+export function updateDinamics2(plyr, command, value) {
 
   var indx = players.indexOf(plyr);
   
@@ -545,7 +534,7 @@ function updateDinamics2(plyr, command, value) {
   }
 }
 
-function updateScene(plyr, posX, posY, posZ, rotX, rotY, rotZ, rotW, me, life) {
+export function updateScene(plyr, posX, posY, posZ, rotX, rotY, rotZ, rotW, me, life) {
   var indx = players.indexOf(plyr);
   var addObjs = false;
 
@@ -670,7 +659,7 @@ function updateScene(plyr, posX, posY, posZ, rotX, rotY, rotZ, rotW, me, life) {
   return addObjs;
 }
 
-function clearScene() {
+export function clearScene() {
   var tmpBox;
   var tmpNicks;
   
@@ -690,7 +679,7 @@ function clearScene() {
   render();
 }
 
-function removeFromScene(plyr) {
+export function removeFromScene(plyr) {
   var indx = players.indexOf(plyr);
   if ( indx == -1 ) {
     return ;
@@ -708,7 +697,7 @@ function removeFromScene(plyr) {
   dinamics.splice(indx, 1);
 }
 
-function onWindowResize() {
+export function onWindowResize() {
   WIDTH = window.innerWidth;
   HEIGHT = window.innerHeight;
   
@@ -723,32 +712,32 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 } 
 
-function zoomCamera(zoomZ) {
+export function zoomCamera(zoomZ) {
   camera.position.z = zoomZ;
   camera.updateProjectionMatrix();
 }
 
-function fovCamera(f) {
+export function fovCamera(f) {
   camera.fov = f;
   camera.updateProjectionMatrix();
 }
 
-function stopPhysics() {
+export function stopPhysics() {
   goPhysics = false;
 }
 
-function startPhysics() {
+export function startPhysics() {
   goPhysics = true;
   
   console.log("startPhysics.");
   physicsCalculator();
 }
 
-function stopRender() {
+export function stopRender() {
   goRender = false;
 }
 
-function startRender() {
+export function startRender() {
   goRender = true;
   
   console.log("startRender - " + sceneReady);
@@ -778,7 +767,7 @@ function addExtraInfo() {
   render();
 }
 
-function extraInfoOnOff() {
+export function extraInfoOnOff() {
   if (document.getElementById("checkExtra").checked) {
     if ( webGLinUse ) {
       extraInfo = true;

@@ -1,6 +1,7 @@
-define(["./lsClient"], function(lsClient) {
+import {enableAllCommands, myNick, logonName, sendNickMsg} from './main';
+import { lsClient } from './lsClient';
 
-  var LogonListener = function (subsPlayers,subsLogon,errorSpan) {
+  export var LogonListener = function (subsPlayers,subsLogon,errorSpan) {
     this.subsPlayers = subsPlayers;
     this.subsLogon = subsLogon;
     this.errorSpan = errorSpan;
@@ -35,6 +36,3 @@ define(["./lsClient"], function(lsClient) {
     }
   };
   
-  return LogonListener;
-  
-});

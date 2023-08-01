@@ -14,12 +14,18 @@
     limitations under the License.
 */
 
+import {Subscription, DynaGrid, StaticGrid} from 'lightstreamer-client-web/lightstreamer.esm';
+import { LogonListener } from './LogonListener';
+import { lsClient } from './lsClient';
+import {onWindowResize, zoomCamera, fovCamera, stopPhysics, startPhysics, startRender, stopRender, extraInfoOnOff, clearScene, getScene, updateNick, updateScene, updateDinamics2, updateLastMsg, removeFromScene, getNick} from "./render";
+import {checkZero, checkfZero, getMyFloat, getMyDouble, fromBase64, Base64} from './floatencoding_b64';
+export * from "./render";
 
 // LightstreamerClient object
-var client = null;
+export var client = null;
 
 // Subscriptions towards Lightstreamer server
-var gBandSubs;
+export var gBandSubs;
 var subsPlayers;
 var oldSubsPlayers = null;
 var oldSubsLogon = null;
@@ -65,12 +71,12 @@ var keyCount_s1 = 0;
 var keyCount_s2 = 0;
 
 // nickname chosen by this page's user; 
-var myNick = null;
+export var myNick = null;
 var whoIam = "";
 var myLastWords = "";
 // logonname random generated, it is used in the
 // item name for the subscription logon
-var logonName = null;
+export var logonName = null;
 var myWorld = "Utente";
 var myOldWorld = "Utente";
 
@@ -123,7 +129,6 @@ function startGrid() {
 }
 
   function subServerSide() {
-    require(["Subscription"],function(Subscription) {  
       var tmp = new Subscription("DISTINCT","ServerSide",["fake"]);
           
       tmp.setRequestedSnapshot("no");
@@ -145,7 +150,6 @@ function startGrid() {
       client.subscribe(tmp);
       
       subSrvSide = tmp;
-    });
   }
   
   function unsubServerSide() {
@@ -170,7 +174,7 @@ function startGrid() {
     }
   }
   
-  function updFrequencyDyns(rv) {
+  export function updFrequencyDyns(rv) {
     var indx = 0;
     
     freqDyns = rv;
@@ -212,7 +216,6 @@ function startGrid() {
     
     if ( indx == -1 ) {
       try {
-        require(["Subscription"],function(Subscription) {  
           var tmp;
           if ( chkDebug == true ) {
             tmp = new Subscription("MERGE",key,["posX", "posY", "posZ", "rotX", "rotY", "rotZ", "rotW", "lifeSpan"]);
@@ -411,7 +414,6 @@ function startGrid() {
           var indy = subsDynsKeys.push(key) - 1;
           subsDyns[indy] = tmp;
           
-          });
       } catch(e) {console.error(e);}
     }
   }
@@ -427,7 +429,6 @@ function startGrid() {
     
     if ( indx == -1) {
       try {
-        require(["Subscription"],function(Subscription) {
           var tmp = new Subscription("MERGE",key,["Vx", "Vy", "Vz", "momx", "momy", "momz"]);
           
           tmp.setRequestedSnapshot("yes");
@@ -474,7 +475,6 @@ function startGrid() {
             indx = subsDeltaKeysBU.push(key) - 1;
             subsDeltaBU[indx] = tmp;
           }
-        });
       } catch(e) {console.error(e);}
     }
   }
@@ -542,7 +542,7 @@ function startGrid() {
     client.subscribe(subsPlayers);
   }
 
-function checkTable(obj) {
+export function checkTable(obj) {
   if (obj.id == "matrix" ) {
     if ( imGrid != null ) {
       if (matrix) {
@@ -564,11 +564,11 @@ function checkTable(obj) {
   }
 }
 
-function enableButton() {
+export function enableButton() {
   $( "#world_button" ).button( "option", "disabled", false );
 }
 
-function changePrecision() {
+export function changePrecision() {
   if (document.getElementById("radio_f").checked) {
     document.getElementById("decimalInput").style.visibility = "visible";  
     precision = "s"+document.getElementById("nowDecimals").innerHTML;
@@ -600,20 +600,19 @@ function changePrecision() {
         imGrid.clean();
       }
     
-      require(["Subscription"],function(Subscription) {
         subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key", "nick", "msg"]);
 
         subsPlayers.setRequestedSnapshot("yes");
         subsPlayers.addListener(rndrListener);
 
         client.subscribe(subsPlayers);
-      });
+
       if (myNick != logonName) {
         setTimeout(function(){sendNickMsg(myNick)},50);
       }
 
       clearScene();
-    } catch (x) {
+    } catch (e) {
       console.error("Re-subscribe procedure for precision changes failed", e);
     }
   }
@@ -670,7 +669,7 @@ function changePrecision() {
     updateImp_Counter(parent, "impcounter_s2",  keyCount_s2);
   }
   
-  function switchShift() {
+  export function switchShift() {
     var parent = null;
     
     if ( chkSwitchShift == true ) {
@@ -818,11 +817,11 @@ function changePrecision() {
     }
   }
   
-  function setFocus(obj) {
+export  function setFocus(obj) {
     noCmds = true;
   }
   
-  function unFocus(obj) {
+export  function unFocus(obj) {
     noCmds = false;
   }
   
@@ -1057,6 +1056,7 @@ function changePrecision() {
     
     if ( (keyId == 87) || (keyId == 65) || (keyId == 83) || (keyId == 49) || (keyId == 50) || (keyId == 68) ) {
       if ( client != null ) {
+        var msg;
         if ( shift ) {
           impulsesShiftCounter(keyId);
           msg = "10" + keyId;
@@ -1088,7 +1088,7 @@ function changePrecision() {
     }
   }
 
-  function submitKey(key) {
+  export function submitKey(key) {
     if ( client != null ) {
       if ( (""+key).indexOf("10") > -1 ) {
         impulsesShiftCounter((""+key).substr(2,2));
@@ -1118,7 +1118,7 @@ function changePrecision() {
     }
   }
   
-  function submitKeySmall(key) {
+  export function submitKeySmall(key) {
     if ( client != null ) {
       if ( chkSwitchShift == true ) {
         impulsesShiftCounter(key);
@@ -1171,7 +1171,7 @@ function changePrecision() {
     }
   }
   
-  function enableAllCommands() {
+  export function enableAllCommands() {
   
     if ( iamWatcher ) {
       document.getElementById("radio_string").disabled = true;
@@ -1317,7 +1317,7 @@ function changePrecision() {
     
   }
   
-  function sendNickMsg(nick) {
+export  function sendNickMsg(nick) {
     var msg = "n|" + nick;
     client.sendMessage(msg, "ChangeNick", 30000, {
       onAbort: function(originalMex, snt) {
@@ -1367,7 +1367,7 @@ function changePrecision() {
     return (! val.match(/^[a-zA-Z0-9]+$/));
   } 
   
-  function checkAlphanum() {
+  export function checkAlphanum() {
     var text = document.getElementById("user_world").value ;
     if ( text != "" ) {
       if (isNotAlphanumeric(text)) {
@@ -1380,7 +1380,7 @@ function changePrecision() {
     }
   }
 
-  function submitWorld() {
+  export function submitWorld() {
     if (document.getElementById("user_world")) {
       var text = document.getElementById("user_world").value;
       
@@ -1407,7 +1407,6 @@ function changePrecision() {
             imGrid.clean();
           }
           
-          require(["Subscription","js/LogonListener"],function(Subscription,LogonListener) {
             subsPlayers = new Subscription("COMMAND","Custom_list_"+myWorld+"_"+precision,["command", "key", "nick", "msg"]);
           
             subsPlayers.setRequestedSnapshot("yes");
@@ -1417,7 +1416,6 @@ function changePrecision() {
             
             subsLogon = new Subscription("DISTINCT", "c_logon_", ["Test"]);
             subsLogon.addListener(new LogonListener(oldSubsPlayers,oldSubsLogon,document.getElementById("subscriptionError")));
-          });
           
           //document.getElementById("user_msg").value = "";
           clearScene();
@@ -1450,7 +1448,7 @@ function changePrecision() {
     }
   }
   
-  function submitNick() {
+  export function submitNick() {
     if (document.getElementById("user_nick")) {
       var text = document.getElementById("user_nick").value;
       if (!text) {
@@ -1466,7 +1464,7 @@ function changePrecision() {
     }
   }
 
-  function submitMsg() {
+  export function submitMsg() {
     var text = null;
     
     if (document.getElementById("user_msg")) {
@@ -1559,7 +1557,6 @@ function changePrecision() {
     
   function createMessageGrid() {
    
-    require(["js/lsClient","js/LogonListener","DynaGrid","StaticGrid","Subscription"],function(lsClient,LogonListener,DynaGrid,StaticGrid,Subscription) {
       client = lsClient;
       
       lsClient.addListener({onServerError: function(errorCode, errorMsg) {
@@ -1695,8 +1692,8 @@ function changePrecision() {
           if (subsLogon.isActive()==false) {
             subsLogon.setItemGroup("c_logon_"+myWorld+"_"+logonName+"_"+physicsMod);
           }
-          client.subscribe(subsLogon);
-        }
+            client.subscribe(subsLogon);
+          }
       };
       
       subsPlayers.addListener(rndrListener);
@@ -1732,7 +1729,6 @@ function changePrecision() {
         }
       });
       lsClient.subscribe(subStats); */
-    }); 
  }
 
   function createBuddyTable() {
@@ -1794,14 +1790,14 @@ function changePrecision() {
   //Bandwidth slider
   var values = [];
   
-  var maxBandVal = 100.5;
+  export var maxBandVal = 100.5;
   var maxFreqVal = 100.1;
   var maxBandFreqVal = 30;
   var maxDecimals = 15;
   var maxZoom = 500;
   var maxFov = 180;
                 
-  function updateBWInd(v) {
+  export function updateBWInd(v) {
     if (v == maxBandVal) {
       document.getElementById("nowBandwidth").innerHTML = "unlimited";
       return;
@@ -1815,7 +1811,7 @@ function changePrecision() {
     }
   }
   
-  function updateFreqInd(v) {
+  export function updateFreqInd(v) {
     var txt = v.toString();
     if ( v > 1 ) {
       v+=0.1;
@@ -1844,14 +1840,14 @@ function changePrecision() {
     return val;
   }
   
-  function updateBandFreqInd(v) {
+  export function updateBandFreqInd(v) {
     var txt = v.toString();
     document.getElementById("nowBandFrequency").innerHTML = txt;
    
     return Number(txt);
   }
   
-  function updateDecimals(v) {
+  export function updateDecimals(v) {
     var txt = v.toString();
     document.getElementById("nowDecimals").innerHTML = txt;
     

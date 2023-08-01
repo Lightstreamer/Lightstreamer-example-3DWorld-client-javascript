@@ -13,8 +13,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+import {LightstreamerClient, StatusWidget, ConsoleLoggerProvider, ConsoleLogLevel} from 'lightstreamer-client-web/lightstreamer.esm';
 
-define(["LightstreamerClient","StatusWidget"],function(LightstreamerClient,StatusWidget) {
+LightstreamerClient.setLoggerProvider(new ConsoleLoggerProvider(ConsoleLogLevel.WARN));
+
   var protocolToUse = document.location.protocol != "file:" ? document.location.protocol : "http:";
   var lsClient = new LightstreamerClient(protocolToUse+"//localhost:8080","DEMOMOVE3D");
    
@@ -22,6 +24,4 @@ define(["LightstreamerClient","StatusWidget"],function(LightstreamerClient,Statu
 
   lsClient.connect();
   
-  return lsClient;
-});
 

@@ -17,7 +17,7 @@
 
 //////////////// Base 64 encoding
 
-function checkZero(data) {
+export function checkZero(data) {
   for (var k=0; k<7; k++) {
     if (data[k] != 0) {
       return false;
@@ -27,7 +27,7 @@ function checkZero(data) {
   return true;
 }
 
-function checkfZero(data) {
+export function checkfZero(data) {
   for (var k=0; k<4; k++) {
     if (data[k] != 0) {
       return false;
@@ -37,7 +37,7 @@ function checkfZero(data) {
   return true;
 }
 
-function getMyFloat(data) {
+export function getMyFloat(data) {
   var sign = 1;
   var exp = 0;
   var man = 1;
@@ -141,7 +141,7 @@ function getMyFloat(data) {
   return sign * Math.pow(2, (exp-127)) * mantiss;
 }
 
-function getMyDouble(data) {
+export function getMyDouble(data) {
 
   var sign = 1;
   var exp = 0;
@@ -240,7 +240,7 @@ function getMyDouble(data) {
 }
 
 var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-function fromBase64(dataToConvert) {
+export function fromBase64(dataToConvert) {
 
       var o1, o2, o3, h1, h2, h3, h4, bits;
       
@@ -287,7 +287,7 @@ function fromBase64(dataToConvert) {
       return res;
   };
 
-var Base64 = {
+  export var Base64 = {
   // private property
   _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
 
