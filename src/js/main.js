@@ -1691,9 +1691,9 @@ export  function sendNickMsg(nick) {
         onSubscription: function(){
           if (subsLogon.isActive()==false) {
             subsLogon.setItemGroup("c_logon_"+myWorld+"_"+logonName+"_"+physicsMod);
-          }
             client.subscribe(subsLogon);
           }
+        }
       };
       
       subsPlayers.addListener(rndrListener);
