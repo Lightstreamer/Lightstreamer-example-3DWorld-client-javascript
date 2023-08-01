@@ -51,202 +51,96 @@ var materialSphere = new THREE.MeshLambertMaterial( { color: 0xffc32b } );
 var materialAxisLabel = new THREE.MeshLambertMaterial( { color: 0x2a2a2a } );
 var materialMsgs = new THREE.MeshLambertMaterial( { color: 0xffc32b } );
 
-try { 
-  renderer = new THREE.WebGLRenderer({ antialias: true }); 
+renderer = new THREE.WebGLRenderer({ antialias: true }); 
 
-  /*
-  //The wireframe has changed since r61, with ugly diagonal lines.
-  
-  materialLines = new THREE.MeshBasicMaterial( { wireframe: true, color: 0x2f2f2f } );
-  
-  var geometryLines = new THREE.CubeGeometry( 160, 90, 120 );
-  var meshLines = new THREE.Mesh( geometryLines, materialLines );
-  
-  group.add( meshLines );
-  */
-  
-  var sizeX = 60, sizeZ = 80, step = 10;
-  var material = new THREE.LineBasicMaterial( { color: 0x2f2f2f, opacity: 0.2 } );
-  
-  var plane1 = new THREE.Geometry();
-  plane1.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
-  plane1.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
-  plane1.vertices.push( new THREE.Vector3( -80, 45, 60 ) );
-  plane1.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
-  
-  var plane2 = new THREE.Geometry();
-  plane2.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
-  plane2.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
-  plane2.vertices.push( new THREE.Vector3( -80, 45, -60 ) );
-  plane2.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
-  
-  var plane3 = new THREE.Geometry();
-  plane3.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
-  plane3.vertices.push( new THREE.Vector3( -80, 45, 60 ) );
-  plane3.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
-  plane3.vertices.push( new THREE.Vector3( -80, 45, -60 ) );
-  
-  var plane4 = new THREE.Geometry();
-  plane4.vertices.push( new THREE.Vector3( -80, 45, 60 ) );
-  plane4.vertices.push( new THREE.Vector3( -80, 45, -60 ) );
-  plane4.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
-  plane4.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
+var sizeX = 60, sizeZ = 80, step = 10;
+var material = new THREE.LineBasicMaterial( { color: 0x2f2f2f, opacity: 0.2 } );
 
-  var plane5 = new THREE.Geometry();
-  plane5.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
-  plane5.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
-  plane5.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
-  plane5.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
-  
-  var plane6 = new THREE.Geometry();
-  plane6.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
-  plane6.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
-  plane6.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
-  plane6.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
-  
-  var plane7 = new THREE.Geometry();
-  plane7.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
-  plane7.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
-  plane7.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
-  plane7.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
-  
-  var plane8 = new THREE.Geometry();
-  plane8.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
-  plane8.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
-  
-  var line8 = new THREE.Line( plane8, material );
-  line8.type = THREE.LinePieces;
-  scene.add( line8 );
-  
-  var line7 = new THREE.Line( plane7, material );
-  line7.type = THREE.LinePieces;
-  scene.add( line7 );
-  
-  var line5 = new THREE.Line( plane5, material );
-  line5.type = THREE.LinePieces;
-  scene.add( line5 );
-  
-  var line4 = new THREE.Line( plane4, material );
-  line4.type = THREE.LinePieces;
-  scene.add( line4 );
-  
-  var line1 = new THREE.Line( plane1, material );
-  line1.type = THREE.LinePieces;
-  scene.add( line1 );
-  
-  var line2 = new THREE.Line( plane2, material );
-  line2.type = THREE.LinePieces;
-  scene.add( line2 );
-  
-  var line3 = new THREE.Line( plane3, material );
-  line3.type = THREE.LinePieces;
-  scene.add( line3 );
-  
-  camera = new THREE.PerspectiveCamera(45, WIDTH/HEIGHT, 0.1, 10000); 
-  
-  // Lighting the scene.
-  var lightF = new THREE.DirectionalLight( 0xffffff, 2 );
-  lightF.position.set( 160, 90, 120 );
-  scene.add( lightF );
-  
-  var light = new THREE.PointLight( 0xffffff, 2 ); 
-  light.position.set( -160, -90, -120 );
-  scene.add( light );
-  
-} catch (e) { 
-  renderer = new THREE.CanvasRenderer();
-  webGLinUse = false;
-  extraInfo = false;
-  
-  materialLines = new THREE.MeshLambertMaterial( { wireframe: true, opacity: 1.0 } );
-  
-  var lightF = new THREE.DirectionalLight( 0xffffff, 2 );
-  lightF.position.set( 160, 90, 120 );
-  scene.add( lightF );
-  
-  var light = new THREE.PointLight( 0xffffff, 2 ); 
-  light.position.set( -160, -90, -120 );
-  scene.add( light );
-  
-  var sizeX = 60, sizeZ = 80, step = 10;
-  var material = new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 0.2 } );
-  
-  var plane1 = new THREE.Geometry();
-  plane1.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
-  plane1.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
-  plane1.vertices.push( new THREE.Vector3( -80, 45, 60 ) );
-  plane1.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
-  
-  var plane2 = new THREE.Geometry();
-  plane2.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
-  plane2.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
-  plane2.vertices.push( new THREE.Vector3( -80, 45, -60 ) );
-  plane2.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
-  
-  var plane3 = new THREE.Geometry();
-  plane3.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
-  plane3.vertices.push( new THREE.Vector3( -80, 45, 60 ) );
-  plane3.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
-  plane3.vertices.push( new THREE.Vector3( -80, 45, -60 ) );
-  
-  var plane4 = new THREE.Geometry();
-  plane4.vertices.push( new THREE.Vector3( -80, 45, 60 ) );
-  plane4.vertices.push( new THREE.Vector3( -80, 45, -60 ) );
-  plane4.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
-  plane4.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
+var plane1 = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3( 80, -45, 60  ),
+  new THREE.Vector3( -80, -45, 60 ),
+  new THREE.Vector3( -80, 45, 60  ),
+  new THREE.Vector3( 80, 45, 60   ),
+]);
 
-  var plane5 = new THREE.Geometry();
-  plane5.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
-  plane5.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
-  plane5.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
-  plane5.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
-  
-  var plane6 = new THREE.Geometry();
-  plane6.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
-  plane6.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
-  plane6.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
-  plane6.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
-  
-  var plane7 = new THREE.Geometry();
-  plane7.vertices.push( new THREE.Vector3( 80, 45, 60 ) );
-  plane7.vertices.push( new THREE.Vector3( 80, -45, 60 ) );
-  plane7.vertices.push( new THREE.Vector3( 80, 45, -60 ) );
-  plane7.vertices.push( new THREE.Vector3( 80, -45, -60 ) );
-  
-  var plane8 = new THREE.Geometry();
-  plane8.vertices.push( new THREE.Vector3( -80, -45, 60 ) );
-  plane8.vertices.push( new THREE.Vector3( -80, -45, -60 ) );
-  
-  var line8 = new THREE.Line( plane8, material );
-  line8.type = THREE.LinePieces;
-  scene.add( line8 );
-  
-  var line7 = new THREE.Line( plane7, material );
-  line7.type = THREE.LinePieces;
-  scene.add( line7 );
-  
-  var line5 = new THREE.Line( plane5, material );
-  line5.type = THREE.LinePieces;
-  scene.add( line5 );
-  
-  var line4 = new THREE.Line( plane4, material );
-  line4.type = THREE.LinePieces;
-  scene.add( line4 );
-  
-  var line1 = new THREE.Line( plane1, material );
-  line1.type = THREE.LinePieces;
-  scene.add( line1 );
-  
-  var line2 = new THREE.Line( plane2, material );
-  line2.type = THREE.LinePieces;
-  scene.add( line2 );
-  
-  var line3 = new THREE.Line( plane3, material );
-  line3.type = THREE.LinePieces;
-  scene.add( line3 );
-  
-  camera = new THREE.PerspectiveCamera(45, WIDTH/HEIGHT, 1, 10000); 
-}
+var plane2 = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3( 80, -45, -60  ),
+  new THREE.Vector3( -80, -45, -60 ),
+  new THREE.Vector3( -80, 45, -60  ),
+  new THREE.Vector3( 80, 45, -60   ),
+]);
+
+var plane3 = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3( -80, -45, 60  ),
+  new THREE.Vector3( -80, 45, 60   ),
+  new THREE.Vector3( -80, -45, -60 ),
+  new THREE.Vector3( -80, 45, -60  ),
+]);
+
+var plane4 = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3( -80, 45, 60  ),
+  new THREE.Vector3( -80, 45, -60 ),
+  new THREE.Vector3( 80, 45, 60   ),
+  new THREE.Vector3( 80, 45, -60  ),
+]);
+
+var plane5 = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3( 80, 45, 60   ),
+  new THREE.Vector3( 80, 45, -60  ),
+  new THREE.Vector3( 80, -45, -60 ),
+  new THREE.Vector3( 80, -45, 60  ),
+]);
+
+var plane6 = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3( -80, -45, -60 ),
+  new THREE.Vector3( -80, -45, 60  ),
+  new THREE.Vector3( 80, -45, 60   ),
+  new THREE.Vector3( 80, -45, -60  ),
+]);
+
+var plane7 = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3( 80, 45, 60   ),
+  new THREE.Vector3( 80, -45, 60  ),
+  new THREE.Vector3( 80, 45, -60  ),
+  new THREE.Vector3( 80, -45, -60 ),
+]);
+
+var plane8 = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3( -80, -45, 60  ),
+  new THREE.Vector3( -80, -45, -60 ),
+]);
+
+var line8 = new THREE.Line( plane8, material );
+scene.add( line8 );
+
+var line7 = new THREE.Line( plane7, material );
+scene.add( line7 );
+
+var line5 = new THREE.Line( plane5, material );
+scene.add( line5 );
+
+var line4 = new THREE.Line( plane4, material );
+scene.add( line4 );
+
+var line1 = new THREE.Line( plane1, material );
+scene.add( line1 );
+
+var line2 = new THREE.Line( plane2, material );
+scene.add( line2 );
+
+var line3 = new THREE.Line( plane3, material );
+scene.add( line3 );
+
+camera = new THREE.PerspectiveCamera(45, WIDTH/HEIGHT, 0.1, 10000); 
+
+// Lighting the scene.
+var lightF = new THREE.DirectionalLight( 0xffffff, 2 );
+lightF.position.set( 160, 90, 120 );
+scene.add( lightF );
+
+var light = new THREE.PointLight( 0xffffff, 2 ); 
+light.position.set( -160, -90, -120 );
+scene.add( light );
 
 var worldHTML = document.getElementById("theWorld");
 if ( (WIDTH/HEIGHT) >  1.5) {
@@ -262,18 +156,18 @@ renderer.sortObjects = false;
 worldHTML.appendChild(renderer.domElement); 
 
 // Geometry of players body definition
-var geometry = new THREE.CubeGeometry(2,4,2); 
+var geometry = new THREE.BoxGeometry(2,4,2); 
 var sphere = new THREE.Mesh( new THREE.SphereGeometry( 1, 0.2, 0.2 ), materialSphere );
 sphere.name = "Centro";
 
 scene.add( sphere );
 
 // Add axis name.
-var textaX = new THREE.TextGeometry( "x", {
+var textaX = new TextGeometry( "x", {
             size: 70,
             height: 0,
             curveSegments: 4,
-            font: "helvetiker"
+            font: font_helvetiker_regular
           });
 textaX.computeBoundingBox();
 var aX = new THREE.Mesh(textaX, materialAxisLabel);
@@ -287,11 +181,11 @@ aX.quaternion.z = 0;
 aX.quaternion.w = 0.7071067811;
 scene.add( aX );
 
-var textaY = new THREE.TextGeometry( "y", {
+var textaY = new TextGeometry( "y", {
             size: 50,
             height: 0,
             curveSegments: 4,
-            font: "helvetiker"
+            font: font_helvetiker_regular
           });
 textaY.computeBoundingBox();
 var aY = new THREE.Mesh(textaY, materialAxisLabel);
@@ -308,11 +202,11 @@ aY.quaternion.z = 0;
 aY.quaternion.w = 1;
 scene.add( aY );
 
-var textaZ = new THREE.TextGeometry( "z", {
+var textaZ = new TextGeometry( "z", {
             size: 50,
             height: 0,
             curveSegments: 4,
-            font: "helvetiker"
+            font: font_helvetiker_regular
           });
 textaZ.computeBoundingBox();
 var aZ = new THREE.Mesh(textaZ, materialAxisLabel);
@@ -410,7 +304,7 @@ function render() {
   if ( goRender ) {
     requestAnimationFrame( render );
   }
-  
+
   renderer.render(scene, camera); 
 }
 
@@ -423,13 +317,13 @@ export function updateNick(player, nick, me) {
   var indx = players.indexOf(player);
   
   if ( indx > -1 ) {
-    var text3d = new THREE.TextGeometry( nick, {
+    var text3d = new TextGeometry( nick, {
           size: 1.2,
-          height: 0,
-          curveSegments: 0,
+          height: 1,
+          // curveSegments: 0,
           
-          font: "droid serif",
-          weight: "bold",
+          font: font_droid_serif_bold,
+          // weight: "bold",
         });
     text3d.computeBoundingBox();
     
@@ -467,20 +361,20 @@ export function updateLastMsg(plyr, msg) {
   if ( indx > -1 && !( plyr.indexOf("Ghost") == 0) ) {
     var text3d = null;
     if ( (msg != null) && (msg != "") ) {
-      text3d = new THREE.TextGeometry( msg, {
+      text3d = new TextGeometry( msg, {
             size: 1.2,
-            height: 0,
-            curveSegments: 0,
+            height: 1,
+            // curveSegments: 0,
 
-            font: "droid serif"
+            font: font_droid_serif_regular
           });
     } else {
-      text3d = new THREE.TextGeometry( ".", {
-              size: 0,
-              height: 0,
-              curveSegments: 0,
+      text3d = new TextGeometry( ".", {
+              size: 1.2,
+              height: 1,
+              // curveSegments: 0,
 
-              font: "droid serif",
+              font: font_droid_serif_regular
             });
     }          
           
@@ -543,23 +437,23 @@ export function updateScene(plyr, posX, posY, posZ, rotX, rotY, rotZ, rotW, me, 
     addObjs = true;
     indx = players.push(plyr) - 1;
   
-    var text3d = new THREE.TextGeometry( plyr, {
+    var text3d = new TextGeometry( plyr, {
           size: 1.2,
-          height: 0,
-          curveSegments: 0,
+          height: 1,
+          // curveSegments: 0,
 
-          font: "droid serif",
-          weight: "bold",
+          font: font_droid_serif_bold,
+          // weight: "bold",
         });
     text3d.computeBoundingBox();
   
-    var text4d = new THREE.TextGeometry( ".", {
-          size: 0,
-          height: 0,
-          curveSegments: 0,
+    var text4d = new TextGeometry( ".", {
+          size: 1.2,
+          height: 1,
+          // curveSegments: 0,
 
-          font: "droid serif",
-          weight: "bold",
+          font: font_droid_serif_bold,
+          // weight: "bold",
         });
     text4d.computeBoundingBox();
     
@@ -584,7 +478,7 @@ export function updateScene(plyr, posX, posY, posZ, rotX, rotY, rotZ, rotW, me, 
     }
     cube[indx].name = plyr;
     //cube[indx].useQuaternion = true;
-    cube[indx].quaternion = new THREE.Quaternion(rotX,rotY,rotZ,rotW);
+    cube[indx].quaternion.copy(new THREE.Quaternion(rotX,rotY,rotZ,rotW));
     dinamics[indx] = {V: new THREE.Vector3( 0, 0, 0 ), R: new THREE.Vector3( 0, 0, 0 )};
   }
     
