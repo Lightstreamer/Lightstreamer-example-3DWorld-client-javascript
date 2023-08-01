@@ -1,0 +1,31 @@
+{
+  "name": "example-3dworld-client-javascript",
+  "version": "1.0.0",
+  "description": "<!-- START DESCRIPTION lightstreamer-example-3dworld-client-javascript -->",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lightstreamer/Lightstreamer-example-3DWorld-client-javascript.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lightstreamer/Lightstreamer-example-3DWorld-client-javascript/issues"
+  },
+  "homepage": "https://github.com/Lightstreamer/Lightstreamer-example-3DWorld-client-javascript#readme",
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.0.0",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-terser": "^0.4.3",
+    "rollup": "^3.26.3"
+  },
+  "dependencies": {
+    "lightstreamer-client-web": "^9.0.0",
+    "three": "^0.154.0"
+  }
+}
